@@ -1,2 +1,3 @@
-# ripe-sdk-android
-Android version of the RIPE SDK
+# RIPE SDK Android
+
+Android version of the RIPE SDK.
