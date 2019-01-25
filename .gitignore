@@ -8,18 +8,15 @@
 
 local.properties
 
-/.gradle
+.gradle
 
-/.idea/workspace.xml
-/.idea/caches
-/.idea/codeStyles
-/.idea/libraries
+.idea
 
-/gradlew
-/gradlew.bat
+gradlew
+gradlew.bat
 
-/bin
-/gen
-/build
-/gradle
-/captures
+bin
+gen
+build
+gradle
+captures
