@@ -1,0 +1,3 @@
+include ':ripe', "hello"
+
+project(':hello').projectDir = file('examples/hello')
