@@ -18,8 +18,7 @@ class MainActivity : AppCompatActivity() {
         val ripe = Ripe("dummy", "dummy", hashMapOf(
                 "url" to "https://sandbox.platforme.com/api/"
         ))
-
-        val image = Image(imageView, ripe)
-        image.update(hashMapOf())
+        ripe.bindImage(imageView)
+        ripe.update()
     }
 }
