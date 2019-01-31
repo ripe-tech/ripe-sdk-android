@@ -5,7 +5,7 @@ import java.util.ArrayList
 import com.ripe.android.api.BaseAPI
 import com.ripe.android.api.RipeAPI
 
-class Ripe constructor(var brand: String?, var model: String?, var options: Map<String, Any>) : Observable by ObservableImpl(), BaseAPI by RipeAPI(options) {
+class Ripe constructor(var brand: String?, var model: String?, var options: Map<String, Any>) : Observable(), BaseAPI by RipeAPI(options) {
 
     var initials = ""
     var engraving = ""
