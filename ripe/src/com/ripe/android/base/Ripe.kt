@@ -30,6 +30,17 @@ class Ripe constructor(var brand: String?, var model: String?, var options: Map<
         this.children.forEach { it.update(state) }
     }
 
+    fun setInitials(initials: String, engraving: String, noUpdate: Boolean = false) {
+        this.initials = initials
+        this.engraving = engraving
+
+        if (noUpdate) {
+            return
+        }
+
+        this.update()
+    }
+
     fun bindImage(view: ImageView, options: Map<String, Any> = HashMap()): Image {
         val image = Image(view, this, options)
         return this.bindInteractable(image) as Image

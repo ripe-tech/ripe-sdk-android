@@ -19,6 +19,7 @@ class MainActivity : AppCompatActivity() {
                 "url" to "https://sandbox.platforme.com/api/"
         ))
         ripe.bindImage(imageView)
+        ripe.setInitials("PT", "grey")
         ripe.update()
     }
 }
