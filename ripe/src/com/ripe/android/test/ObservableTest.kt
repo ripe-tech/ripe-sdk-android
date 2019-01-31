@@ -4,13 +4,13 @@ import org.junit.Test
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 
-import com.ripe.android.base.ObservableImpl
+import com.ripe.android.base.Observable
 
 class ObservableTest {
 
     @Test
     fun testAddRemove() {
-        val observable = ObservableImpl()
+        val observable = Observable()
         val callback = observable.addCallback("test") { a: String, b: String -> print(a + b) }
         assertNotNull(observable.callbacks["test"])
         assertEquals(observable.callbacks["test"]!!.size, 1)

@@ -8,7 +8,7 @@ import com.ripe.android.util.DownloadImageDelegate
 import com.ripe.android.util.DownloadImageTask
 
 class Image constructor(private val imageView: ImageView, override val owner: Ripe, override val options: Map<String, Any> = HashMap()) :
-        Visual by VisualImpl(owner, options),
+        Visual(owner, options),
         DownloadImageDelegate {
 
     override fun update(state: Map<String, Any>) {
