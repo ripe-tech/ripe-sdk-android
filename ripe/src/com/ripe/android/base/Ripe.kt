@@ -2,10 +2,10 @@ package com.ripe.android.base
 
 import java.util.ArrayList
 
-import com.ripe.android.api.BaseAPI
+import com.ripe.android.api.RipeAPIImpl
 import com.ripe.android.api.RipeAPI
 
-class Ripe constructor(var brand: String?, var model: String?, var options: Map<String, Any>) : Observable(), BaseAPI by RipeAPI(options) {
+class Ripe constructor(var brand: String?, var model: String?, var options: Map<String, Any>) : Observable(), RipeAPI by RipeAPIImpl(options) {
 
     var initials = ""
     var engraving = ""

@@ -3,11 +3,17 @@ package com.ripe.android.api
 import org.json.JSONObject
 
 interface LocaleAPI : BaseAPI {
-    fun locale(value: String, locale: String, options: Map<String, Any> = HashMap()): JSONObject {
+    fun locale(value: String, locale: String, options: Map<String, Any> = HashMap()): JSONObject
+
+    fun localeMultiple(values: List<String>, locale: String, options: Map<String, Any> = HashMap()): JSONObject
+}
+
+class LocaleAPIImpl constructor(override val url: String): LocaleAPI {
+    override fun locale(value: String, locale: String, options: Map<String, Any>): JSONObject {
         return this.localeMultiple(listOf(value), locale, options)
     }
 
-    fun localeMultiple(values: List<String>, locale: String, options: Map<String, Any> = HashMap()): JSONObject {
+    override fun localeMultiple(values: List<String>, locale: String, options: Map<String, Any>): JSONObject {
         var url = this.url + "locale";
         var _options: HashMap<String, Any> = hashMapOf(
                 "url" to url,
