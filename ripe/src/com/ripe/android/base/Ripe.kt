@@ -3,12 +3,12 @@ package com.ripe.android.base
 import android.widget.ImageView
 import java.util.ArrayList
 
-import com.ripe.android.api.RipeAPIImpl
 import com.ripe.android.api.RipeAPI
 import com.ripe.android.visual.Image
 
-class Ripe constructor(var brand: String?, var model: String?, var options: Map<String, Any>) : Observable(), RipeAPI by RipeAPIImpl(options) {
+class Ripe constructor(var brand: String?, var model: String?, var options: Map<String, Any>) : Observable() {
 
+    var api = RipeAPI(this)
     var parts = HashMap<String, Any>()
     var initials = ""
     var engraving = ""

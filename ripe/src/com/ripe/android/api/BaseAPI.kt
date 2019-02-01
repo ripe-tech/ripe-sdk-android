@@ -7,10 +7,14 @@ import java.net.URLEncoder
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import org.json.JSONObject
-import kotlin.reflect.KCallable
+import com.ripe.android.base.Ripe
 
 interface BaseAPI {
-    val url: String
+    val owner: Ripe
+
+    fun getUrl(): String {
+        return this.owner.options["url"] as String? ?: "https://sandbox.platforme.com/api/"
+    }
 
     fun getPrice(options: HashMap<String, Any>, callback: (args: Any?) -> Unit) {
         var _options = this._getPriceOptions(options)
@@ -52,7 +56,7 @@ interface BaseAPI {
     }
 
     fun _getPriceOptions(options: HashMap<String, Any>): HashMap<String, Any> {
-        val url = this.url + "config/price"
+        val url = this.getUrl() + "config/price"
         val _options = this._getQueryOptions(options)
         _options.putAll(hashMapOf(
                 "url" to url,
@@ -74,7 +78,7 @@ interface BaseAPI {
             params["profile"] = profile.joinToString(",")
         }
 
-        val url = this.url + "compose"
+        val url = this.getUrl() + "compose"
         _options.putAll(hashMapOf(
                 "url" to url,
                 "method" to "GET",
@@ -93,8 +97,14 @@ interface BaseAPI {
     fun _getQueryOptions(options: HashMap<String, Any>): HashMap<String, Any> {
         val params: HashMap<String, String> = options["params"] as HashMap<String, String>?
                 ?: HashMap()
-        params["brand"] = options["brand"] as String
-        params["model"] = options["model"] as String
+        val brand = options["brand"] as String? ?: this.owner.brand
+        val model = options["model"] as String? ?: this.owner.model
+        if (brand != null) {
+            params["brand"] = brand
+        }
+        if (model != null) {
+            params["model"] = model
+        }
 
         // TODO
         options["params"] = params
