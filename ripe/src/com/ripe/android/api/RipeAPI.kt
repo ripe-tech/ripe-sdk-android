@@ -1,5 +1,6 @@
 package com.ripe.android.api
 
-class RipeAPI constructor(var options: Map<String, Any>) : BaseAPI {
-    override val url: String = options["url"] as String
-}
+interface RipeAPI: LocaleAPI
+
+class RipeAPIImpl constructor(var options: Map<String, Any>) : RipeAPI,
+        LocaleAPI by LocaleAPIImpl(options["url"] as String)

@@ -11,7 +11,16 @@ interface BaseAPI {
 
     fun _getImageOptions(options: HashMap<String, Any> = HashMap()): HashMap<String, Any> {
         val _options = this._getQueryOptions(options)
-        val params = _options["params"] ?: HashMap<String, Any>()
+        val params: MutableMap<String, Any> = _options["params"] as HashMap<String, Any>? ?: HashMap()
+
+        val initials = options["initials"] as String?
+        val profile = options["profile"] as Array<String>?
+        if (initials != null) {
+            params["initials"] = initials
+        }
+        if (profile != null) {
+            params["profile"] = profile.joinToString(",")
+        }
 
         val url = this.url + "compose"
         _options.putAll(hashMapOf(
@@ -34,6 +43,7 @@ interface BaseAPI {
                 ?: HashMap()
         params["brand"] = options["brand"] as String
         params["model"] = options["model"] as String
+
         // TODO
         options["params"] = params
         return options
