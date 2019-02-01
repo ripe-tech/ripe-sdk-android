@@ -5,8 +5,8 @@ import android.os.Bundle
 import android.widget.ImageView
 
 import com.ripe.android.base.Ripe
-import com.ripe.android.visual.Image
 import com.ripe.examples.R
+import kotlin.reflect.KCallable
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,5 +21,8 @@ class MainActivity : AppCompatActivity() {
         ripe.bindImage(imageView)
         ripe.setInitials("PT", "grey")
         ripe.update()
+        ripe.getPrice(hashMapOf("brand" to "dummy", "model" to "dummy")){
+            print(it)
+        }
     }
 }
