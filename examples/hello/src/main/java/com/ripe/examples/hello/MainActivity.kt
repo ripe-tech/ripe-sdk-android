@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.widget.ImageView
 
 import com.ripe.android.base.Ripe
-import com.ripe.android.visual.Image
 import com.ripe.examples.R
 
 class MainActivity : AppCompatActivity() {

@@ -23,11 +23,11 @@ class Image constructor(private val imageView: ImageView, override val owner: Ri
 
         this.initials = state["initials"] as String? ?: this.initials
         this.engraving = state["engraving"] as String? ?: this.engraving
-        var initialsSpec = if (initials != null && engraving !== null)
+        var initialsSpec = if (initials != null && engraving !== null && this.showInitials)
             this.initialsBuilder(initials!!, engraving!!, this.imageView)
             else HashMap()
 
-        val url = this.owner._getImageUrl(
+        val url = this.owner.api._getImageUrl(
             hashMapOf(
                 "brand" to brand,
                 "model" to model,
