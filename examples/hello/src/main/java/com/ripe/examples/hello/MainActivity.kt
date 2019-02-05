@@ -6,7 +6,8 @@ import android.widget.ImageView
 
 import com.ripe.android.base.Ripe
 import com.ripe.examples.R
-import kotlin.reflect.KCallable
+import java.util.*
+import kotlin.concurrent.timerTask
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,8 +22,11 @@ class MainActivity : AppCompatActivity() {
         ripe.bindImage(imageView)
         ripe.setInitials("PT", "grey")
         ripe.update()
-        ripe.getPrice(hashMapOf("brand" to "dummy", "model" to "dummy")){
-            print(it)
-        }
+        Timer().schedule(timerTask {
+            ripe.api.getPrice { result, isValid ->
+                print(result)
+            }
+        }, 500)
+
     }
 }

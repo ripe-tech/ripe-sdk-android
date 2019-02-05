@@ -8,6 +8,7 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import org.json.JSONObject
 import com.ripe.android.base.Ripe
+import org.json.JSONException
 
 interface BaseAPI {
     val owner: Ripe
@@ -16,26 +17,26 @@ interface BaseAPI {
         return this.owner.options["url"] as String? ?: "https://sandbox.platforme.com/api/"
     }
 
-    fun getPrice(options: HashMap<String, Any>, callback: (args: Any?) -> Unit) {
+    fun getPrice(options: HashMap<String, Any> = HashMap(), callback: (result: JSONObject?, isValid: Boolean) -> Unit) {
         var _options = this._getPriceOptions(options)
         _options = this._build(_options)
         val url = _options["url"] as String
         this._cacheURL(url, options, callback)
     }
 
-    fun _cacheURL(url: String, options: HashMap<String, Any>, callback: (args: Any?) -> Unit) {
+    fun _cacheURL(url: String, options: HashMap<String, Any>, callback: (result: JSONObject?, isValid: Boolean) -> Unit) {
         return this._requestURL(url, options, callback)
     }
 
-    fun _requestURL(url: String, options: HashMap<String, Any>, callback: (args: Any?) -> Unit) {
+    fun _requestURL(url: String, options: HashMap<String, Any>, callback: (result: JSONObject?, isValid: Boolean) -> Unit) {
         var url = url
         val method = options["method"] as String? ?: "GET"
-        val params = options["params"] as HashMap<String, String>? ?: HashMap()
+        val params = options["params"] as HashMap<String, Any>? ?: HashMap()
         val headers = options["headers"] as HashMap<String, String>? ?: HashMap()
         var data = options["data"]
         var contentType = options["contentType"]
 
-        val query = this._buildQuery(params) + "&p=side:leather_dmy:black"
+        val query = this._buildQuery(params)
         val isEmpty = arrayOf("GET", "DELETE").contains(method)
         val hasQuery = url.contains("?")
         val separator = if (hasQuery) "&" else "?"
@@ -49,7 +50,12 @@ interface BaseAPI {
 
         val task = DownloadURLTask(object: DownloadURLDelegate {
             override fun downloadURLResult(result: String) {
-                callback(result)
+                try {
+                    val resultJSON = JSONObject(result)
+                    callback(resultJSON, true)
+                } catch (exception: JSONException) {
+                    callback(null, false)
+                }
             }
         })
         task.execute(url)
@@ -90,21 +96,35 @@ interface BaseAPI {
     fun _getImageUrl(options: HashMap<String, Any> = HashMap()): String {
         val _options = this._getImageOptions(options)
         val url = _options["url"] as String
-        val params = _options["params"] as HashMap<String, String>
+        val params = _options["params"] as HashMap<String, Any>
         return "${url}?${this._buildQuery(params)}"
     }
 
     fun _getQueryOptions(options: HashMap<String, Any>): HashMap<String, Any> {
-        val params: HashMap<String, String> = options["params"] as HashMap<String, String>?
+        val params = options["params"] as HashMap<String, Any>?
                 ?: HashMap()
         val brand = options["brand"] as String? ?: this.owner.brand
         val model = options["model"] as String? ?: this.owner.model
+        val parts = options["parts"] as HashMap<String, Any>? ?: this.owner.parts
+
         if (brand != null) {
             params["brand"] = brand
         }
         if (model != null) {
             params["model"] = model
         }
+
+        val partsQ = ArrayList<String>()
+        for (part in parts?.keys) {
+            val value = parts.get(part) as HashMap<String, String>
+            val material = value["material"]
+            val color = value["color"]
+            if (material == null || color == null) {
+                continue
+            }
+            partsQ.add("${part}:${material}:${color}")
+        }
+        params.set("p", partsQ)
 
         // TODO
         options["params"] = params
@@ -115,13 +135,20 @@ interface BaseAPI {
         return options // TODO
     }
 
-    fun _buildQuery(params: HashMap<String, String>): String {
+    fun _buildQuery(params: HashMap<String, Any>): String {
         val buffer = ArrayList<String>()
         params.forEach { (key, value) ->
-            var valueS = value.toString()
-            valueS = URLEncoder.encode(valueS, "UTF-8")
-            buffer.add("$key=$valueS")
+            if (value is String) {
+                val valueS = URLEncoder.encode(value, "UTF-8")
+                buffer.add("$key=$valueS")
+            } else if (value is ArrayList<*>) {
+                value.forEach {
+                    val valueS = URLEncoder.encode(it.toString(),"UTF-8")
+                    buffer.add("$key=$valueS")
+                }
+            }
         }
+
         return buffer.joinToString("&")
     }
 
