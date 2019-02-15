@@ -9,6 +9,9 @@ import java.io.InputStreamReader
 import org.json.JSONObject
 import com.ripe.android.base.Ripe
 import org.json.JSONException
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import kotlin.collections.HashMap
 
 interface BaseAPI {
     val owner: Ripe
@@ -17,18 +20,18 @@ interface BaseAPI {
         return this.owner.options["url"] as String? ?: "https://sandbox.platforme.com/api/"
     }
 
-    fun getPrice(options: HashMap<String, Any> = HashMap(), callback: (result: JSONObject?, isValid: Boolean) -> Unit) {
+    fun getPrice(options: HashMap<String, Any> = HashMap(), callback: (result: HashMap<String, Any>?, isValid: Boolean) -> Unit) {
         var _options = this._getPriceOptions(options)
         _options = this._build(_options)
         val url = _options["url"] as String
         this._cacheURL(url, options, callback)
     }
 
-    fun _cacheURL(url: String, options: HashMap<String, Any>, callback: (result: JSONObject?, isValid: Boolean) -> Unit) {
+    fun _cacheURL(url: String, options: HashMap<String, Any>, callback: (result: HashMap<String, Any>?, isValid: Boolean) -> Unit) {
         return this._requestURL(url, options, callback)
     }
 
-    fun _requestURL(url: String, options: HashMap<String, Any>, callback: (result: JSONObject?, isValid: Boolean) -> Unit) {
+    fun _requestURL(url: String, options: HashMap<String, Any>, callback: (result: HashMap<String, Any>?, isValid: Boolean) -> Unit) {
         var url = url
         val method = options["method"] as String? ?: "GET"
         val params = options["params"] as HashMap<String, Any>? ?: HashMap()
@@ -51,8 +54,10 @@ interface BaseAPI {
         val task = DownloadURLTask(object: DownloadURLDelegate {
             override fun downloadURLResult(result: String) {
                 try {
-                    val resultJSON = JSONObject(result)
-                    callback(resultJSON, true)
+                    val gson = Gson()
+                    val type = object : TypeToken<HashMap<String, Any>>() {}.type
+                    val resultMap = gson.fromJson<HashMap<String, Any>>(result, type)
+                    callback(resultMap, true)
                 } catch (exception: JSONException) {
                     callback(null, false)
                 }
@@ -116,7 +121,7 @@ interface BaseAPI {
 
         val partsQ = ArrayList<String>()
         for (part in parts?.keys) {
-            val value = parts.get(part) as HashMap<String, String>
+            val value = parts.get(part) as Map<String, String>
             val material = value["material"]
             val color = value["color"]
             if (material == null || color == null) {

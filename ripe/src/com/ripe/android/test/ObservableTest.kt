@@ -20,7 +20,7 @@ class ObservableTest {
         assertNotNull(observable.callbacks["test"])
         assertEquals(observable.callbacks["test"]!!.size, 1)
 
-        observable.trigger("test", mapOf("a" to "a", "b" to "b"))
+        observable.trigger("test", hashMapOf("a" to "a", "b" to "b"))
 
         observable.removeCallback("test", callback)
         assertEquals(observable.callbacks["test"]!!.size, 0)

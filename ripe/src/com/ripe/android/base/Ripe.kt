@@ -1,6 +1,7 @@
 package com.ripe.android.base
 
 import android.widget.ImageView
+import com.google.gson.internal.LinkedTreeMap
 
 import com.ripe.android.api.RipeAPI
 import com.ripe.android.visual.Image
@@ -56,14 +57,15 @@ class Ripe constructor(var brand: String?, var model: String?, var options: Hash
                 this.trigger("ready")
             }
             if (hasModel) {
-                this.parts = parts
+                val parts = parts["parts"] as LinkedTreeMap<String, Any>
+                this.parts = parts.toMap<String, Any>() as HashMap<String, Any>
                 this.update()
             }
         }
         if (loadDefaults) {
             this.api.getDefaults(callback = callback)
         } else {
-            Timer().schedule(timerTask { callback(null, true) }, 1000)
+            Timer().schedule(timerTask { callback(null, true) }, 0)
         }
 
         // in case the current instance already contains configured parts
@@ -81,7 +83,7 @@ class Ripe constructor(var brand: String?, var model: String?, var options: Hash
 
         if(this.ready && this.usePrice) {
             this.api.getPrice { result, isValid ->
-                if (isValid) this.trigger("price", result)
+                if (isValid) this.trigger("price", result!!)
             }
         }
     }
