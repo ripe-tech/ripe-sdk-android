@@ -24,11 +24,9 @@ class MainActivity : AppCompatActivity() {
             val total = result["total"]!!
             val priceFinal = total["price_final"] as Double
             val currency = total["currency"] as String
-            textView.setText("${priceFinal} ${currency}")
+            textView.text = "${priceFinal} ${currency}"
         }
         ripe.bindImage(imageView)
         ripe.setInitials("PT", "grey")
-        ripe.update()
-
     }
 }

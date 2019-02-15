@@ -1,13 +1,13 @@
 package com.ripe.android.base
 
+import java.util.*
+import kotlin.collections.HashMap
+import kotlin.concurrent.timerTask
 import android.widget.ImageView
 import com.google.gson.internal.LinkedTreeMap
 
 import com.ripe.android.api.RipeAPI
 import com.ripe.android.visual.Image
-import java.util.*
-import kotlin.collections.HashMap
-import kotlin.concurrent.timerTask
 
 class Ripe constructor(var brand: String?, var model: String?, var options: HashMap<String, Any>) : Observable() {
 

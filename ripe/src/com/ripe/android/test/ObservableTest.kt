@@ -6,8 +6,6 @@ import org.junit.Assert.assertNotNull
 
 import com.ripe.android.base.Observable
 
-
-
 class ObservableTest {
 
     @Test

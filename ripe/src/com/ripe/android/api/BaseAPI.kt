@@ -1,17 +1,14 @@
 package com.ripe.android.api
 
-import com.ripe.android.util.DownloadURLDelegate
-import com.ripe.android.util.DownloadURLTask
-import java.net.URL
 import java.net.URLEncoder
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import org.json.JSONObject
-import com.ripe.android.base.Ripe
-import org.json.JSONException
 import com.google.gson.Gson
+import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
 import kotlin.collections.HashMap
+
+import com.ripe.android.base.Ripe
+import com.ripe.android.util.DownloadURLDelegate
+import com.ripe.android.util.DownloadURLTask
 
 interface BaseAPI {
     val owner: Ripe
@@ -58,7 +55,7 @@ interface BaseAPI {
                     val type = object : TypeToken<HashMap<String, Any>>() {}.type
                     val resultMap = gson.fromJson<HashMap<String, Any>>(result, type)
                     callback(resultMap, true)
-                } catch (exception: JSONException) {
+                } catch (exception: JsonSyntaxException) {
                     callback(null, false)
                 }
             }
@@ -155,23 +152,5 @@ interface BaseAPI {
         }
 
         return buffer.joinToString("&")
-    }
-
-    fun _cacheURL(url: String, options: HashMap<String, Any>): JSONObject {
-        return this._requestURL(url, options)
-    }
-
-    fun _requestURL(url: String, options: HashMap<String, Any>): JSONObject {
-        val _url = URL(url)
-        val inputStream = _url.openStream()
-        BufferedReader(InputStreamReader(inputStream)).use {
-            val response = StringBuffer()
-            var inputLine = it.readLine()
-            while (inputLine != null) {
-                response.append(inputLine)
-                inputLine = it.readLine()
-            }
-            return JSONObject(response.toString())
-        }
     }
 }
