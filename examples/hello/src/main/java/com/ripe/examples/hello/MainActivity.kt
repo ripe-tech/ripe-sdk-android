@@ -6,8 +6,6 @@ import android.widget.ImageView
 
 import com.ripe.android.base.Ripe
 import com.ripe.examples.R
-import java.util.*
-import kotlin.concurrent.timerTask
 
 class MainActivity : AppCompatActivity() {
 
@@ -22,11 +20,11 @@ class MainActivity : AppCompatActivity() {
         ripe.bindImage(imageView)
         ripe.setInitials("PT", "grey")
         ripe.update()
-        Timer().schedule(timerTask {
-            ripe.api.getPrice { result, isValid ->
+        ripe.bind("config") {
+            ripe.api.getPrice { result, _ ->
                 print(result)
             }
-        }, 500)
+        }
 
     }
 }
