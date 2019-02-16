@@ -11,9 +11,15 @@ class ObservableTest {
     @Test
     fun testAddRemove() {
         val observable = Observable()
-        val callback = observable.addCallback("test") { a: String, b: String -> print(a + b) }
+        val callback = observable.addCallback("test") {
+            val value = it as Map<String, String>
+            print("${value["a"]} ${value["b"]}")
+        }
         assertNotNull(observable.callbacks["test"])
         assertEquals(observable.callbacks["test"]!!.size, 1)
+
+        observable.trigger("test", hashMapOf("a" to "a", "b" to "b"))
+
         observable.removeCallback("test", callback)
         assertEquals(observable.callbacks["test"]!!.size, 0)
     }

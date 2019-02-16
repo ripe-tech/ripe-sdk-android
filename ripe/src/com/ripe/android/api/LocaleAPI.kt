@@ -1,20 +1,11 @@
 package com.ripe.android.api
 
-import com.ripe.android.base.Ripe
-import org.json.JSONObject
-
 interface LocaleAPI : BaseAPI {
-    fun locale(value: String, locale: String, options: Map<String, Any> = HashMap()): JSONObject
-    fun localeMultiple(values: List<String>, locale: String, options: Map<String, Any> = HashMap()): JSONObject
-}
-
-class LocaleAPIImpl constructor(override val owner: Ripe): LocaleAPI {
-
-    override fun locale(value: String, locale: String, options: Map<String, Any>): JSONObject {
-        return this.localeMultiple(listOf(value), locale, options)
+    fun locale(value: String, locale: String, options: Map<String, Any>, callback: (result: HashMap<String, Any>?, isValid: Boolean) -> Unit) {
+        return this.localeMultiple(listOf(value), locale, options, callback)
     }
 
-    override fun localeMultiple(values: List<String>, locale: String, options: Map<String, Any>): JSONObject {
+    fun localeMultiple(values: List<String>, locale: String, options: Map<String, Any>, callback: (result: HashMap<String, Any>?, isValid: Boolean) -> Unit) {
         var url = this.getUrl() + "locale"
         var _options: HashMap<String, Any> = hashMapOf(
                 "url" to url,
@@ -27,6 +18,6 @@ class LocaleAPIImpl constructor(override val owner: Ripe): LocaleAPI {
         _options.putAll(options)
         _options = this._build(_options)
         url = _options["url"] as String
-        return this._cacheURL(url, _options)
+        return this._cacheURL(url, _options, callback)
     }
 }
