@@ -20,6 +20,7 @@ class Ripe constructor(var brand: String?, var model: String?, var options: Hash
     private var parts = HashMap<String, Any>()
 
     init {
+        this._setOptions(options)
         if (brand != null && model != null) {
             this.config(brand!!, model!!, options)
         }
