@@ -107,7 +107,7 @@ interface BaseAPI {
                 ?: HashMap()
         val brand = options["brand"] as String? ?: this.owner.brand
         val model = options["model"] as String? ?: this.owner.model
-        val parts = options["parts"] as HashMap<String, Any>? ?: this.owner.parts
+        val parts = options["parts"] as HashMap<String, Any>? ?: this.owner.getParts()
 
         if (brand != null) {
             params["brand"] = brand
