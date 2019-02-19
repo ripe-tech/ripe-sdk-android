@@ -1,18 +1,21 @@
 package com.ripe.android.base
 
-import kotlin.reflect.KFunction
+import kotlinx.coroutines.Deferred
+
+typealias ObservableCallback = (args: Map<String, Any>) -> Deferred<Any?>?
 
 open class Observable {
-    val callbacks: MutableMap<String, MutableList<KFunction<Unit>>> = HashMap()
 
-    fun addCallback(event: String, callback: KFunction<Unit>): KFunction<Unit> {
+    val callbacks: MutableMap<String, MutableList<ObservableCallback>> = HashMap()
+
+    fun addCallback(event: String, callback: ObservableCallback): ObservableCallback {
         val callbacks = this.callbacks[event] ?: ArrayList()
         callbacks.add(callback)
         this.callbacks[event] = callbacks
         return callback
     }
 
-    fun removeCallback(event: String, callback: (KFunction<Unit>)?) {
+    fun removeCallback(event: String, callback: ObservableCallback?) {
         val callbacks = this.callbacks[event] ?: ArrayList()
         if (callback != null) {
             callbacks.remove(callback)
@@ -22,12 +25,13 @@ open class Observable {
         this.callbacks[event] = callbacks
     }
 
-    fun runCallbacks(event: String, args: Map<String, Any> = HashMap()) {
+    fun runCallbacks(event: String, args: Map<String, Any> = HashMap()): List<Deferred<Any?>> {
         val callbacks = this.callbacks[event] ?: ArrayList()
-        callbacks.forEach { it.call(args) }
+        val futures = callbacks.map { it.invoke(args) }.filter { it != null }
+        return futures as List<Deferred<Any?>>
     }
 
-    fun bind(event: String, callback: KFunction<Unit>) = addCallback(event, callback)
-    fun unbind(event: String, callback: (KFunction<Unit>)?) = removeCallback(event, callback)
+    fun bind(event: String, callback: ObservableCallback) = addCallback(event, callback)
+    fun unbind(event: String, callback: ObservableCallback?) = removeCallback(event, callback)
     fun trigger(event: String, args: Map<String, Any> = HashMap()) = runCallbacks(event, args)
 }
