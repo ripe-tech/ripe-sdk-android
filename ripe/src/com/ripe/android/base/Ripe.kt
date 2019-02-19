@@ -27,6 +27,9 @@ class Ripe constructor(var brand: String?, var model: String?, options: Map<Stri
     }
 
     fun config(brand: String, model: String, options: Map<String, Any> = HashMap()) {
+        // updates the current references to both the brand
+        // and the model according to the new configuration
+        // request (update before remote update)
         this.brand = brand
         this.model = model
 
