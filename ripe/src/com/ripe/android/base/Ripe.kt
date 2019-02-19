@@ -6,18 +6,18 @@ import android.widget.ImageView
 import com.ripe.android.api.RipeAPI
 import com.ripe.android.visual.Image
 
-class Ripe constructor(var brand: String?, var model: String?, var options: HashMap<String, Any>) : Observable() {
-
+class Ripe constructor(var brand: String?, var model: String?, options: Map<String, Any>) : Observable() {
+    var options = options.toMutableMap()
     var api = RipeAPI(this)
     var initials = ""
     var engraving = ""
-    var children = ArrayList<Interactable>()
-    var loadedConfig: HashMap<String, Any>? = null
+    var children: MutableList<Interactable> = ArrayList()
+    var loadedConfig: Map<String, Any>? = null
     var ready = false
     var useDefaults = true
     var usePrice = true
 
-    private var parts = HashMap<String, Any>()
+    private var parts: MutableMap<String, Any> = HashMap()
 
     init {
         this._setOptions(options)
@@ -26,7 +26,7 @@ class Ripe constructor(var brand: String?, var model: String?, var options: Hash
         }
     }
 
-    fun config(brand: String, model: String, options: HashMap<String, Any> = HashMap()) {
+    fun config(brand: String, model: String, options: Map<String, Any> = HashMap()) {
         this.brand = brand
         this.model = model
 
@@ -53,7 +53,7 @@ class Ripe constructor(var brand: String?, var model: String?, var options: Hash
 
             // determines if the defaults for the selected model should
             // be loaded so that the parts structure is initially populated
-            val hasParts = this.parts?.isNotEmpty()
+            val hasParts = this.parts.isNotEmpty()
             val loadDefaults = !hasParts && this.useDefaults && hasModel
 
             // in case the current instance already contains configured parts
@@ -71,28 +71,28 @@ class Ripe constructor(var brand: String?, var model: String?, var options: Hash
             var parts = this.parts
             if (loadDefaults) {
                 val defaults = this.loadedConfig!!["defaults"] as Map<String, Any>
-                parts = defaults.toMap() as HashMap<String, Any>
+                parts = defaults.toMutableMap()
             }
-            if (this.ready === false) {
+            if (!this.ready) {
                 this.ready = true
                 this.trigger("ready")
             }
 
             // in case there's no model defined in the current instance then there's
             // nothing more possible to be done, returns the control flow
-            if (hasModel === false) {
+            if (!hasModel) {
                 return@getConfig
             }
 
             // updates the parts of the current instance and triggers the remove and
             // local update operations, as expected
-            this.setParts(parts, false, hashMapOf("noPartEvents" to true))
+            this.setParts(parts, false, mapOf("noPartEvents" to true))
             this.update()
         }
 
     }
 
-    fun update(state: HashMap<String, Any> = this._getState()) {
+    fun update(state: Map<String, Any> = this._getState()) {
         this.children.forEach { it.update(state) }
 
         if (this.ready) this.trigger("update")
@@ -104,7 +104,7 @@ class Ripe constructor(var brand: String?, var model: String?, var options: Hash
         }
     }
 
-    fun getParts(): HashMap<String, Any> {
+    fun getParts(): Map<String, Any> {
         return this.parts
     }
 
@@ -113,7 +113,7 @@ class Ripe constructor(var brand: String?, var model: String?, var options: Hash
             return this._setPart(part, material, color)
         }
 
-        val eventValue = hashMapOf<String, Any>("parts" to this.parts, "options" to options)
+        val eventValue = mapOf<String, Any>("parts" to this.parts, "options" to options)
         this.trigger("pre_parts", eventValue)
         this._setPart(part, material, color)
         this.update()
@@ -133,7 +133,7 @@ class Ripe constructor(var brand: String?, var model: String?, var options: Hash
             return this.setParts(partsList, noPartEvent)
         }
 
-        val eventValue: HashMap<String, Any> = hashMapOf("parts" to this.parts, "options" to options)
+        val eventValue = mapOf("parts" to this.parts, "options" to options)
         this.trigger("pre_parts", eventValue)
         this._setParts(partsList, noPartEvent)
         this.update()
@@ -162,19 +162,19 @@ class Ripe constructor(var brand: String?, var model: String?, var options: Hash
         return child
     }
 
-    fun _getState(): HashMap<String, Any> {
-        return hashMapOf(
+    fun _getState(): Map<String, Any> {
+        return mapOf(
                 "parts" to this.parts,
                 "initials"  to this.initials,
                 "engraving" to this.engraving
         )
     }
 
-    fun _setOptions(options: HashMap<String, Any>?) {
-        this.options = options ?: HashMap<String, Any>()
-        val parts = options?.get("parts") as HashMap<String, Any>?
-        val useDefaults = options?.get("useDefaults") as Boolean?
-        val usePrice = options?.get("usePrice") as Boolean?
+    fun _setOptions(options: Map<String, Any>) {
+        this.options = options.toMutableMap()
+        val parts = options["parts"] as? MutableMap<String, Any>
+        val useDefaults = options["useDefaults"] as? Boolean
+        val usePrice = options["usePrice"] as? Boolean
 
         if (parts != null) {
             this.parts = parts
@@ -219,7 +219,7 @@ class Ripe constructor(var brand: String?, var model: String?, var options: Hash
             }
         }
 
-        val eventValue = hashMapOf("part" to part, "value" to value)
+        val eventValue = mapOf("part" to part, "value" to value)
         this.trigger("pre_part", eventValue)
         if (remove) {
             this.parts.remove(part)
