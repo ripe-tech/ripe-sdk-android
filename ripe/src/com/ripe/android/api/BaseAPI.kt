@@ -17,31 +17,31 @@ interface BaseAPI {
     }
 
     fun getPrice(options: Map<String, Any> = HashMap(), callback: (result: Map<String, Any>?, isValid: Boolean) -> Unit) {
-        var priceOptions = this._getPriceOptions(options)
-        priceOptions = this._build(priceOptions)
+        var priceOptions = this.getPriceOptions(options)
+        priceOptions = this.build(priceOptions)
         val url = priceOptions["url"] as String
-        this._cacheURL(url, priceOptions, callback)
+        this.cacheURL(url, priceOptions, callback)
     }
 
-    fun _cacheURL(url: String, options: Map<String, Any>, callback: (result: Map<String, Any>?, isValid: Boolean) -> Unit) {
-        return this._requestURL(url, options, callback)
+    fun cacheURL(url: String, options: Map<String, Any>, callback: (result: Map<String, Any>?, isValid: Boolean) -> Unit) {
+        return this.requestURL(url, options, callback)
     }
 
-    fun _requestURL(url: String, options: Map<String, Any>, callback: (result: Map<String, Any>?, isValid: Boolean) -> Unit) {
-        var url = url
+    fun requestURL(url: String, options: Map<String, Any>, callback: (result: Map<String, Any>?, isValid: Boolean) -> Unit) {
+        var requestUrl = url
         val method = options["method"] as String? ?: "GET"
         val params = options["params"] as Map<String, Any>? ?: HashMap()
         val headers = options["headers"] as Map<String, String>? ?: HashMap()
         var data = options["data"]
         var contentType = options["contentType"]
 
-        val query = this._buildQuery(params)
+        val query = this.buildQuery(params)
         val isEmpty = arrayOf("GET", "DELETE").contains(method)
-        val hasQuery = url.contains("?")
+        val hasQuery = requestUrl.contains("?")
         val separator = if (hasQuery) "&" else "?"
 
         if (isEmpty || data != null) {
-            url += separator + query
+            requestUrl += separator + query
         } else {
             data = query
             contentType = "application/x-www-form-urlencoded"
@@ -59,12 +59,12 @@ interface BaseAPI {
                 }
             }
         })
-        task.execute(url)
+        task.execute(requestUrl)
     }
 
-    fun _getPriceOptions(options: Map<String, Any>): Map<String, Any> {
+    fun getPriceOptions(options: Map<String, Any>): Map<String, Any> {
         val url = this.getUrl() + "config/price"
-        val result = this._getQueryOptions(options).toMutableMap()
+        val result = this.getQueryOptions(options).toMutableMap()
         result.putAll(mapOf(
                 "url" to url,
                 "method" to "GET"
@@ -72,8 +72,8 @@ interface BaseAPI {
         return result
     }
 
-    fun _getImageOptions(options: Map<String, Any> = HashMap()): Map<String, Any> {
-        val result = this._getQueryOptions(options).toMutableMap()
+    fun getImageOptions(options: Map<String, Any> = HashMap()): Map<String, Any> {
+        val result = this.getQueryOptions(options).toMutableMap()
         val params: MutableMap<String, Any> = result["params"] as? MutableMap<String, Any> ?: HashMap()
 
         val initials = options["initials"] as String?
@@ -94,14 +94,14 @@ interface BaseAPI {
         return result
     }
 
-    fun _getImageUrl(options: Map<String, Any> = HashMap()): String {
-        val imageOptions = this._getImageOptions(options)
+    fun getImageUrl(options: Map<String, Any> = HashMap()): String {
+        val imageOptions = this.getImageOptions(options)
         val url = imageOptions["url"] as String
         val params = imageOptions["params"] as Map<String, Any>
-        return "${url}?${this._buildQuery(params)}"
+        return "${url}?${this.buildQuery(params)}"
     }
 
-    fun _getQueryOptions(options: Map<String, Any>): Map<String, Any> {
+    fun getQueryOptions(options: Map<String, Any>): Map<String, Any> {
         val result = options.toMutableMap()
         val optionsParams = options["params"] as Map<String, Any>?
                 ?: HashMap()
@@ -134,11 +134,11 @@ interface BaseAPI {
         return result
     }
 
-    fun _build(options: Map<String, Any>): Map<String, Any> {
+    fun build(options: Map<String, Any>): Map<String, Any> {
         return options // TODO
     }
 
-    fun _buildQuery(params: Map<String, Any>): String {
+    fun buildQuery(params: Map<String, Any>): String {
         val buffer = ArrayList<String>()
         params.forEach { (key, value) ->
             if (value is String) {

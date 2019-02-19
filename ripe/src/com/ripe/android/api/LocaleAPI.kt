@@ -16,8 +16,8 @@ interface LocaleAPI : BaseAPI {
                 )
         )
         _options.putAll(options)
-        _options = this._build(_options).toMutableMap()
+        _options = this.build(_options).toMutableMap()
         url = _options["url"] as String
-        return this._cacheURL(url, _options, callback)
+        return this.cacheURL(url, _options, callback)
     }
 }

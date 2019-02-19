@@ -4,9 +4,9 @@ interface BrandAPI: BaseAPI {
 
     fun getConfig(options: Map<String, Any> = HashMap(), callback: (config: Map<String, Any>?, isValid: Boolean) -> Unit) {
         var _options = this.getConfigOptions(options)
-        _options = this._build(_options)
+        _options = this.build(_options)
         val url = _options["url"] as String
-        return this._cacheURL(url, _options, callback)
+        return this.cacheURL(url, _options, callback)
     }
 
     fun getConfigOptions(options: Map<String, Any> = HashMap()): Map<String, Any> {
@@ -20,9 +20,9 @@ interface BrandAPI: BaseAPI {
 
     fun getDefaults(options: Map<String, Any> = HashMap(), callback: (defaults: Map<String, Any>?, isValid: Boolean) -> Unit) {
         var _options = this.getDefaultsOptions(options)
-        _options = this._build(_options)
+        _options = this.build(_options)
         val url = _options["url"] as String
-        return this._cacheURL(url, _options, callback)
+        return this.cacheURL(url, _options, callback)
     }
 
     fun getDefaultsOptions(options: Map<String, Any> = HashMap()): Map<String, Any> {
