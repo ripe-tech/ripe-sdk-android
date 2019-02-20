@@ -29,11 +29,11 @@ class ObservableTest {
     @Test
     fun testAsyncEvents() {
         val observable = Observable()
-        observable.bind("test") {
+        observable.bindAsync("test") {
             GlobalScope.async { "result" }
         }
 
-        observable.bind("test") {
+        observable.bindAsync("test") {
             GlobalScope.async {
                 delay(100)
                 return@async "delay"}

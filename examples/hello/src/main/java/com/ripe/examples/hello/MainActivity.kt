@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
         val ripe = Ripe("dummy", "dummy", hashMapOf(
                 "url" to "https://sandbox.platforme.com/api/"
         ))
-        ripe.bindSync("price") {
+        ripe.bind("price") {
             val result = it as Map<String, Map<String, Any>>
             val total = result["total"]!!
             val priceFinal = total["price_final"] as Double
