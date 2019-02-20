@@ -15,7 +15,7 @@ class ObservableTest {
     @Test
     fun testAddRemove() {
         val observable = Observable()
-        val callback = observable.bind("test") { null }
+        val callback = observable.bind("test") {}
 
         assertNotNull(observable.callbacks["test"])
         assertEquals(observable.callbacks["test"]!!.size, 1)

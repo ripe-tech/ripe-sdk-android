@@ -73,6 +73,7 @@ class Ripe constructor(var brand: String?, var model: String?, options: Map<Stri
             // if the defaults should be loaded
             var parts = this.parts
             if (loadDefaults) {
+                @Suppress("unchecked_cast")
                 val defaults = this.loadedConfig!!["defaults"] as Map<String, Any>
                 parts = defaults.toMutableMap()
             }
@@ -125,9 +126,11 @@ class Ripe constructor(var brand: String?, var model: String?, options: Map<Stri
     }
 
     fun setParts(parts: Any, noEvents: Boolean = false, options: Map<String, Any> = HashMap()) {
+        @Suppress("unchecked_cast")
         var partsList = parts as? ArrayList<ArrayList<String?>> ?: ArrayList()
-        if (parts as? HashMap<String, Any> != null) {
-            partsList = this._partsList(parts)
+        if (parts is HashMap<*, *>) {
+            @Suppress("unchecked_cast")
+            partsList = this._partsList(parts as HashMap<String, Any>)
         }
 
         val noPartEvent = options["noPartEvent"] as? Boolean ?: false
@@ -175,6 +178,7 @@ class Ripe constructor(var brand: String?, var model: String?, options: Map<Stri
 
     fun _setOptions(options: Map<String, Any>) {
         this.options = options.toMutableMap()
+        @Suppress("unchecked_cast")
         val parts = options["parts"] as? MutableMap<String, Any>
         val useDefaults = options["useDefaults"] as? Boolean
         val usePrice = options["usePrice"] as? Boolean
@@ -201,7 +205,9 @@ class Ripe constructor(var brand: String?, var model: String?, options: Map<Stri
         // is considered a removal operation and the part
         // is removed from the parts structure if it's
         // optional or an error is thrown if it's required
+        @Suppress("unchecked_cast")
         val defaults = this.loadedConfig!!["defaults"] as Map<String, Any>
+        @Suppress("unchecked_cast")
         val partInfo = defaults[part] as Map<String, Any>
         val isOptional = partInfo["optional"] as? Boolean ?: false
         val isRequired = !isOptional
@@ -210,6 +216,7 @@ class Ripe constructor(var brand: String?, var model: String?, options: Map<Stri
             throw Error("Part ${part} can't be removed")
         }
 
+        @Suppress("unchecked_cast")
         val value: MutableMap<String, String?> = this.parts[part] as? MutableMap<String, String?> ?: HashMap()
         value["material"] = if (remove) null else material
         value["color"] = if (remove) null else color
@@ -240,6 +247,7 @@ class Ripe constructor(var brand: String?, var model: String?, options: Map<Stri
     fun _partsList(parts: HashMap<String, Any>): ArrayList<ArrayList<String?>> {
         val partsList = ArrayList<ArrayList<String?>>()
         for ((key, value) in parts) {
+            @Suppress("unchecked_cast")
             val part = value as Map<String, String>
             partsList.add(arrayListOf(key, part["material"], part["color"]))
         }

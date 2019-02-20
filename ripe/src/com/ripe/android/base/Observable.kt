@@ -28,6 +28,7 @@ open class Observable {
     fun runCallbacks(event: String, args: Map<String, Any> = HashMap()): List<Deferred<Any?>> {
         val callbacks = this.callbacks[event] ?: ArrayList()
         val futures = callbacks.map { it.invoke(args) }.filter { it != null }
+        @Suppress("unchecked_cast")
         return futures as List<Deferred<Any?>>
     }
 
