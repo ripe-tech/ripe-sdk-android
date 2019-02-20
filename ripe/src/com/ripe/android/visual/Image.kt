@@ -12,6 +12,7 @@ class Image constructor(private val imageView: ImageView, override val owner: Ri
         DownloadImageDelegate {
 
     private var showInitials = this.options["showInitials"] as Boolean? ?: true
+    @Suppress("unchecked_cast")
     private var initialsBuilder: (String, String, ImageView) -> HashMap<String, Any> = this.options["initialsBuilder"] as ((String, String, ImageView) -> HashMap<String, Any>)? ?: ::_initialsBuilder
     private var initials: String? = null
     private var engraving: String? = null
