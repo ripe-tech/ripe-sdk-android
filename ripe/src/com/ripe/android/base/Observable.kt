@@ -31,7 +31,16 @@ open class Observable {
         return futures as List<Deferred<Any?>>
     }
 
-    fun bind(event: String, callback: ObservableCallback) = addCallback(event, callback)
+    fun bind(event: String, callback: (args: Map<String, Any>) -> Unit) = bindSync(event, callback)
+
+    fun bindSync(event: String, callback: (args: Map<String, Any>) -> Unit) = addCallback(event) { args ->
+        callback(args)
+        return@addCallback null
+    }
+
+    fun bindAsync(event: String, callback: ObservableCallback) = addCallback(event, callback)
+
     fun unbind(event: String, callback: ObservableCallback?) = removeCallback(event, callback)
+
     fun trigger(event: String, args: Map<String, Any> = HashMap()) = runCallbacks(event, args)
 }
