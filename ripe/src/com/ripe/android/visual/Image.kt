@@ -27,7 +27,7 @@ class Image constructor(private val imageView: ImageView, override val owner: Ri
             this.initialsBuilder(initials!!, engraving!!, this.imageView)
             else HashMap()
 
-        val url = this.owner.api._getImageUrl(
+        val url = this.owner.api.getImageUrl(
             hashMapOf(
                 "brand" to brand,
                 "model" to model,

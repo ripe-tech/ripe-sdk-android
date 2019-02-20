@@ -2,33 +2,35 @@ package com.ripe.android.api
 
 interface BrandAPI: BaseAPI {
 
-    fun getConfig(options: HashMap<String, Any> = HashMap(), callback: (config: HashMap<String, Any>?, isValid: Boolean) -> Unit) {
+    fun getConfig(options: Map<String, Any> = HashMap(), callback: (config: Map<String, Any>?, isValid: Boolean) -> Unit) {
         var _options = this.getConfigOptions(options)
-        _options = this._build(_options)
+        _options = this.build(_options)
         val url = _options["url"] as String
-        return this._cacheURL(url, _options, callback)
+        return this.cacheURL(url, _options, callback)
     }
 
-    fun getConfigOptions(options: HashMap<String, Any> = HashMap()): HashMap<String, Any> {
+    fun getConfigOptions(options: Map<String, Any> = HashMap()): Map<String, Any> {
+        val configOptions = options.toMutableMap()
         val brand = options["brand"] as String? ?: this.owner.brand
         val model = options["model"] as String? ?: this.owner.model
         val url = "${this.getUrl()}brands/${brand}/models/${model}/config"
-        options.putAll(hashMapOf("url" to url, "method" to "GET"))
-        return options
+        configOptions.putAll(mapOf("url" to url, "method" to "GET"))
+        return configOptions
     }
 
-    fun getDefaults(options: HashMap<String, Any> = HashMap(), callback: (defaults: HashMap<String, Any>?, isValid: Boolean) -> Unit) {
+    fun getDefaults(options: Map<String, Any> = HashMap(), callback: (defaults: Map<String, Any>?, isValid: Boolean) -> Unit) {
         var _options = this.getDefaultsOptions(options)
-        _options = this._build(_options)
+        _options = this.build(_options)
         val url = _options["url"] as String
-        return this._cacheURL(url, _options, callback)
+        return this.cacheURL(url, _options, callback)
     }
 
-    fun getDefaultsOptions(options: HashMap<String, Any> = HashMap()): HashMap<String, Any> {
+    fun getDefaultsOptions(options: Map<String, Any> = HashMap()): Map<String, Any> {
+        val defaultOptions = options.toMutableMap()
         val brand = options["brand"] as String? ?: this.owner.brand
         val model = options["model"] as String? ?: this.owner.model
         val url = "${this.getUrl()}brands/${brand}/models/${model}/defaults"
-        options.putAll(hashMapOf("url" to url, "method" to "GET"))
-        return options
+        defaultOptions.putAll(mapOf("url" to url, "method" to "GET"))
+        return defaultOptions
     }
 }
