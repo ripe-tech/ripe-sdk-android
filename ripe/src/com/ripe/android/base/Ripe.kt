@@ -1,7 +1,8 @@
 package com.ripe.android.base
 
-import java.lang.Exception
 import kotlin.collections.HashMap
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import android.widget.ImageView
 import com.ripe.android.api.RipeAPI
 import com.ripe.android.visual.Image
@@ -21,10 +22,18 @@ class Ripe constructor(var brand: String?, var model: String?, options: Map<Stri
 
     init {
         this._setOptions(options)
-        this.config(brand, model, options)
+
+        val ripe = this
+
+        @Suppress("experimental_api_usage")
+        MainScope().launch {
+            ripe.config(brand, model, options)
+        }
     }
 
-    fun config(brand: String?, model: String?, options: Map<String, Any> = HashMap()) {
+
+
+    suspend fun config(brand: String?, model: String?, options: Map<String, Any> = HashMap()) {
         // updates the current references to both the brand
         // and the model according to the new configuration
         // request (update before remote update)
@@ -47,47 +56,46 @@ class Ripe constructor(var brand: String?, var model: String?, options: Map<Stri
 
         // retrieves the configuration for the currently loaded model so
         // that others may use it freely (cache mechanism)
-        val callback: (config: Map<String, Any>?, isValid: Boolean) -> Unit =  { config, isValid ->
-            this.loadedConfig = config
+        this.loadedConfig = if (hasModel) this.api.getConfigAsync().await() else { null }
 
-            // determines if the defaults for the selected model should
-            // be loaded so that the parts structure is initially populated
-            val hasParts = this.parts.isNotEmpty()
-            val loadDefaults = !hasParts && this.useDefaults && hasModel
+        // determines if the defaults for the selected model should
+        // be loaded so that the parts structure is initially populated
+        val hasParts = this.parts.isNotEmpty()
+        val loadDefaults = !hasParts && this.useDefaults && hasModel
 
-            // in case the current instance already contains configured parts
-            // the instance is marked as ready (for complex resolution like price)
-            // for cases where this is the first configuration (not an update)
-            val update = this.options["update"] as Boolean? ?: false
-            this.ready = if (update) this.ready else hasParts
+        // in case the current instance already contains configured parts
+        // the instance is marked as ready (for complex resolution like price)
+        // for cases where this is the first configuration (not an update)
+        val update = this.options["update"] as Boolean? ?: false
+        this.ready = if (update) this.ready else hasParts
 
-            // triggers the config event notifying any listener that the (base)
-            // configuration for this main RIPE instance has changed
-            this.trigger("config", this.loadedConfig ?: HashMap())
+        // triggers the config event notifying any listener that the (base)
+        // configuration for this main RIPE instance has changed
+        this.trigger("config", this.loadedConfig ?: HashMap())
 
-            // determines the proper initial parts for the model taking into account
-            // if the defaults should be loaded
-            var parts = this.parts
-            if (loadDefaults) {
-                @Suppress("unchecked_cast")
-                val defaults = this.loadedConfig!!["defaults"] as Map<String, Any>
-                parts = defaults.toMutableMap()
-            }
-            if (!this.ready) {
-                this.ready = true
-                this.trigger("ready")
-            }
-
-            // in case there's a model defined in the current instance then updates
-            // the parts of the current instance and triggers the remove and local
-            // update operations
-            if (hasModel) {
-                this.setParts(parts, false, mapOf("noPartEvents" to true))
-                this.update()
-            }
+        // determines the proper initial parts for the model taking into account
+        // if the defaults should be loaded
+        var parts = this.parts
+        if (loadDefaults) {
+            @Suppress("unchecked_cast")
+            val defaults = this.loadedConfig!!["defaults"] as Map<String, Any>
+            parts = defaults.toMutableMap()
+        }
+        if (!this.ready) {
+            this.ready = true
+            this.trigger("ready")
         }
 
-        if (hasModel) this.api.getConfig(HashMap(), callback) else callback(null, false)
+        // in case there's no model defined in the current instance then there's
+        // nothing more possible to be done, returns the control flow
+        if (!hasModel) {
+            return
+        }
+
+        // updates the parts of the current instance and triggers the remove and
+        // local update operations, as expected
+        this.setParts(parts, false, mapOf("noPartEvents" to true))
+        this.update()
     }
 
     fun update(state: Map<String, Any> = this._getState()) {
@@ -96,8 +104,13 @@ class Ripe constructor(var brand: String?, var model: String?, options: Map<Stri
         if (this.ready) this.trigger("update")
 
         if(this.ready && this.usePrice) {
-            this.api.getPrice { result, isValid ->
-                if (isValid) this.trigger("price", result!!)
+            val ripe = this
+            @Suppress("experimental_api_usage")
+            MainScope().launch {
+                val price = ripe.api.getPriceAsync().await()
+                if (price != null) {
+                    ripe.trigger("price", price)
+                }
             }
         }
     }

@@ -1,15 +1,16 @@
 package com.ripe.android.visual
 
+import java.net.URL
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import android.widget.ImageView
-import android.graphics.Bitmap
-
+import android.graphics.BitmapFactory
 import com.ripe.android.base.Ripe
-import com.ripe.android.util.DownloadImageDelegate
-import com.ripe.android.util.DownloadImageTask
 
 class Image constructor(private val imageView: ImageView, override val owner: Ripe, override val options: Map<String, Any> = HashMap()) :
-        Visual(owner, options),
-        DownloadImageDelegate {
+        Visual(owner, options) {
 
     private var showInitials = this.options["showInitials"] as Boolean? ?: true
     @Suppress("unchecked_cast")
@@ -40,16 +41,19 @@ class Image constructor(private val imageView: ImageView, override val owner: Ri
             return
         }
 
-        val task = DownloadImageTask(this)
-        task.execute(url)
         this.url = url
+        val imageView = this.imageView
+        CoroutineScope(Dispatchers.IO).launch {
+            val url = URL(url)
+            val inputStream = url.openStream()
+            val bitmap = BitmapFactory.decodeStream(inputStream)
+            withContext(Dispatchers.Main) {
+                imageView.setImageBitmap(bitmap)
+            }
+        }
     }
 
     override fun deinit() {}
-
-    override fun downloadImageResult(result: Bitmap) {
-        this.imageView.setImageBitmap(result)
-    }
 
     private fun _initialsBuilder(initials: String, engraving: String, view: ImageView): HashMap<String, Any> {
         return hashMapOf(
