@@ -6,7 +6,7 @@ import android.widget.ImageView
 import com.ripe.android.api.RipeAPI
 import com.ripe.android.visual.Image
 
-class Ripe constructor(var brand: String?, var model: String?, options: Map<String, Any>) : Observable() {
+class Ripe constructor(var brand: String?, var model: String?, options: Map<String, Any> = HashMap()) : Observable() {
     var options = options.toMutableMap()
     var api = RipeAPI(this)
     var initials = ""
@@ -21,12 +21,10 @@ class Ripe constructor(var brand: String?, var model: String?, options: Map<Stri
 
     init {
         this._setOptions(options)
-        if (brand != null && model != null) {
-            this.config(brand!!, model!!, options)
-        }
+        this.config(brand, model, options)
     }
 
-    fun config(brand: String, model: String, options: Map<String, Any> = HashMap()) {
+    fun config(brand: String?, model: String?, options: Map<String, Any> = HashMap()) {
         // updates the current references to both the brand
         // and the model according to the new configuration
         // request (update before remote update)
@@ -49,9 +47,7 @@ class Ripe constructor(var brand: String?, var model: String?, options: Map<Stri
 
         // retrieves the configuration for the currently loaded model so
         // that others may use it freely (cache mechanism)
-        this.api.getConfig { config, isValid ->
-            if (!isValid) throw Exception()
-
+        val callback: (config: Map<String, Any>?, isValid: Boolean) -> Unit =  { config, isValid ->
             this.loadedConfig = config
 
             // determines if the defaults for the selected model should
@@ -67,7 +63,7 @@ class Ripe constructor(var brand: String?, var model: String?, options: Map<Stri
 
             // triggers the config event notifying any listener that the (base)
             // configuration for this main RIPE instance has changed
-            this.trigger("config")
+            this.trigger("config", this.loadedConfig ?: HashMap())
 
             // determines the proper initial parts for the model taking into account
             // if the defaults should be loaded
@@ -82,18 +78,16 @@ class Ripe constructor(var brand: String?, var model: String?, options: Map<Stri
                 this.trigger("ready")
             }
 
-            // in case there's no model defined in the current instance then there's
-            // nothing more possible to be done, returns the control flow
-            if (!hasModel) {
-                return@getConfig
+            // in case there's a model defined in the current instance then updates
+            // the parts of the current instance and triggers the remove and local
+            // update operations
+            if (hasModel) {
+                this.setParts(parts, false, mapOf("noPartEvents" to true))
+                this.update()
             }
-
-            // updates the parts of the current instance and triggers the remove and
-            // local update operations, as expected
-            this.setParts(parts, false, mapOf("noPartEvents" to true))
-            this.update()
         }
 
+        if (hasModel) this.api.getConfig(HashMap(), callback) else callback(null, false)
     }
 
     fun update(state: Map<String, Any> = this._getState()) {
