@@ -27,21 +27,8 @@ interface BaseAPI {
         return this.cacheURLAsync(url, priceOptions)
     }
 
-    fun cacheURL(url: String, options: Map<String, Any>, callback: (result: Map<String, Any>?, isValid: Boolean) -> Unit) {
-        return this.requestURL(url, options, callback)
-    }
-
     fun cacheURLAsync(url: String, options: Map<String, Any>): Deferred<Map<String, Any>?> {
         return this.requestURLAsync(url, options)
-    }
-
-    fun requestURL(url: String, options: Map<String, Any>, callback: (result: Map<String, Any>?, isValid: Boolean) -> Unit) {
-        val request = this.requestURLAsync(url, options)
-        @Suppress("experimental_api_usage")
-        MainScope().launch {
-            val result = request.await()
-            callback(result, result != null)
-        }
     }
 
     fun requestURLAsync(url: String, options: Map<String, Any>): Deferred<Map<String, Any>?> {
