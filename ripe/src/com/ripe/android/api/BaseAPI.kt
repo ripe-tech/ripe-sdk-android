@@ -1,13 +1,17 @@
 package com.ripe.android.api
 
+import java.net.URL
 import java.net.URLEncoder
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.async
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
-
 import com.ripe.android.base.Ripe
-import com.ripe.android.util.DownloadURLDelegate
-import com.ripe.android.util.DownloadURLTask
 
 interface BaseAPI {
     val owner: Ripe
@@ -16,18 +20,18 @@ interface BaseAPI {
         return this.owner.options["url"] as String? ?: "https://sandbox.platforme.com/api/"
     }
 
-    fun getPrice(options: Map<String, Any> = HashMap(), callback: (result: Map<String, Any>?, isValid: Boolean) -> Unit) {
+    fun getPriceAsync(options: Map<String, Any> = HashMap()): Deferred<Map<String, Any>?> {
         var priceOptions = this.getPriceOptions(options)
         priceOptions = this.build(priceOptions)
         val url = priceOptions["url"] as String
-        this.cacheURL(url, priceOptions, callback)
+        return this.cacheURLAsync(url, priceOptions)
     }
 
-    fun cacheURL(url: String, options: Map<String, Any>, callback: (result: Map<String, Any>?, isValid: Boolean) -> Unit) {
-        return this.requestURL(url, options, callback)
+    fun cacheURLAsync(url: String, options: Map<String, Any>): Deferred<Map<String, Any>?> {
+        return this.requestURLAsync(url, options)
     }
 
-    fun requestURL(url: String, options: Map<String, Any>, callback: (result: Map<String, Any>?, isValid: Boolean) -> Unit) {
+    fun requestURLAsync(url: String, options: Map<String, Any>): Deferred<Map<String, Any>?> {
         var requestUrl = url
         val method = options["method"] as String? ?: "GET"
         @Suppress("unchecked_cast")
@@ -49,19 +53,21 @@ interface BaseAPI {
             contentType = "application/x-www-form-urlencoded"
         }
 
-        val task = DownloadURLTask(object: DownloadURLDelegate {
-            override fun downloadURLResult(result: String) {
-                try {
-                    val gson = Gson()
-                    val type = object : TypeToken<Map<String, Any>>() {}.type
-                    val resultMap = gson.fromJson<Map<String, Any>>(result, type)
-                    callback(resultMap, true)
-                } catch (exception: JsonSyntaxException) {
-                    callback(null, false)
-                }
+        return CoroutineScope(Dispatchers.IO).async {
+            val urlS = requestUrl
+            val url = URL(urlS)
+            val result = url.readText()
+            val gson = Gson()
+            val type = object : TypeToken<Map<String, Any>>() {}.type
+
+            var resultMap: Map<String, Any>?
+            try {
+                resultMap = gson.fromJson<Map<String, Any>>(result, type)
+            } catch (exception: JsonSyntaxException) {
+                resultMap = null
             }
-        })
-        task.execute(requestUrl)
+            resultMap
+        }
     }
 
     fun getPriceOptions(options: Map<String, Any>): Map<String, Any> {

@@ -1,11 +1,13 @@
 package com.ripe.android.api
 
+import kotlinx.coroutines.Deferred
+
 interface LocaleAPI : BaseAPI {
-    fun locale(value: String, locale: String, options: Map<String, Any>, callback: (result: Map<String, Any>?, isValid: Boolean) -> Unit) {
-        return this.localeMultiple(listOf(value), locale, options, callback)
+    fun localeAsync(value: String, locale: String, options: Map<String, Any>): Deferred<Map<String, Any>?> {
+        return this.localeMultipleAsync(listOf(value), locale, options)
     }
 
-    fun localeMultiple(values: List<String>, locale: String, options: Map<String, Any>, callback: (result: Map<String, Any>?, isValid: Boolean) -> Unit) {
+    fun localeMultipleAsync(values: List<String>, locale: String, options: Map<String, Any>): Deferred<Map<String, Any>?> {
         var url = this.getUrl() + "locale"
         var _options = mutableMapOf(
                 "url" to url,
@@ -18,6 +20,6 @@ interface LocaleAPI : BaseAPI {
         _options.putAll(options)
         _options = this.build(_options).toMutableMap()
         url = _options["url"] as String
-        return this.cacheURL(url, _options, callback)
+        return this.cacheURLAsync(url, _options)
     }
 }
