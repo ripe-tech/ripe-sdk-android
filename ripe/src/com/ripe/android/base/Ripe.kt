@@ -31,9 +31,11 @@ class Ripe constructor(var brand: String?, var model: String?, options: Map<Stri
         }
     }
 
-
-
     suspend fun config(brand: String?, model: String?, options: Map<String, Any> = HashMap()) {
+        // triggers the 'pre_config' event so that
+        // the listeners can cleanup if needed
+        this.trigger("pre_config").await()
+
         // updates the current references to both the brand
         // and the model according to the new configuration
         // request (update before remote update)
@@ -71,7 +73,7 @@ class Ripe constructor(var brand: String?, var model: String?, options: Map<Stri
 
         // triggers the config event notifying any listener that the (base)
         // configuration for this main RIPE instance has changed
-        this.trigger("config", this.loadedConfig ?: HashMap())
+        this.trigger("config", this.loadedConfig ?: HashMap()).await()
 
         // determines the proper initial parts for the model taking into account
         // if the defaults should be loaded
@@ -89,12 +91,18 @@ class Ripe constructor(var brand: String?, var model: String?, options: Map<Stri
         // in case there's no model defined in the current instance then there's
         // nothing more possible to be done, returns the control flow
         if (!hasModel) {
+            this.trigger("post_config").await()
             return
         }
 
-        // updates the parts of the current instance and triggers the remove and
-        // local update operations, as expected
+        // updates the parts of the current instance
         this.setParts(parts, false, mapOf("noPartEvents" to true))
+
+        // notifies that the config has changed and waits for listeners
+        // before concluding the config operation
+        this.trigger("post_config").await()
+
+        // triggers the local update operations
         this.update()
     }
 
