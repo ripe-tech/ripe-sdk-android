@@ -1,6 +1,8 @@
 package com.ripe.android.base
 
 import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.async
 
 typealias ObservableCallback = (args: Map<String, Any>) -> Deferred<Any?>?
 
@@ -25,11 +27,11 @@ open class Observable {
         this.callbacks[event] = callbacks
     }
 
-    fun runCallbacks(event: String, args: Map<String, Any> = HashMap()): List<Deferred<Any?>> {
+    fun runCallbacks(event: String, args: Map<String, Any> = HashMap()): Deferred<List<Any?>> {
         val callbacks = this.callbacks[event] ?: ArrayList()
-        val futures = callbacks.map { it.invoke(args) }.filter { it != null }
-        @Suppress("unchecked_cast")
-        return futures as List<Deferred<Any?>>
+        val deferreds = callbacks.map { it.invoke(args) }.filter { it != null }
+        @Suppress("experimental_api_usage")
+        return MainScope().async { deferreds.map {  it!!.await() } }
     }
 
     fun bind(event: String, callback: (args: Map<String, Any>) -> Unit) = bindSync(event, callback)
