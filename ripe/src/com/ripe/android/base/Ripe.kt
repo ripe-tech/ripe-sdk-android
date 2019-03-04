@@ -242,6 +242,7 @@ class Ripe constructor(var brand: String?, var model: String?, options: Map<Stri
             } else {
                 this.parts[part] = value
             }
+            return
         }
 
         val eventValue = mapOf("part" to part, "value" to value)
