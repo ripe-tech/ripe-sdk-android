@@ -2,10 +2,6 @@ package com.ripe.android.test
 
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.newSingleThreadContext
-import kotlinx.coroutines.isActive
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import org.junit.Test
@@ -14,6 +10,7 @@ import org.junit.Before
 import org.junit.Assert.assertEquals
 import com.ripe.android.base.Ripe
 import com.ripe.android.base.Observable
+import kotlinx.coroutines.*
 
 
 class SimpleTest {
@@ -74,9 +71,69 @@ class SimpleTest {
         }
     }
 
-    suspend fun waitForEvent(instance: Observable, event: String) = suspendCoroutine<Any> {
+    @Test
+    fun testUndoSetParts() {
+        runBlocking {
+            val instance = Ripe("swear", "vyner")
+            @Suppress("unchecked_cast")
+            val result = waitForEvent(instance, "post_parts") as Map<String, Any>
+            @Suppress("unchecked_cast")
+            val initialParts = result["parts"] as Map<String, Any>
+
+            assertEquals(instance.getParts(), initialParts)
+            assertEquals(instance.canUndo(), false)
+            assertEquals(instance.canRedo(), false)
+
+            instance.undo()
+            assertEquals(instance.canUndo(), false)
+            assertEquals(instance.canRedo(), false)
+
+            var parts = instance.getParts()
+            assertEquals(parts, initialParts)
+
+            @Suppress("unchecked_cast")
+            var front = parts["front"] as Map<String, String>
+            assertEquals(front["material"], "nappa")
+            assertEquals(front["color"], "white")
+
+            instance.setPart("front", "suede", "black")
+            parts = instance.getParts()
+            front = parts["front"] as Map<String, String>
+            assertEquals(front["material"], "suede")
+            assertEquals(front["color"], "black")
+            assertEquals(instance.canUndo(), true)
+            assertEquals(instance.canRedo(), false)
+
+            instance.undo()
+
+            parts = instance.getParts()
+            @Suppress("unchecked_cast")
+            front = parts["front"] as Map<String, String>
+            assertEquals(parts, initialParts)
+            assertEquals(front["material"], "nappa")
+            assertEquals(front["color"], "white")
+            assertEquals(instance.canUndo(), false)
+            assertEquals(instance.canRedo(), true)
+
+            instance.redo()
+
+            parts = instance.getParts()
+            @Suppress("unchecked_cast")
+            front = parts["front"] as Map<String, String>
+            assertEquals(front["material"], "suede")
+            assertEquals(front["color"], "black")
+            assertEquals(instance.canUndo(), true)
+            assertEquals(instance.canRedo(), false)
+        }
+    }
+
+    suspend fun waitForEvent(instance: Observable, event: String) = suspendCancellableCoroutine<Any> {
         continuation -> instance.bind(event) {
-            result -> if(continuation.context.isActive) continuation.resume(result)
+            result ->
+                if (continuation.isActive) {
+                    continuation.resume(result)
+                    continuation.cancel()
+                }
         }
     }
 
