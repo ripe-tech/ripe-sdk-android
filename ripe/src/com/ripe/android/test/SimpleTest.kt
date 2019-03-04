@@ -1,16 +1,18 @@
 package com.ripe.android.test
 
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 import org.junit.Test
 import org.junit.After
 import org.junit.Before
 import org.junit.Assert.assertEquals
+import kotlin.coroutines.resume
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.newSingleThreadContext
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.suspendCancellableCoroutine
 import com.ripe.android.base.Ripe
 import com.ripe.android.base.Observable
-import kotlinx.coroutines.*
 
 
 class SimpleTest {
