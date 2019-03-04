@@ -13,6 +13,8 @@ class Ripe constructor(var brand: String?, var model: String?, options: Map<Stri
     var initials = ""
     var engraving = ""
     var children: MutableList<Interactable> = ArrayList()
+    var history: MutableList<Map<String, Any>> = ArrayList()
+    var historyPointer = -1
     var loadedConfig: Map<String, Any>? = null
     var ready = false
     var useDefaults = true
@@ -25,9 +27,29 @@ class Ripe constructor(var brand: String?, var model: String?, options: Map<Stri
 
         val ripe = this
 
+        // runs the configuration operation on the current instance, using
+        // the requested parameters and options, multiple configuration
+        // operations may be executed over the object life-time
         @Suppress("experimental_api_usage")
         MainScope().launch {
             ripe.config(brand, model, options)
+        }
+
+        // listens for the post parts event and saves the current configuration
+        // for the undo operations (history control)
+        this.bind("post_parts") {
+            // in case the current opertion was an undo and redo one there's
+            // nothing to be done (no history stack change)
+            @Suppress("unchecked_cast")
+            val options = it["options"] as? Map<String, Any>
+            val action = options?.get("action") as? String
+            if (action in arrayOf("undo", "redo")) {
+                return@bind
+            }
+
+            // pushes the current state of the configuration (parts) into
+            // the history stack allowing undo and redo
+            this._pushHistory()
         }
     }
 
@@ -41,6 +63,11 @@ class Ripe constructor(var brand: String?, var model: String?, options: Map<Stri
         // request (update before remote update)
         this.brand = brand
         this.model = model
+
+        // resets the history related values as the current
+        // model has changed and no previous history is possible
+        this.history = ArrayList()
+        this.historyPointer = -1
 
         // sets the new options using the current options
         // as default values and sets the update flag to
@@ -124,7 +151,7 @@ class Ripe constructor(var brand: String?, var model: String?, options: Map<Stri
     }
 
     fun getParts(): Map<String, Any> {
-        return this.parts
+        return cloneParts(this.parts)
     }
 
     fun setPart(part: String, material: String?, color: String?, noEvents: Boolean = false, options: Map<String, Any> = HashMap()) {
@@ -181,6 +208,64 @@ class Ripe constructor(var brand: String?, var model: String?, options: Map<Stri
     fun bindInteractable(child: Interactable): Interactable {
         this.children.add(child)
         return child
+    }
+
+    fun selectPart(part: String, options: Map<String, Any> = HashMap()) {
+        this.trigger("selected_part", mapOf("part" to part))
+    }
+
+    fun deselectPart(part: String, options: Map<String, Any> = HashMap()) {
+        this.trigger("deselected_part", mapOf("part" to part))
+    }
+
+    /**
+     * Reverses the last change to the parts. It is possible
+     * to undo all the changes done from the initial state.
+     */
+    fun undo() {
+        if (!this.canUndo()) {
+            return
+        }
+
+        this.historyPointer -= 1
+        val parts = this.history[this.historyPointer]
+        this.setParts(parts, false, mapOf("action" to "undo"))
+    }
+
+    /**
+     * Reapplies the last change to the parts that was undone.
+     * Notice that if there's a change when the history pointer
+     * is in the middle of the stack the complete stack forward
+     * is removed (history re-written).
+     */
+    fun redo() {
+        if (!this.canRedo()) {
+            return
+        }
+
+        this.historyPointer += 1
+        val parts = this.history[this.historyPointer]
+        this.setParts(parts, false, mapOf("action" to "redo"))
+    }
+
+    /**
+     * Indicates if there are part changes to undo.
+     *
+     * @return If there are changes to reverse in the
+     * current parts history stack.
+     */
+    fun canUndo(): Boolean {
+        return this.historyPointer > 0
+    }
+
+    /**
+     * Indicates if there are part changes to redo.
+     *
+     * @return If there are changes to reapply pending
+     * in the history stack.
+     */
+    fun canRedo(): Boolean {
+        return this.history.size - 1 > this.historyPointer
     }
 
     fun _getState(): Map<String, Any> {
@@ -268,5 +353,31 @@ class Ripe constructor(var brand: String?, var model: String?, options: Map<Stri
             partsList.add(arrayListOf(key, part["material"], part["color"]))
         }
         return partsList
+    }
+
+    fun _pushHistory() {
+        if(this.parts.isEmpty()) {
+            return
+        }
+
+        val historyParts = if (this.historyPointer > -1) this.history[this.historyPointer] else null
+        if (this.parts == historyParts) {
+            return
+        }
+
+        val parts = this.getParts()
+        this.history = this.history.subList(0, this.historyPointer + 1)
+        this.history.add(parts)
+        this.historyPointer = this.history.size - 1
+    }
+
+    fun cloneParts(parts: Map<String, Any>): Map<String, Any> {
+        val clone = HashMap<String, Any>()
+        for ( (key, value) in parts) {
+            @Suppress("unchecked_cast")
+            val part = value as Map<String, Any>
+            clone[key] = part.toMap()
+        }
+        return clone
     }
 }
