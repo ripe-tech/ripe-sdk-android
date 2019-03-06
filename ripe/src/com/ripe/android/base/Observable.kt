@@ -26,9 +26,9 @@ open class Observable {
      * Binds to an event by providing a block that will receive the event payload as a
      * parameter and return a Deferred that will be resolved asynchronously.
      *
-     * @param event Name of the event to bind to
-     * @param callback Block to be executed when the event is triggered
-     * @return Returns the provided callback, to be used when unbinding from the event
+     * @param event Name of the event to bind to.
+     * @param callback Block to be executed when the event is triggered.
+     * @return Returns the provided callback, to be used when unbinding from the event.
      */
     fun addCallback(event: String, callback: ObservableCallback): ObservableCallback {
         val callbacks = this.callbacks[event] ?: ArrayList()
@@ -40,7 +40,7 @@ open class Observable {
     /**
      * Unbinds the provided callback from an event.
      *
-     * @param event The name of the event
+     * @param event The name of the event.
      * @param callback The callback that was returned when the bind method was called.
      */
     fun removeCallback(event: String, callback: ObservableCallback?) {
@@ -56,10 +56,10 @@ open class Observable {
     /**
      * Triggers the event by calling all its bound callbacks with args as parameters.
      *
-     * @param event The name of the event to be triggered
-     * @param args The payload of the event, to be passed to the callbacks
+     * @param event The name of the event to be triggered.
+     * @param args The payload of the event, to be passed to the callbacks.
      * @return Returns a deferred result that will be resolved when all of the callbacks
-     * have finished processing the triggered event
+     * have finished processing the triggered event.
      */
     fun runCallbacks(event: String, args: Map<String, Any> = HashMap()): Deferred<List<Any?>> {
         val callbacks = this.callbacks[event] ?: ArrayList()
@@ -73,9 +73,9 @@ open class Observable {
      * parameter. The block will be executed synchronously, for costly operations prefer
      * the use of `bindAsync`.
      *
-     * @param event Name of the event to bind to
-     * @param callback Block to be executed synchronously when the event is triggered
-     * @return Returns the callback instance created, to be used when unbinding from the event
+     * @param event Name of the event to bind to.
+     * @param callback Block to be executed synchronously when the event is triggered.
+     * @return Returns the callback instance created, to be used when unbinding from the event.
      */
     fun bind(event: String, callback: (args: Map<String, Any>) -> Unit) = bindSync(event, callback)
 
@@ -84,9 +84,9 @@ open class Observable {
      * parameter. The block will be executed synchronously, for costly operations prefer
      * the use of `bindAsync`.
      *
-     * @param event Name of the event to bind to
-     * @param callback Block to be executed synchronously when the event is triggered
-     * @return Returns the callback instance created, to be used when unbinding from the event
+     * @param event Name of the event to bind to.
+     * @param callback Block to be executed synchronously when the event is triggered.
+     * @return Returns the callback instance created, to be used when unbinding from the event.
      */
     fun bindSync(event: String, callback: (args: Map<String, Any>) -> Unit) = addCallback(event) { args ->
         callback(args)
@@ -97,16 +97,16 @@ open class Observable {
      * Binds to an event by providing a block that will receive the event payload as a
      * parameter and return a Deferred that will be resolved asynchronously.
 
-     * @param event Name of the event to bind to
-     * @param callback Block to be executed when the event is triggered
-     * @return Returns the provided callback, to be used when unbinding from the event
+     * @param event Name of the event to bind to.
+     * @param callback Block to be executed when the event is triggered.
+     * @return Returns the provided callback, to be used when unbinding from the event.
      */
     fun bindAsync(event: String, callback: ObservableCallback) = addCallback(event, callback)
 
     /**
      * Unbinds the provided callback from an event.
      *
-     * @param event The name of the event
+     * @param event The name of the event.
      * @param callback The callback that was returned when the bind method was called.
      */
     fun unbind(event: String, callback: ObservableCallback?) = removeCallback(event, callback)
@@ -114,10 +114,10 @@ open class Observable {
     /**
      * Triggers the event by calling all its bound callbacks with args as parameters.
      *
-     * @param event The name of the event to be triggered
-     * @param args The payload of the event, to be passed to the callbacks
+     * @param event The name of the event to be triggered.
+     * @param args The payload of the event, to be passed to the callbacks.
      * @return Returns a deferred result that will be resolved when all of the callbacks
-     * have finished processing the triggered event
+     * have finished processing the triggered event.
      */
     fun trigger(event: String, args: Map<String, Any> = HashMap()) = runCallbacks(event, args)
 }
