@@ -37,3 +37,10 @@ dependencies {
 repositories {
     mavenCentral()
 }
+
+dokka {
+    packageOptions {
+        prefix = "com.ripe.android.test"
+        suppress = true
+    }
+}
