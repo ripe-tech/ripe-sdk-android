@@ -5,10 +5,10 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.async
 
 /**
-A function to be executed when an event. It receives a dictionary with the response as parameter and returns a deferred result which is resolved asynchronously.
-
-@param response A dictionary with the payload of the event
-@return A Deferred that may be resolved asynchronously
+ * A function to be executed when an event. It receives a dictionary with the response as parameter and returns a deferred result which is resolved asynchronously.
+ *
+ * @param response A dictionary with the payload of the event
+ * @return A Deferred that may be resolved asynchronously
  */
 typealias ObservableCallback = (args: Map<String, Any>) -> Deferred<Any?>?
 
@@ -96,7 +96,7 @@ open class Observable {
     /**
      * Binds to an event by providing a block that will receive the event payload as a
      * parameter and return a Deferred that will be resolved asynchronously.
-
+     *
      * @param event Name of the event to bind to.
      * @param callback Block to be executed when the event is triggered.
      * @return Returns the provided callback, to be used when unbinding from the event.
