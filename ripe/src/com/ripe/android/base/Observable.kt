@@ -95,7 +95,7 @@ open class Observable {
 
     /**
      * Binds to an event by providing a block that will receive the event payload as a
-    parameter and return a Deferred that will be resolved asynchronously.
+     * parameter and return a Deferred that will be resolved asynchronously.
 
      * @param event Name of the event to bind to
      * @param callback Block to be executed when the event is triggered
