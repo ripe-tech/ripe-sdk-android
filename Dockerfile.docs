@@ -1,0 +1,22 @@
+FROM hivesolutions/android:latest
+
+LABEL version="1.0"
+LABEL maintainer="Platforme <development@platforme.com>"
+
+EXPOSE 8080
+
+ENV LEVEL="INFO"\
+    ENCODING="gzip"\
+    HOST="0.0.0.0"\
+    PORT="8080"\
+    CACHE="86400"\
+    CORS="1"\
+    BASE_PATH="/ripe/build/dokka/"\
+    INDEX_FILES="index.html"
+
+RUN gradle wrapper
+RUN ./gradlew dokka
+
+RUN pip3 install --upgrade netius
+
+CMD ["/usr/bin/python3", "-m", "netius.extra.filea"]
