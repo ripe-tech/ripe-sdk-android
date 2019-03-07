@@ -1,3 +1,4 @@
 include ':ripe', "hello"
 
+rootProject.name = 'ripe-sdk-android'
 project(':hello').projectDir = file('examples/hello')
