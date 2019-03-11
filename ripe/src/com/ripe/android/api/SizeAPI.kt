@@ -39,7 +39,6 @@ interface SizeAPI : BaseAPI {
         val valuesP = ArrayList<Double>()
         val gendersP = ArrayList<String>()
 
-
         for (index in 0 until scales.size) {
             scalesP.add(scales[index])
             valuesP.add(values[index])
