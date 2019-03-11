@@ -1,18 +1,18 @@
 package com.ripe.android.test
 
-import org.junit.Test
-import org.junit.After
-import org.junit.Before
-import org.junit.Assert.assertEquals
-import kotlin.coroutines.resume
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
+import com.ripe.android.base.Observable
+import com.ripe.android.base.Ripe
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.suspendCancellableCoroutine
-import com.ripe.android.base.Ripe
-import com.ripe.android.base.Observable
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
+import org.junit.After
+import org.junit.Assert.assertEquals
+import org.junit.Before
+import org.junit.Test
+import kotlin.coroutines.resume
 
 
 class SimpleTest {
@@ -129,13 +129,12 @@ class SimpleTest {
         }
     }
 
-    suspend fun waitForEvent(instance: Observable, event: String) = suspendCancellableCoroutine<Any> {
-        continuation -> instance.bind(event) {
-            result ->
-                if (continuation.isActive) {
-                    continuation.resume(result)
-                    continuation.cancel()
-                }
+    suspend fun waitForEvent(instance: Observable, event: String) = suspendCancellableCoroutine<Any> { continuation ->
+        instance.bind(event) { result ->
+            if (continuation.isActive) {
+                continuation.resume(result)
+                continuation.cancel()
+            }
         }
     }
 
