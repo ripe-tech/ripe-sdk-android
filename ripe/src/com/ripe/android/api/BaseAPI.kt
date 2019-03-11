@@ -27,11 +27,11 @@ interface BaseAPI {
         return this.cacheURLAsync(url, priceOptions)
     }
 
-    fun cacheURLAsync(url: String, options: Map<String, Any>): Deferred<Map<String, Any>?> {
-        return this.requestURLAsync(url, options)
+    fun <T>cacheURLAsync(url: String, options: Map<String, Any>): Deferred<T?> {
+        return this.requestURLAsync<T>(url, options)
     }
 
-    fun requestURLAsync(url: String, options: Map<String, Any>): Deferred<Map<String, Any>?> {
+    fun <T>requestURLAsync(url: String, options: Map<String, Any>): Deferred<T?> {
         var requestUrl = url
         val method = options["method"] as String? ?: "GET"
         @Suppress("unchecked_cast")
@@ -58,11 +58,11 @@ interface BaseAPI {
             val url = URL(urlS)
             val result = url.readText()
             val gson = Gson()
-            val type = object : TypeToken<Map<String, Any>>() {}.type
+            val type = object : TypeToken<T>() {}.type
 
-            var resultMap: Map<String, Any>?
+            var resultMap: T?
             try {
-                resultMap = gson.fromJson<Map<String, Any>>(result, type)
+                resultMap = gson.fromJson<T>(result, type)
             } catch (exception: JsonSyntaxException) {
                 resultMap = null
             }
@@ -155,14 +155,15 @@ interface BaseAPI {
     fun buildQuery(params: Map<String, Any>): String {
         val buffer = ArrayList<String>()
         params.forEach { (key, value) ->
-            if (value is String) {
-                val valueS = URLEncoder.encode(value, "UTF-8")
-                buffer.add("$key=$valueS")
-            } else if (value is ArrayList<*>) {
+            if (value is List<*>) {
                 value.forEach {
                     val valueS = URLEncoder.encode(it.toString(),"UTF-8")
                     buffer.add("$key=$valueS")
                 }
+            }
+            else {
+                val valueS = URLEncoder.encode(value.toString(), "UTF-8")
+                buffer.add("$key=$valueS")
             }
         }
 
