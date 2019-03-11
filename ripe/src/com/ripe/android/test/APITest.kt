@@ -1,16 +1,15 @@
 package com.ripe.android.test
 
-import org.junit.Test
-import org.junit.After
-import org.junit.Before
-import org.junit.Assert.assertEquals
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
+import com.ripe.android.base.Ripe
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.runBlocking
-import com.ripe.android.base.Ripe
-
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
+import org.junit.After
+import org.junit.Assert.assertEquals
+import org.junit.Before
+import org.junit.Test
 
 class APITest {
     @Suppress("experimental_api_usage")

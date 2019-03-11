@@ -6,8 +6,8 @@ interface SizeAPI : BaseAPI {
     fun getSizesAsync(options: Map<String, Any> = HashMap()): Deferred<Map<String, Any>?> {
         var url = this.getUrl() + "sizes"
         var sizeOptions: MutableMap<String, Any> = mutableMapOf(
-            "url" to url,
-            "method" to "GET"
+                "url" to url,
+                "method" to "GET"
         )
         sizeOptions.putAll(options)
         sizeOptions = this.build(sizeOptions).toMutableMap()
@@ -18,13 +18,13 @@ interface SizeAPI : BaseAPI {
     fun sizeToNativeAsync(scale: String, value: Double, gender: String, options: Map<String, Any> = HashMap()): Deferred<Map<String, Any>?> {
         var url = this.getUrl() + "sizes/size_to_native"
         var sizeOptions = mutableMapOf(
-            "url" to url,
-            "method" to "GET",
-            "params" to mapOf(
-                "scale" to scale,
-                "value" to value,
-                "gender" to gender
-            )
+                "url" to url,
+                "method" to "GET",
+                "params" to mapOf(
+                        "scale" to scale,
+                        "value" to value,
+                        "gender" to gender
+                )
         )
         sizeOptions.putAll(options)
         sizeOptions = this.build(sizeOptions).toMutableMap()
@@ -47,13 +47,13 @@ interface SizeAPI : BaseAPI {
         }
 
         var sizeOptions = mutableMapOf(
-            "url" to url,
-            "method" to "GET",
-            "params" to mapOf(
-                "scales" to scales,
-                "values" to values,
-                "genders" to genders
-            )
+                "url" to url,
+                "method" to "GET",
+                "params" to mapOf(
+                        "scales" to scales,
+                        "values" to values,
+                        "genders" to genders
+                )
         )
         sizeOptions.putAll(options)
         sizeOptions = this.build(sizeOptions).toMutableMap()
@@ -64,13 +64,13 @@ interface SizeAPI : BaseAPI {
     fun nativeToSizeAsync(scale: String, value: Int, gender: String, options: Map<String, Any> = HashMap()): Deferred<Map<String, Any>?> {
         var url = this.getUrl() + "sizes/native_to_size"
         var sizeOptions = mutableMapOf(
-            "url" to url,
-            "method" to "GET",
-            "params" to mapOf(
-                "scale" to scale,
-                "value" to value,
-                "gender" to gender
-            )
+                "url" to url,
+                "method" to "GET",
+                "params" to mapOf(
+                        "scale" to scale,
+                        "value" to value,
+                        "gender" to gender
+                )
         )
         sizeOptions.putAll(options)
         sizeOptions = this.build(sizeOptions).toMutableMap()
@@ -93,13 +93,13 @@ interface SizeAPI : BaseAPI {
         }
 
         var sizeOptions = mutableMapOf(
-            "url" to url,
-            "method" to "GET",
-            "params" to mapOf(
-                "scales" to scales,
-                "values" to values,
-                "genders" to genders
-            )
+                "url" to url,
+                "method" to "GET",
+                "params" to mapOf(
+                        "scales" to scales,
+                        "values" to values,
+                        "genders" to genders
+                )
         )
         sizeOptions.putAll(options)
         sizeOptions = this.build(sizeOptions).toMutableMap()

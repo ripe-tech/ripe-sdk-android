@@ -1,11 +1,10 @@
 package com.ripe.android.base
 
-import kotlin.collections.HashMap
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
 import android.widget.ImageView
 import com.ripe.android.api.RipeAPI
 import com.ripe.android.visual.Image
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 
 class Ripe constructor(var brand: String?, var model: String?, options: Map<String, Any> = HashMap()) : Observable() {
     var options = options.toMutableMap()
@@ -85,7 +84,9 @@ class Ripe constructor(var brand: String?, var model: String?, options: Map<Stri
 
         // retrieves the configuration for the currently loaded model so
         // that others may use it freely (cache mechanism)
-        this.loadedConfig = if (hasModel) this.api.getConfigAsync().await() else { null }
+        this.loadedConfig = if (hasModel) this.api.getConfigAsync().await() else {
+            null
+        }
 
         // determines if the defaults for the selected model should
         // be loaded so that the parts structure is initially populated
@@ -138,7 +139,7 @@ class Ripe constructor(var brand: String?, var model: String?, options: Map<Stri
 
         if (this.ready) this.trigger("update")
 
-        if(this.ready && this.usePrice) {
+        if (this.ready && this.usePrice) {
             val ripe = this
             @Suppress("experimental_api_usage")
             MainScope().launch {
@@ -189,6 +190,13 @@ class Ripe constructor(var brand: String?, var model: String?, options: Map<Stri
         this.trigger("post_parts", eventValue)
     }
 
+    /**
+     *
+     * @param initials asdasdasdasd
+     * @param engraving bebebebebeb
+     * @param noUpdate if update events should
+     *
+     */
     fun setInitials(initials: String, engraving: String, noUpdate: Boolean = false) {
         this.initials = initials
         this.engraving = engraving
@@ -271,7 +279,7 @@ class Ripe constructor(var brand: String?, var model: String?, options: Map<Stri
     fun _getState(): Map<String, Any> {
         return mapOf(
                 "parts" to this.parts,
-                "initials"  to this.initials,
+                "initials" to this.initials,
                 "engraving" to this.engraving
         )
     }
@@ -317,7 +325,8 @@ class Ripe constructor(var brand: String?, var model: String?, options: Map<Stri
         }
 
         @Suppress("unchecked_cast")
-        val value: MutableMap<String, String?> = this.parts[part] as? MutableMap<String, String?> ?: HashMap()
+        val value: MutableMap<String, String?> = this.parts[part] as? MutableMap<String, String?>
+                ?: HashMap()
         value["material"] = if (remove) null else material
         value["color"] = if (remove) null else color
 
@@ -356,7 +365,7 @@ class Ripe constructor(var brand: String?, var model: String?, options: Map<Stri
     }
 
     fun _pushHistory() {
-        if(this.parts.isEmpty()) {
+        if (this.parts.isEmpty()) {
             return
         }
 
@@ -373,7 +382,7 @@ class Ripe constructor(var brand: String?, var model: String?, options: Map<Stri
 
     fun cloneParts(parts: Map<String, Any>): Map<String, Any> {
         val clone = HashMap<String, Any>()
-        for ( (key, value) in parts) {
+        for ((key, value) in parts) {
             @Suppress("unchecked_cast")
             val part = value as Map<String, Any>
             clone[key] = part.toMap()

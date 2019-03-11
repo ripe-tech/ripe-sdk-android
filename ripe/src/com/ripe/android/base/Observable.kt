@@ -65,7 +65,7 @@ open class Observable {
         val callbacks = this.callbacks[event] ?: ArrayList()
         val deferreds = callbacks.map { it.invoke(args) }.filter { it != null }
         @Suppress("experimental_api_usage")
-        return MainScope().async { deferreds.map {  it!!.await() } }
+        return MainScope().async { deferreds.map { it!!.await() } }
     }
 
     /**

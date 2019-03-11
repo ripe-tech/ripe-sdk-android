@@ -1,16 +1,16 @@
 package com.ripe.android.test
 
-import org.junit.Test
-import org.junit.Before
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
-import kotlinx.coroutines.async
-import kotlinx.coroutines.delay
+import com.ripe.android.base.Observable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.setMain
-import com.ripe.android.base.Observable
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Before
+import org.junit.Test
 
 
 class ObservableTest {
@@ -43,7 +43,8 @@ class ObservableTest {
         observable.bindAsync("test") {
             GlobalScope.async {
                 delay(100)
-                return@async "delay"}
+                return@async "delay"
+            }
         }
 
         assertNotNull(observable.callbacks["test"])

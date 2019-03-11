@@ -1,20 +1,21 @@
 package com.ripe.android.visual
 
-import java.net.URL
+import android.graphics.BitmapFactory
+import android.widget.ImageView
+import com.ripe.android.base.Ripe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import android.widget.ImageView
-import android.graphics.BitmapFactory
-import com.ripe.android.base.Ripe
+import java.net.URL
 
 class Image constructor(private val imageView: ImageView, override val owner: Ripe, override val options: Map<String, Any> = HashMap()) :
         Visual(owner, options) {
 
     private var showInitials = this.options["showInitials"] as Boolean? ?: true
     @Suppress("unchecked_cast")
-    private var initialsBuilder: (String, String, ImageView) -> HashMap<String, Any> = this.options["initialsBuilder"] as ((String, String, ImageView) -> HashMap<String, Any>)? ?: ::_initialsBuilder
+    private var initialsBuilder: (String, String, ImageView) -> HashMap<String, Any> = this.options["initialsBuilder"] as ((String, String, ImageView) -> HashMap<String, Any>)?
+            ?: ::_initialsBuilder
     private var initials: String? = null
     private var engraving: String? = null
     private var url: String? = null
@@ -27,15 +28,15 @@ class Image constructor(private val imageView: ImageView, override val owner: Ri
         this.engraving = state["engraving"] as String? ?: this.engraving
         var initialsSpec = if (initials != null && engraving !== null && this.showInitials)
             this.initialsBuilder(initials!!, engraving!!, this.imageView)
-            else HashMap()
+        else HashMap()
 
         val url = this.owner.api.getImageUrl(
-            hashMapOf(
-                "brand" to brand,
-                "model" to model,
-                "initials" to (initialsSpec["initials"] ?: ""),
-                "profile" to (initialsSpec["profile"] ?: ArrayList<String>())
-            )
+                hashMapOf(
+                        "brand" to brand,
+                        "model" to model,
+                        "initials" to (initialsSpec["initials"] ?: ""),
+                        "profile" to (initialsSpec["profile"] ?: ArrayList<String>())
+                )
         )
         if (this.url == url) {
             return

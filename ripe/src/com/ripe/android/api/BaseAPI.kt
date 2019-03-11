@@ -1,17 +1,15 @@
 package com.ripe.android.api
 
-import java.net.URL
-import java.net.URLEncoder
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.async
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
 import com.ripe.android.base.Ripe
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import java.net.URL
+import java.net.URLEncoder
 
 interface BaseAPI {
     val owner: Ripe
@@ -27,11 +25,11 @@ interface BaseAPI {
         return this.cacheURLAsync(url, priceOptions)
     }
 
-    fun <T>cacheURLAsync(url: String, options: Map<String, Any>): Deferred<T?> {
+    fun <T> cacheURLAsync(url: String, options: Map<String, Any>): Deferred<T?> {
         return this.requestURLAsync<T>(url, options)
     }
 
-    fun <T>requestURLAsync(url: String, options: Map<String, Any>): Deferred<T?> {
+    fun <T> requestURLAsync(url: String, options: Map<String, Any>): Deferred<T?> {
         var requestUrl = url
         val method = options["method"] as String? ?: "GET"
         @Suppress("unchecked_cast")
@@ -83,7 +81,8 @@ interface BaseAPI {
     fun getImageOptions(options: Map<String, Any> = HashMap()): Map<String, Any> {
         val result = this.getQueryOptions(options).toMutableMap()
         @Suppress("unchecked_cast")
-        val params: MutableMap<String, Any> = result["params"] as? MutableMap<String, Any> ?: HashMap()
+        val params: MutableMap<String, Any> = result["params"] as? MutableMap<String, Any>
+                ?: HashMap()
 
         val initials = options["initials"] as String?
         @Suppress("unchecked_cast")
@@ -157,11 +156,10 @@ interface BaseAPI {
         params.forEach { (key, value) ->
             if (value is List<*>) {
                 value.forEach {
-                    val valueS = URLEncoder.encode(it.toString(),"UTF-8")
+                    val valueS = URLEncoder.encode(it.toString(), "UTF-8")
                     buffer.add("$key=$valueS")
                 }
-            }
-            else {
+            } else {
                 val valueS = URLEncoder.encode(value.toString(), "UTF-8")
                 buffer.add("$key=$valueS")
             }

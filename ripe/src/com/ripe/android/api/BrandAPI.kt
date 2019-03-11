@@ -2,7 +2,7 @@ package com.ripe.android.api
 
 import kotlinx.coroutines.Deferred
 
-interface BrandAPI: BaseAPI {
+interface BrandAPI : BaseAPI {
 
     fun getConfigAsync(options: Map<String, Any> = HashMap()): Deferred<Map<String, Any>?> {
         var _options = this.getConfigOptions(options)
@@ -11,7 +11,7 @@ interface BrandAPI: BaseAPI {
         return this.cacheURLAsync(url, _options)
     }
 
-    fun getConfigOptions(options: Map<String, Any> = HashMap()): Map<String, Any> {
+    private fun getConfigOptions(options: Map<String, Any> = HashMap()): Map<String, Any> {
         val configOptions = options.toMutableMap()
         val brand = options["brand"] as String? ?: this.owner.brand
         val model = options["model"] as String? ?: this.owner.model
@@ -27,7 +27,7 @@ interface BrandAPI: BaseAPI {
         return this.cacheURLAsync(url, _options)
     }
 
-    fun getDefaultsOptions(options: Map<String, Any> = HashMap()): Map<String, Any> {
+    private fun getDefaultsOptions(options: Map<String, Any> = HashMap()): Map<String, Any> {
         val defaultOptions = options.toMutableMap()
         val brand = options["brand"] as String? ?: this.owner.brand
         val model = options["model"] as String? ?: this.owner.model
