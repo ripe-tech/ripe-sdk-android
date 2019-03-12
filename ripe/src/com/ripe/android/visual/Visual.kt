@@ -1,8 +1,7 @@
 package com.ripe.android.visual
 
-import com.ripe.android.base.Ripe
 import com.ripe.android.base.Interactable
-
+import com.ripe.android.base.Ripe
 
 /**
  * This is a superclass for visual representations of a Ripe instance.

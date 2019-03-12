@@ -5,7 +5,8 @@ import com.ripe.android.base.Ripe
 class RipeAPI constructor(override var owner: Ripe) :
         BaseAPI,
         BrandAPI,
-        LocaleAPI {
+        LocaleAPI,
+        SizeAPI {
 
     constructor(options: Map<String, Any>) : this(Ripe(null, null, options))
 }

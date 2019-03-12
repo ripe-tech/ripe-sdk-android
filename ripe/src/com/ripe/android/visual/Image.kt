@@ -1,13 +1,13 @@
 package com.ripe.android.visual
 
-import java.net.URL
+import android.graphics.BitmapFactory
+import android.widget.ImageView
+import com.ripe.android.base.Ripe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import android.widget.ImageView
-import android.graphics.BitmapFactory
-import com.ripe.android.base.Ripe
+import java.net.URL
 
 /**
  * Reactively updates the image of an ImageView whenever the state of its owner changes.
@@ -39,7 +39,8 @@ class Image constructor(private val imageView: ImageView, override val owner: Ri
 
     private var showInitials = this.options["showInitials"] as Boolean? ?: true
     @Suppress("unchecked_cast")
-    private var initialsBuilder: (String, String, ImageView) -> Map<String, Any> = this.options["initialsBuilder"] as ((String, String, ImageView) -> Map<String, Any>)? ?: ::initialsBuilder
+    private var initialsBuilder: (String, String, ImageView) -> HashMap<String, Any> = this.options["initialsBuilder"] as ((String, String, ImageView) -> HashMap<String, Any>)?
+            ?: ::_initialsBuilder
     private var initials: String? = null
     private var engraving: String? = null
     private var url: String? = null
@@ -50,17 +51,17 @@ class Image constructor(private val imageView: ImageView, override val owner: Ri
 
         this.initials = state["initials"] as String? ?: this.initials
         this.engraving = state["engraving"] as String? ?: this.engraving
-        val initialsSpec = if (initials != null && engraving !== null && this.showInitials)
+        var initialsSpec = if (initials != null && engraving !== null && this.showInitials)
             this.initialsBuilder(initials!!, engraving!!, this.imageView)
-            else HashMap()
+        else HashMap()
 
         val url = this.owner.api.getImageUrl(
-            hashMapOf(
-                "brand" to brand,
-                "model" to model,
-                "initials" to (initialsSpec["initials"] ?: ""),
-                "profile" to (initialsSpec["profile"] ?: ArrayList<String>())
-            )
+                hashMapOf(
+                        "brand" to brand,
+                        "model" to model,
+                        "initials" to (initialsSpec["initials"] ?: ""),
+                        "profile" to (initialsSpec["profile"] ?: ArrayList<String>())
+                )
         )
         if (this.url == url) {
             return
@@ -69,8 +70,8 @@ class Image constructor(private val imageView: ImageView, override val owner: Ri
         this.url = url
         val imageView = this.imageView
         CoroutineScope(Dispatchers.IO).launch {
-            val streamUrl = URL(url)
-            val inputStream = streamUrl.openStream()
+            val url = URL(url)
+            val inputStream = url.openStream()
             val bitmap = BitmapFactory.decodeStream(inputStream)
             withContext(Dispatchers.Main) {
                 imageView.setImageBitmap(bitmap)
@@ -80,7 +81,7 @@ class Image constructor(private val imageView: ImageView, override val owner: Ri
 
     override fun deinit() {}
 
-    private fun initialsBuilder(initials: String, engraving: String, view: ImageView): Map<String, Any> {
+    private fun _initialsBuilder(initials: String, engraving: String, view: ImageView): HashMap<String, Any> {
         return hashMapOf(
                 "initials" to initials,
                 "profile" to arrayOf(engraving)

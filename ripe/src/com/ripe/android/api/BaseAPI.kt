@@ -1,15 +1,15 @@
 package com.ripe.android.api
 
-import java.net.URL
-import java.net.URLEncoder
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
 import com.ripe.android.base.Ripe
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import java.net.URL
+import java.net.URLEncoder
 
 /**
  * This interface contains the base methods to be used by the various API classes.
@@ -45,6 +45,7 @@ interface BaseAPI {
         return this.cacheURLAsync(url, priceOptions)
     }
 
+
     /**
      * Returns the url of a composition for the current configuration.
      *
@@ -60,11 +61,11 @@ interface BaseAPI {
         return "${url}?${this.buildQuery(params)}"
     }
 
-    fun cacheURLAsync(url: String, options: Map<String, Any>): Deferred<Map<String, Any>?> {
-        return this.requestURLAsync(url, options)
+    fun <T> cacheURLAsync(url: String, options: Map<String, Any>): Deferred<T?> {
+        return this.requestURLAsync<T>(url, options)
     }
 
-    fun requestURLAsync(url: String, options: Map<String, Any>): Deferred<Map<String, Any>?> {
+    fun <T> requestURLAsync(url: String, options: Map<String, Any>): Deferred<T?> {
         var requestUrl = url
         val method = options["method"] as String? ?: "GET"
         @Suppress("unchecked_cast")
@@ -91,11 +92,11 @@ interface BaseAPI {
             val url = URL(urlS)
             val result = url.readText()
             val gson = Gson()
-            val type = object : TypeToken<Map<String, Any>>() {}.type
+            val type = object : TypeToken<T>() {}.type
 
-            var resultMap: Map<String, Any>?
+            var resultMap: T?
             try {
-                resultMap = gson.fromJson<Map<String, Any>>(result, type)
+                resultMap = gson.fromJson<T>(result, type)
             } catch (exception: JsonSyntaxException) {
                 resultMap = null
             }
@@ -116,7 +117,8 @@ interface BaseAPI {
     private fun getImageOptions(options: Map<String, Any> = HashMap()): Map<String, Any> {
         val result = this.getQueryOptions(options).toMutableMap()
         @Suppress("unchecked_cast")
-        val params: MutableMap<String, Any> = result["params"] as? MutableMap<String, Any> ?: HashMap()
+        val params: MutableMap<String, Any> = result["params"] as? MutableMap<String, Any>
+                ?: HashMap()
 
         val initials = options["initials"] as String?
         @Suppress("unchecked_cast")
@@ -180,14 +182,14 @@ interface BaseAPI {
     fun buildQuery(params: Map<String, Any>): String {
         val buffer = ArrayList<String>()
         params.forEach { (key, value) ->
-            if (value is String) {
-                val valueS = URLEncoder.encode(value, "UTF-8")
-                buffer.add("$key=$valueS")
-            } else if (value is ArrayList<*>) {
+            if (value is List<*>) {
                 value.forEach {
-                    val valueS = URLEncoder.encode(it.toString(),"UTF-8")
+                    val valueS = URLEncoder.encode(it.toString(), "UTF-8")
                     buffer.add("$key=$valueS")
                 }
+            } else {
+                val valueS = URLEncoder.encode(value.toString(), "UTF-8")
+                buffer.add("$key=$valueS")
             }
         }
 
