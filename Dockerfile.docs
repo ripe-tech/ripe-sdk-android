@@ -14,6 +14,10 @@ ENV LEVEL="INFO"\
     BASE_PATH="/ripe/build/dokka/"\
     INDEX_FILES="index.html"
 
+ADD build.gradle /
+ADD settings.gradle /
+ADD ripe /ripe
+
 RUN gradle wrapper
 RUN ./gradlew dokka
 
