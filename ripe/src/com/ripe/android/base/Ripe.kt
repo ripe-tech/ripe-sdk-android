@@ -18,6 +18,7 @@ class Ripe constructor(var brand: String?, var model: String?, options: Map<Stri
     var ready = false
     var useDefaults = true
     var usePrice = true
+    var locale: String? = null
 
     private var parts: MutableMap<String, Any> = HashMap()
 
@@ -290,6 +291,7 @@ class Ripe constructor(var brand: String?, var model: String?, options: Map<Stri
         val parts = options["parts"] as? MutableMap<String, Any>
         val useDefaults = options["useDefaults"] as? Boolean
         val usePrice = options["usePrice"] as? Boolean
+        val locale = options["locale"] as? String
 
         if (parts != null) {
             this.parts = parts
@@ -299,6 +301,9 @@ class Ripe constructor(var brand: String?, var model: String?, options: Map<Stri
         }
         if (usePrice != null) {
             this.usePrice = usePrice
+        }
+        if (locale != null) {
+            this.locale = locale
         }
     }
 
