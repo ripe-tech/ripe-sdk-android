@@ -116,10 +116,16 @@ interface BaseAPI {
         @Suppress("unchecked_cast")
         val optionsParams = options["params"] as Map<String, Any>?
                 ?: HashMap()
-        val brand = options["brand"] as String? ?: this.owner.brand
-        val model = options["model"] as String? ?: this.owner.model
+        val brand = options["brand"] as? String ?: this.owner.brand
+        val model = options["model"] as? String ?: this.owner.model
+        val variant = options["variant"] as? String ?: this.owner.variant
         @Suppress("unchecked_cast")
         val parts = options["parts"] as? Map<String, Any> ?: this.owner.getParts()
+        val engraving = options["engraving"] as? String ?: this.owner.engraving
+        val country = options["country"] as? String ?: this.owner.country
+        val currency = options["currency"] as? String ?: this.owner.currency
+        val flag = options["flag"] as? String ?: this.owner.flag
+        val full = options["full"] as? Boolean ?: true
 
         val params = optionsParams.toMutableMap()
         if (brand != null) {
@@ -127,6 +133,21 @@ interface BaseAPI {
         }
         if (model != null) {
             params["model"] = model
+        }
+        if (variant != null) {
+            params["variant"] = variant
+        }
+        if (full) {
+            params["engraving"] = engraving
+        }
+        if (full && country != null) {
+            params["country"] = country
+        }
+        if (full && currency != null) {
+            params["currency"] = currency
+        }
+        if (full && flag != null) {
+            params["flag"] = flag
         }
 
         val partsQ = ArrayList<String>()

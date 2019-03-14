@@ -8,6 +8,7 @@ import kotlinx.coroutines.launch
 
 class Ripe constructor(var brand: String?, var model: String?, options: Map<String, Any> = HashMap()) : Observable() {
     var options = options.toMutableMap()
+    var variant: String? = null
     var api = RipeAPI(this)
     var initials = ""
     var engraving = ""
@@ -18,6 +19,9 @@ class Ripe constructor(var brand: String?, var model: String?, options: Map<Stri
     var ready = false
     var useDefaults = true
     var usePrice = true
+    var country: String? = null
+    var flag: String? = null
+    var currency: String? = null
     var locale: String? = null
 
     private var parts: MutableMap<String, Any> = HashMap()
@@ -287,24 +291,15 @@ class Ripe constructor(var brand: String?, var model: String?, options: Map<Stri
 
     fun _setOptions(options: Map<String, Any>) {
         this.options = options.toMutableMap()
+        this.variant = options["variant"] as? String
         @Suppress("unchecked_cast")
-        val parts = options["parts"] as? MutableMap<String, Any>
-        val useDefaults = options["useDefaults"] as? Boolean
-        val usePrice = options["usePrice"] as? Boolean
-        val locale = options["locale"] as? String
-
-        if (parts != null) {
-            this.parts = parts
-        }
-        if (useDefaults != null) {
-            this.useDefaults = useDefaults
-        }
-        if (usePrice != null) {
-            this.usePrice = usePrice
-        }
-        if (locale != null) {
-            this.locale = locale
-        }
+        this.parts = options["parts"] as? MutableMap<String, Any> ?: HashMap()
+        this.country = options["country"] as? String
+        this.currency = options["country"] as? String
+        this.locale = options["country"] as? String
+        this.flag = options["country"] as? String
+        this.useDefaults = options["useDefaults"] as? Boolean ?: true
+        this.usePrice = options["usePrice"] as? Boolean ?: true
     }
 
     fun _setPart(part: String, material: String?, color: String?, noEvents: Boolean = false) {
