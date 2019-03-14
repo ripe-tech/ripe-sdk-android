@@ -35,7 +35,7 @@ interface BaseAPI {
      * be completed asynchronously.
      *
      * @param options A map containing configuration information that can be used to override
-     * the current configuration. Allows setting *brand*, *model* or the *parts* map.
+     * the current configuration - allows setting *brand*, *model* and *parts*.
      *
      */
     fun getPriceAsync(options: Map<String, Any> = HashMap()): Deferred<Map<String, Any>?> {
@@ -50,8 +50,8 @@ interface BaseAPI {
      * Returns the url of a composition for the current configuration.
      *
      * @param options A map containing configuration information that can be used to override
-     * the current configuration. Allows setting *brand*, *model*, the *parts* map, *initals*
-     * and the *profiles* array.
+     * the current configuration - allows setting *brand*, *model*, *parts*, *initals*
+     * and *profiles*.
      */
     fun getImageUrl(options: Map<String, Any> = HashMap()): String {
         val imageOptions = this.getImageOptions(options)
