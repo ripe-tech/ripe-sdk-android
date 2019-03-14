@@ -7,7 +7,7 @@ interface BrandAPI : BaseAPI {
     /**
      * Returns the configuration information of a specific brand and model. If no model is provided
      * then returns the information of the owner's current model.
-     * The **options** map accepts the following parameters:
+     * The **options** map accepts the following keys:
      *  - **brand** - the brand of the model
      *  - **model** - the name of the model
      *  - **country** - the country where the model will be provided, some materials/colors might not be available.
