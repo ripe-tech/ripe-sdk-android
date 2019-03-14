@@ -13,19 +13,18 @@ import java.net.URL
  * Reactively updates the image of an ImageView whenever the state of its owner changes.
  * An Image can be configured with the following options:
  *
- * - **showInitials** - A [Boolean] indicating if the owner's personalization should be shown. Defaults to true.
+ * - **showInitials** - A [Boolean] indicating if the owner's personalization should be shown (defaults to `true¨).
  * - **initialsBuilder** - A method that receives the *initials* and *engraving* as Strings and the ImageView that
  * will be used and returns a map with the initials and a profile list. This is the default method:
  *
  * ```
- *      fun initialsBuilder(initials: String, engraving: String, view: ImageView): Map<String, Any> {
- *          return hashMapOf(
- *              "initials" to initials,
- *              "profile" to arrayOf(engraving)
- *          )
- *      }
+ * fun initialsBuilder(initials: String, engraving: String, view: ImageView): Map<String, Any> {
+ *     return hashMapOf(
+ *         "initials" to initials,
+ *         "profile" to arrayOf(engraving)
+ *     )
+ * }
  * ```
- *
  *
  * @property imageView The ImageView that should be updated.
  * @property owner The [Ripe] instance to be shown.
