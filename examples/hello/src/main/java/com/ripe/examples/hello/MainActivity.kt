@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity() {
 
         val imageView = findViewById(R.id.imageView) as ImageView
         val textView = findViewById(R.id.textView) as TextView
-        val ripe = Ripe("dummy", "dummy", hashMapOf(
+        val ripe = Ripe("dummy", "dummy", mapOf(
                 "url" to "https://sandbox.platforme.com/api/"
         ))
         ripe.bind("price") {

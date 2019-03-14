@@ -11,18 +11,54 @@ import kotlinx.coroutines.async
 import java.net.URL
 import java.net.URLEncoder
 
+/**
+ * This interface contains the base methods to be used by the various API classes.
+ *
+ */
 interface BaseAPI {
+    /**
+     * The Ripe instance that is using the API.
+     */
     val owner: Ripe
 
+    /**
+     * Helper method that retrieves the base API URL from the owner's options.
+     *
+     * @return the base API url to be used.
+     */
     fun getUrl(): String {
         return this.owner.options["url"] as String? ?: "https://sandbox.platforme.com/api/"
     }
 
+    /**
+     * Retrieves the price for current configuration. Returns a [Deferred] object that will
+     * be completed asynchronously.
+     *
+     * @param options A map containing configuration information that can be used to override
+     * the current configuration - allows setting *brand*, *model* and *parts*.
+     *
+     */
     fun getPriceAsync(options: Map<String, Any> = HashMap()): Deferred<Map<String, Any>?> {
         var priceOptions = this.getPriceOptions(options)
         priceOptions = this.build(priceOptions)
         val url = priceOptions["url"] as String
         return this.cacheURLAsync(url, priceOptions)
+    }
+
+
+    /**
+     * Returns the url of a composition for the current configuration.
+     *
+     * @param options A map containing configuration information that can be used to override
+     * the current configuration - allows setting *brand*, *model*, *parts*, *initals*
+     * and *profiles*.
+     */
+    fun getImageUrl(options: Map<String, Any> = HashMap()): String {
+        val imageOptions = this.getImageOptions(options)
+        val url = imageOptions["url"] as String
+        @Suppress("unchecked_cast")
+        val params = imageOptions["params"] as Map<String, Any>
+        return "${url}?${this.buildQuery(params)}"
     }
 
     fun <T> cacheURLAsync(url: String, options: Map<String, Any>): Deferred<T?> {
@@ -68,7 +104,7 @@ interface BaseAPI {
         }
     }
 
-    fun getPriceOptions(options: Map<String, Any>): Map<String, Any> {
+    private fun getPriceOptions(options: Map<String, Any>): Map<String, Any> {
         val url = this.getUrl() + "config/price"
         val result = this.getQueryOptions(options).toMutableMap()
         result.putAll(mapOf(
@@ -78,7 +114,7 @@ interface BaseAPI {
         return result
     }
 
-    fun getImageOptions(options: Map<String, Any> = HashMap()): Map<String, Any> {
+    private fun getImageOptions(options: Map<String, Any> = HashMap()): Map<String, Any> {
         val result = this.getQueryOptions(options).toMutableMap()
         @Suppress("unchecked_cast")
         val params: MutableMap<String, Any> = result["params"] as? MutableMap<String, Any>
@@ -101,14 +137,6 @@ interface BaseAPI {
                 "params" to params
         ))
         return result
-    }
-
-    fun getImageUrl(options: Map<String, Any> = HashMap()): String {
-        val imageOptions = this.getImageOptions(options)
-        val url = imageOptions["url"] as String
-        @Suppress("unchecked_cast")
-        val params = imageOptions["params"] as Map<String, Any>
-        return "${url}?${this.buildQuery(params)}"
     }
 
     fun getQueryOptions(options: Map<String, Any>): Map<String, Any> {

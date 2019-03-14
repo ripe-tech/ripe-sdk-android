@@ -9,6 +9,30 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.net.URL
 
+/**
+ * Reactively updates the image of an ImageView whenever the state of its owner changes.
+ * An Image can be configured with the following options:
+ *
+ * - **showInitials** - A [Boolean] indicating if the owner's personalization should be shown (defaults to `true¨).
+ * - **initialsBuilder** - A method that receives the *initials* and *engraving* as Strings and the ImageView that
+ * will be used and returns a map with the initials and a profile list. This is the default method:
+ *
+ * ```
+ * fun initialsBuilder(initials: String, engraving: String, view: ImageView): Map<String, Any> {
+ *     return hashMapOf(
+ *         "initials" to initials,
+ *         "profile" to arrayOf(engraving)
+ *     )
+ * }
+ * ```
+ *
+ * @property imageView The ImageView that should be updated.
+ * @property owner The [Ripe] instance to be shown.
+ * @property options A map with options to configure the image.
+ *
+ * @constructor Constructs a new Image with the imageView, a Ripe instance as owner and a options map.
+ *
+ */
 class Image constructor(private val imageView: ImageView, override val owner: Ripe, override val options: Map<String, Any> = HashMap()) :
         Visual(owner, options) {
 
