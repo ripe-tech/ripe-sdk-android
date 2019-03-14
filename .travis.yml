@@ -15,4 +15,3 @@ before_install:
   - gradle -b wrapper.gradle wrapper
 script:
   - ./gradlew clean test
- 
