@@ -61,6 +61,7 @@ open class Observable {
      * @return Returns a deferred result that will be resolved when all of the callbacks
      * have finished processing the triggered event.
      */
+    @JvmOverloads
     fun runCallbacks(event: String, args: Map<String, Any> = HashMap()): Deferred<List<Any?>> {
         val callbacks = this.callbacks[event] ?: ArrayList()
         val deferreds = callbacks.map { it.invoke(args) }.filter { it != null }
@@ -119,5 +120,6 @@ open class Observable {
      * @return Returns a deferred result that will be resolved when all of the callbacks
      * have finished processing the triggered event.
      */
+    @JvmOverloads
     fun trigger(event: String, args: Map<String, Any> = HashMap()) = runCallbacks(event, args)
 }

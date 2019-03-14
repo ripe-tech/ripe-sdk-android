@@ -1,4 +1,5 @@
-include ":ripe", "hello"
+include ":ripe", "hello", "hello_java"
 
 rootProject.name = "ripe-sdk-android"
 project(':hello').projectDir = file("examples/hello")
+project(':hello_java').projectDir = file("examples/hello_java")
