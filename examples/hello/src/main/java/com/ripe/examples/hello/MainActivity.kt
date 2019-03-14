@@ -16,17 +16,18 @@ class MainActivity : AppCompatActivity() {
 
         val imageView = findViewById(R.id.imageView) as ImageView
         val textView = findViewById(R.id.textView) as TextView
-        val ripe = Ripe("dummy", "dummy", mapOf(
-                "url" to "https://sandbox.platforme.com/api/"
-        ))
+        val ripe = Ripe("dummy", "dummy")
+        ripe.bindImage(imageView)
         ripe.bind("price") {
             val result = it as Map<String, Map<String, Any>>
-            val total = result["total"]!!
-            val priceFinal = total["price_final"] as Double
+            val total = result["total"]
+            val priceFinal = total!!["price_final"] as Double
             val currency = total["currency"] as String
             textView.text = "${priceFinal} ${currency}"
         }
-        ripe.bindImage(imageView)
-        ripe.setInitials("PT", "grey")
+        ripe.bind("post_config") {
+            ripe.setInitials("PT", "grey")
+            ripe.setPart("piping", "leather_dmy", "brown")
+        }
     }
 }

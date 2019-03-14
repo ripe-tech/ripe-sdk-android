@@ -6,7 +6,7 @@ import com.ripe.android.visual.Image
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
-class Ripe constructor(var brand: String?, var model: String?, options: Map<String, Any> = HashMap()) : Observable() {
+class Ripe @JvmOverloads constructor(var brand: String?, var model: String?, options: Map<String, Any> = HashMap()) : Observable() {
     var options = options.toMutableMap()
     var variant: String? = null
     var api = RipeAPI(this)
@@ -57,6 +57,7 @@ class Ripe constructor(var brand: String?, var model: String?, options: Map<Stri
         }
     }
 
+    @JvmOverloads
     suspend fun config(brand: String?, model: String?, options: Map<String, Any> = HashMap()) {
         // triggers the 'pre_config' event so that
         // the listeners can cleanup if needed
@@ -139,6 +140,7 @@ class Ripe constructor(var brand: String?, var model: String?, options: Map<Stri
         this.update()
     }
 
+    @JvmOverloads
     fun update(state: Map<String, Any> = this._getState()) {
         this.children.forEach { it.update(state) }
 
@@ -160,6 +162,7 @@ class Ripe constructor(var brand: String?, var model: String?, options: Map<Stri
         return cloneParts(this.parts)
     }
 
+    @JvmOverloads
     fun setPart(part: String, material: String?, color: String?, noEvents: Boolean = false, options: Map<String, Any> = HashMap()) {
         if (noEvents) {
             return this._setPart(part, material, color)
@@ -173,6 +176,7 @@ class Ripe constructor(var brand: String?, var model: String?, options: Map<Stri
         this.trigger("post_parts", eventValue)
     }
 
+    @JvmOverloads
     fun setParts(parts: Any, noEvents: Boolean = false, options: Map<String, Any> = HashMap()) {
         @Suppress("unchecked_cast")
         var partsList = parts as? ArrayList<ArrayList<String?>> ?: ArrayList()
@@ -202,6 +206,7 @@ class Ripe constructor(var brand: String?, var model: String?, options: Map<Stri
      * @param noUpdate if update events should
      *
      */
+    @JvmOverloads
     fun setInitials(initials: String, engraving: String, noUpdate: Boolean = false) {
         this.initials = initials
         this.engraving = engraving
@@ -213,6 +218,7 @@ class Ripe constructor(var brand: String?, var model: String?, options: Map<Stri
         this.update()
     }
 
+    @JvmOverloads
     fun bindImage(view: ImageView, options: Map<String, Any> = HashMap()): Image {
         val image = Image(view, this, options)
         return this.bindInteractable(image) as Image
@@ -223,10 +229,12 @@ class Ripe constructor(var brand: String?, var model: String?, options: Map<Stri
         return child
     }
 
+    @JvmOverloads
     fun selectPart(part: String, options: Map<String, Any> = HashMap()) {
         this.trigger("selected_part", mapOf("part" to part))
     }
 
+    @JvmOverloads
     fun deselectPart(part: String, options: Map<String, Any> = HashMap()) {
         this.trigger("deselected_part", mapOf("part" to part))
     }
@@ -302,6 +310,7 @@ class Ripe constructor(var brand: String?, var model: String?, options: Map<Stri
         this.usePrice = options["usePrice"] as? Boolean ?: true
     }
 
+    @JvmOverloads
     fun _setPart(part: String, material: String?, color: String?, noEvents: Boolean = false) {
         // ensures that there's one valid configuration loaded
         // in the current instance, required for part setting
@@ -350,10 +359,12 @@ class Ripe constructor(var brand: String?, var model: String?, options: Map<Stri
         this.trigger("post_part", eventValue)
     }
 
+    @JvmOverloads
     fun _setParts(update: List<List<String?>>, noEvents: Boolean) {
         update.forEach { this._setPart(it[0]!!, it[1], it[2], noEvents) }
     }
 
+    @JvmOverloads
     fun _partsList(parts: HashMap<String, Any>): ArrayList<ArrayList<String?>> {
         val partsList = ArrayList<ArrayList<String?>>()
         for ((key, value) in parts) {
