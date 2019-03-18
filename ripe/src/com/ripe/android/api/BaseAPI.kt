@@ -36,7 +36,7 @@ interface BaseAPI {
      *
      * @param options A map containing configuration information that can be used to override
      * the current configuration - allows setting *brand*, *model* and *parts*.
-     *  @return A Deferred that will be completed with the result.
+     * @return A Deferred that will be completed with the result.
      */
     fun getPriceAsync(options: Map<String, Any> = HashMap()): Deferred<Map<String, Any>?> {
         var priceOptions = this.getPriceOptions(options)
