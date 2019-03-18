@@ -5,6 +5,7 @@ import com.ripe.android.api.RipeAPI
 import com.ripe.android.visual.Image
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import com.ripe.android.plugins.Plugin
 
 /**
  * Represents a customizable model. The **options** map supports the following keys:
@@ -48,11 +49,6 @@ class Ripe @JvmOverloads constructor(var brand: String?, var model: String?, opt
     var engraving = ""
 
     /**
-     * The [Interactable] children representing this Ripe instance.
-     */
-    var children: MutableList<Interactable> = ArrayList()
-
-    /**
      * The configuration information of the current model.
      */
     var loadedConfig: Map<String, Any>? = null
@@ -82,6 +78,8 @@ class Ripe @JvmOverloads constructor(var brand: String?, var model: String?, opt
      */
     var locale: String? = null
 
+    private var children: MutableList<Interactable> = ArrayList()
+    private var plugins: MutableList<Plugin> = ArrayList()
     private var useDefaults = true
     private var usePrice = true
     private var parts: MutableMap<String, Any> = HashMap()
@@ -92,6 +90,14 @@ class Ripe @JvmOverloads constructor(var brand: String?, var model: String?, opt
         this._setOptions(options)
 
         val ripe = this
+
+        // iterates over all the plugins present in the options (meant
+        // to be registered) and adds them to the current instance
+        @Suppress("unchecked_cast")
+        val plugins = options["plugins"] as? List<Plugin>
+        plugins?.forEach {
+            this.addPlugin(it)
+        }
 
         // runs the configuration operation on the current instance, using
         // the requested parameters and options, multiple configuration
@@ -408,6 +414,26 @@ class Ripe @JvmOverloads constructor(var brand: String?, var model: String?, opt
      */
     fun canRedo(): Boolean {
         return this.history.size - 1 > this.historyPointer
+    }
+
+    /**
+     * Registers a plugin to this Ripe instance.
+     *
+     * @param plugin The plugin to be registered.
+     */
+    fun addPlugin(plugin: Plugin) {
+        plugin.register(this)
+        this.plugins.add(plugin)
+    }
+
+    /**
+     * Unregisters a plugin to this Ripe instance.
+     *
+     * @param plugin The plugin to be unregistered.
+     */
+    fun removePlugin(plugin: Plugin) {
+        plugin.unregister()
+        this.plugins.remove(plugin)
     }
 
     private fun _getState(): Map<String, Any> {
