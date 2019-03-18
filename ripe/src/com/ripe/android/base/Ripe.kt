@@ -7,7 +7,8 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
 /**
- * Represents a customizable model. The **options** map supports the following keys:
+ * Represents a customizable model.
+ * The **options** map supports the following keys:
  *  - **variant** - The variant of the model.
  *  - **parts** - The initial parts of the model.
  *  - **country** - The country where the model will be sold.
