@@ -31,12 +31,12 @@ interface BaseAPI {
     }
 
     /**
-     * Retrieves the price for current configuration. Returns a [Deferred] object that will
+     * Retrieves the price for current configuration. Returns a Deferred object that will
      * be completed asynchronously.
      *
      * @param options A map containing configuration information that can be used to override
      * the current configuration - allows setting *brand*, *model* and *parts*.
-     *
+     * @return A Deferred that will be completed with the result.
      */
     fun getPriceAsync(options: Map<String, Any> = HashMap()): Deferred<Map<String, Any>?> {
         var priceOptions = this.getPriceOptions(options)
@@ -61,10 +61,12 @@ interface BaseAPI {
         return "${url}?${this.buildQuery(params)}"
     }
 
+    /** @suppress */
     fun <T> cacheURLAsync(url: String, options: Map<String, Any>): Deferred<T?> {
         return this.requestURLAsync<T>(url, options)
     }
 
+    /** @suppress */
     fun <T> requestURLAsync(url: String, options: Map<String, Any>): Deferred<T?> {
         var requestUrl = url
         val method = options["method"] as String? ?: "GET"
@@ -139,6 +141,7 @@ interface BaseAPI {
         return result
     }
 
+    /** @suppress */
     fun getQueryOptions(options: Map<String, Any>): Map<String, Any> {
         val result = options.toMutableMap()
         @Suppress("unchecked_cast")
@@ -196,10 +199,12 @@ interface BaseAPI {
         return result
     }
 
+    /** @suppress */
     fun build(options: Map<String, Any>): Map<String, Any> {
         return options // TODO
     }
 
+    /** @suppress */
     fun buildQuery(params: Map<String, Any>): String {
         val buffer = ArrayList<String>()
         params.forEach { (key, value) ->

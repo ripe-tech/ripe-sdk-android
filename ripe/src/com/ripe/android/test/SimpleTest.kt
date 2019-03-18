@@ -36,7 +36,6 @@ class SimpleTest {
             val instance = Ripe(null, null)
             assertEquals(instance.initials, "")
             assertEquals(instance.engraving, "")
-            assertEquals(instance.children.size, 0)
             assertEquals(instance.ready, false)
 
             instance.config("dummy", "dummy")

@@ -2,7 +2,23 @@ package com.ripe.android.api
 
 import kotlinx.coroutines.Deferred
 
+/**
+ * The interface for the Build API.
+ */
 interface BuildAPI : BaseAPI {
+    /**
+     * Retrieves the bundle of part, materials and colors translations of a specific brand and model
+     * If no model is defined the retrieves the bundle of the owner's current model.
+     * The **options** map accepts the following keys:
+     * - **brand** - The brand of the model.
+     * - **model** - The name of the model.
+     * - **locale** - The locale of the translations.
+     * - **compatibility** - If compatibility mode should be enabled.
+     * - **prefix** - A prefix to prepend to the locale keys (defaults to `builds`).
+     *
+     * @param options A map of options to configure the request.
+     * @return A Deferred that will be completed with the locale bundle.
+     */
     fun getLocaleModelAsync(options: Map<String, Any> = HashMap()): Deferred<Map<String, Any>?> {
         var localeOptions = this._getLocaleModelOptions(options)
         localeOptions = this.build(localeOptions)
