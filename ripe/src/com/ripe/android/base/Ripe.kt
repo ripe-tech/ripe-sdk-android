@@ -18,6 +18,7 @@ import com.ripe.android.plugins.Plugin
  *  - **flag** - A specific attribute of the model.
  *  - **useDefaults** - If the default parts of the model should be used when no initials parts are set.
  *  - **usePrice** - If the price should be automatically retrieved whenever there is a customization change.
+ *  - **plugins** - A list of plugins to be registered to the Ripe instance.
  *
  * @property brand The brand of the model.
  * @property model The name of the Model.
