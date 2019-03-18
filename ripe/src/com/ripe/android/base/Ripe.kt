@@ -240,8 +240,8 @@ class Ripe @JvmOverloads constructor(var brand: String?, var model: String?, opt
      * @param part The part to be changed.
      * @param material The material to change to.
      * @param color The color to change to.
-     * @param noEvents If the parts events shouldn't be triggered. False by default.
-     * @param options A map with options to configure the operation. For internal use.
+     * @param noEvents If the parts events shouldn't be triggered (defaults `False`).
+     * @param options A map with options to configure the operation (for internal use).
      */
     @JvmOverloads
     fun setPart(part: String, material: String?, color: String?, noEvents: Boolean = false, options: Map<String, Any> = HashMap()) {
@@ -261,8 +261,8 @@ class Ripe @JvmOverloads constructor(var brand: String?, var model: String?, opt
      * Allows changing the customization of a set of parts in bulk.
      *
      * @param parts A map or array with part, material, color triplets to be set.
-     * @param noEvents If the parts events shouldn't be triggered. False by default.
-     * @param options A map with options to configure the operation. For internal use.
+     * @param noEvents If the parts events shouldn't be triggered (defaults `False`).
+     * @param options A map with options to configure the operation (for internal use).
      */
     @JvmOverloads
     fun setParts(parts: Any, noEvents: Boolean = false, options: Map<String, Any> = HashMap()) {
@@ -291,7 +291,7 @@ class Ripe @JvmOverloads constructor(var brand: String?, var model: String?, opt
      *
      * @param initials The initials to be set.
      * @param engraving The engraving to be set.
-     * @param noUpdate If the update operation shouldn't be triggered. False by default.
+     * @param noUpdate If the update operation shouldn't be triggered (defaults `False`).
      *
      */
     @JvmOverloads
