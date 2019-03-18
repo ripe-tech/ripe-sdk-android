@@ -2,6 +2,9 @@ package com.ripe.android.api
 
 import kotlinx.coroutines.Deferred
 
+/**
+ * The interface for the Brand API.
+ */
 interface BrandAPI : BaseAPI {
 
     /**

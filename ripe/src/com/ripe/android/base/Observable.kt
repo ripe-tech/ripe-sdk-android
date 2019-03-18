@@ -5,10 +5,10 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.async
 
 /**
- * A function to be executed when an event. It receives a dictionary with the response as parameter and returns a deferred result which is resolved asynchronously.
+ * A function to be executed when an event. It receives a dictionary with the response as parameter and returns a deferred result which is completed asynchronously.
  *
  * @param response A dictionary with the payload of the event
- * @return A Deferred that may be resolved asynchronously
+ * @return A Deferred that may be completed asynchronously
  */
 typealias ObservableCallback = (args: Map<String, Any>) -> Deferred<Any?>?
 
@@ -24,7 +24,7 @@ open class Observable {
 
     /**
      * Binds to an event by providing a block that will receive the event payload as a
-     * parameter and return a Deferred that will be resolved asynchronously.
+     * parameter and return a Deferred that will be completed asynchronously.
      *
      * @param event Name of the event to bind to.
      * @param callback Block to be executed when the event is triggered.
@@ -58,7 +58,7 @@ open class Observable {
      *
      * @param event The name of the event to be triggered.
      * @param args The payload of the event, to be passed to the callbacks.
-     * @return Returns a deferred result that will be resolved when all of the callbacks
+     * @return Returns a deferred result that will be completed when all of the callbacks
      * have finished processing the triggered event.
      */
     @JvmOverloads
@@ -96,7 +96,7 @@ open class Observable {
 
     /**
      * Binds to an event by providing a block that will receive the event payload as a
-     * parameter and return a Deferred that will be resolved asynchronously.
+     * parameter and return a Deferred that will be completed asynchronously.
      *
      * @param event Name of the event to bind to.
      * @param callback Block to be executed when the event is triggered.
@@ -117,7 +117,7 @@ open class Observable {
      *
      * @param event The name of the event to be triggered.
      * @param args The payload of the event, to be passed to the callbacks.
-     * @return Returns a deferred result that will be resolved when all of the callbacks
+     * @return Returns a deferred result that will be completed when all of the callbacks
      * have finished processing the triggered event.
      */
     @JvmOverloads
