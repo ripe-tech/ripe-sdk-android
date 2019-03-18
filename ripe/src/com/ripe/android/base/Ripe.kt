@@ -7,7 +7,15 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
 /**
- * Represents a customizable model.
+ * Represents a customizable model. The **options** map supports the following keys:
+ *  - **variant** - The variant of the model.
+ *  - **parts** - The initial parts of the model.
+ *  - **country** - The country where the model will be sold.
+ *  - **currency** - The currency that should be used to calculate the price.
+ *  - **locale** - The locale to be used by default when localizing values.
+ *  - **flag** - A specific attribute of the model.
+ *  - **useDefaults** - If the default parts of the model should be used when no initials parts are set.
+ *  - **usePrice** - If the price should be automatically retrieved whenever there is a customization change.
  *
  * @property brand The brand of the model.
  * @property model The name of the Model.

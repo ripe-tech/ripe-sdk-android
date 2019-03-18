@@ -113,11 +113,6 @@ interface BaseAPI {
                 "url" to url,
                 "method" to "GET"
         ))
-        val params = result["params"] as Map<String, Any>
-        val paramsTest = params.toMutableMap()
-        paramsTest.remove("brand")
-        paramsTest.remove("model")
-        result["params"] = paramsTest
         return result
     }
 
