@@ -1,10 +1,9 @@
 package com.ripe.examples.hello
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.widget.ImageView
 import android.widget.TextView
-
 import com.ripe.android.base.Ripe
 import com.ripe.examples.R
 

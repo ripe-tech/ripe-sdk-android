@@ -7,7 +7,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class APITest: BaseTest() {
+class APITest : BaseTest() {
     @Test
     fun testGetSizes() {
         runBlocking {

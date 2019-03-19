@@ -8,7 +8,7 @@ import com.ripe.android.base.Ripe
  *
  * @property options A map with options to configure the plugin.
  */
-open class Plugin constructor(open val options: Map<String, Any>?): Observable() {
+open class Plugin constructor(open val options: Map<String, Any>?) : Observable() {
     /**
      * The Ripe instance that is using this plugin.
      */

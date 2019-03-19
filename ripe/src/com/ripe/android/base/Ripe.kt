@@ -2,10 +2,10 @@ package com.ripe.android.base
 
 import android.widget.ImageView
 import com.ripe.android.api.RipeAPI
+import com.ripe.android.plugins.Plugin
 import com.ripe.android.visual.Image
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import com.ripe.android.plugins.Plugin
 
 /**
  * Represents a customizable model.
@@ -247,7 +247,8 @@ class Ripe @JvmOverloads constructor(var brand: String?, var model: String?, opt
                     if (price != null) {
                         ripe.trigger("price", price)
                     }
-                } catch (exception: Exception) {}
+                } catch (exception: Exception) {
+                }
             }
         }
     }
