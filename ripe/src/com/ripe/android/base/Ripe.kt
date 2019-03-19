@@ -21,7 +21,7 @@ import com.ripe.android.plugins.Plugin
  *  - **plugins** - A list of plugins to be registered to the Ripe instance.
  *
  * @property brand The brand of the model.
- * @property model The name of the Model.
+ * @property model The name of the model.
  * @param options A map with options to configure the Ripe instance.
  * @constructor Creates a Ripe instance with the provided brand, model and options.
  */
@@ -36,7 +36,7 @@ class Ripe @JvmOverloads constructor(var brand: String?, var model: String?, opt
     var variant: String? = null
 
     /**
-     * The API instance to be used
+     * The API instance to be used.
      */
     var api = RipeAPI(this)
 
@@ -314,6 +314,7 @@ class Ripe @JvmOverloads constructor(var brand: String?, var model: String?, opt
     }
 
     /**
+     * Changes the personalization of the model.
      *
      * @param initials The initials to be set.
      * @param engraving The engraving to be set.
@@ -354,6 +355,25 @@ class Ripe @JvmOverloads constructor(var brand: String?, var model: String?, opt
     fun bindInteractable(child: Interactable): Interactable {
         this.children.add(child)
         return child
+    }
+
+    /**
+     * Unbinds an [Image] from this Ripe instance.
+     *
+     * @param image The [Image] instance to be unbound.
+     */
+    fun unbindImage(image: Image) {
+        this.unbindInteractable(image)
+    }
+
+    /**
+     * Unbinds an [Interactable] from this Ripe instance.
+     *
+     * @param child The [Interactable] instance to be unbound.
+     */
+    fun unbindInteractable(child: Interactable) {
+        child.deinit()
+        this.children.remove(child)
     }
 
     /**
