@@ -3,128 +3,115 @@ package com.ripe.android.test
 import com.ripe.android.base.Observable
 import com.ripe.android.base.Ripe
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
-import org.junit.After
 import org.junit.Assert.assertEquals
-import org.junit.Before
 import org.junit.Test
 import kotlin.coroutines.resume
 
 
-class SimpleTest {
-    @Suppress("experimental_api_usage")
-    val mainThreadSurrogate = newSingleThreadContext("UI thread")
-
-    @Before
-    fun setUp() {
-        Dispatchers.setMain(mainThreadSurrogate)
-    }
-
-    @After
-    fun tearDown() {
-        Dispatchers.resetMain()
-        mainThreadSurrogate.close()
-    }
+class SimpleTest: BaseTest() {
 
     @Test
     fun testInstance() {
-        runBlocking {
-            val instance = Ripe(null, null)
-            assertEquals(instance.initials, "")
-            assertEquals(instance.engraving, "")
-            assertEquals(instance.ready, false)
+        runBlocking(Dispatchers.Main) {
 
-            instance.config("dummy", "dummy")
-            assertEquals(instance.ready, true)
+                val instance = Ripe(null, null)
+                assertEquals(instance.initials, "")
+                assertEquals(instance.engraving, "")
+                assertEquals(instance.ready, false)
+
+                instance.config("dummy", "dummy")
+                assertEquals(instance.ready, true)
+
         }
     }
 
     @Test
     fun testInstanceValues() {
-        runBlocking {
-            val instance = Ripe("dummy", "dummy")
-            waitForEvent(instance, "config")
+        runBlocking(Dispatchers.Main) {
+                val instance = Ripe("dummy", "dummy")
+                waitForEvent(instance, "config")
 
-            @Suppress("unchecked_cast")
-            val result = waitForEvent(instance, "price") as Map<String, Any>
-            @Suppress("unchecked_cast")
-            var total = result["total"] as Map<String, Any>
-            var priceFinal = total["price_final"] as Double
-            var country = total["country"] as String
-            var currency = total["currency"] as String
-            assertEquals(priceFinal > 0, true)
-            assertEquals(country, "US")
-            assertEquals(currency, "EUR")
+                @Suppress("unchecked_cast")
+                val result = waitForEvent(instance, "price") as Map<String, Any>
+                @Suppress("unchecked_cast")
+                var total = result["total"] as Map<String, Any>
+                var priceFinal = total["price_final"] as Double
+                var country = total["country"] as String
+                var currency = total["currency"] as String
+                assertEquals(priceFinal > 0, true)
+                assertEquals(country, "US")
+                assertEquals(currency, "EUR")
 
-            val price = instance.api.getPriceAsync().await()
-            @Suppress("unchecked_cast")
-            total = price!!["total"] as Map<String, Any>
-            priceFinal = total["price_final"] as Double
-            country = total["country"] as String
-            currency = total["currency"] as String
-            assertEquals(priceFinal > 0, true)
-            assertEquals(country, "US")
-            assertEquals(currency, "EUR")
+                val price = instance.api.getPriceAsync().await()
+                @Suppress("unchecked_cast")
+                total = price!!["total"] as Map<String, Any>
+                priceFinal = total["price_final"] as Double
+                country = total["country"] as String
+                currency = total["currency"] as String
+                assertEquals(priceFinal > 0, true)
+                assertEquals(country, "US")
+                assertEquals(currency, "EUR")
         }
     }
 
     @Test
     fun testUndoSetParts() {
-        runBlocking {
-            val instance = Ripe("swear", "vyner")
-            @Suppress("unchecked_cast")
-            val result = waitForEvent(instance, "post_parts") as Map<String, Any>
-            @Suppress("unchecked_cast")
-            val initialParts = result["parts"] as Map<String, Any>
+        runBlocking(Dispatchers.Main) {
 
-            assertEquals(instance.getParts(), initialParts)
-            assertEquals(instance.canUndo(), false)
-            assertEquals(instance.canRedo(), false)
+                val instance = Ripe("swear", "vyner")
+                @Suppress("unchecked_cast")
+                val result = waitForEvent(instance, "post_parts") as Map<String, Any>
+                @Suppress("unchecked_cast")
+                val initialParts = result["parts"] as Map<String, Any>
 
-            instance.undo()
-            assertEquals(instance.canUndo(), false)
-            assertEquals(instance.canRedo(), false)
+                assertEquals(instance.getParts(), initialParts)
+                assertEquals(instance.canUndo(), false)
+                assertEquals(instance.canRedo(), false)
 
-            var parts = instance.getParts()
-            assertEquals(parts, initialParts)
+                instance.undo()
+                assertEquals(instance.canUndo(), false)
+                assertEquals(instance.canRedo(), false)
 
-            @Suppress("unchecked_cast")
-            var front = parts["front"] as Map<String, String>
-            assertEquals(front["material"], "nappa")
-            assertEquals(front["color"], "white")
+                var parts = instance.getParts()
+                assertEquals(parts, initialParts)
 
-            instance.setPart("front", "suede", "black")
-            parts = instance.getParts()
-            front = parts["front"] as Map<String, String>
-            assertEquals(front["material"], "suede")
-            assertEquals(front["color"], "black")
-            assertEquals(instance.canUndo(), true)
-            assertEquals(instance.canRedo(), false)
+                @Suppress("unchecked_cast")
+                var front = parts["front"] as Map<String, String>
+                assertEquals(front["material"], "nappa")
+                assertEquals(front["color"], "white")
 
-            instance.undo()
+                instance.setPart("front", "suede", "black")
+                parts = instance.getParts()
+                @Suppress("unchecked_cast")
+                front = parts["front"] as Map<String, String>
+                assertEquals(front["material"], "suede")
+                assertEquals(front["color"], "black")
+                assertEquals(instance.canUndo(), true)
+                assertEquals(instance.canRedo(), false)
 
-            parts = instance.getParts()
-            @Suppress("unchecked_cast")
-            front = parts["front"] as Map<String, String>
-            assertEquals(parts, initialParts)
-            assertEquals(front["material"], "nappa")
-            assertEquals(front["color"], "white")
-            assertEquals(instance.canUndo(), false)
-            assertEquals(instance.canRedo(), true)
+                instance.undo()
 
-            instance.redo()
+                parts = instance.getParts()
+                @Suppress("unchecked_cast")
+                front = parts["front"] as Map<String, String>
+                assertEquals(parts, initialParts)
+                assertEquals(front["material"], "nappa")
+                assertEquals(front["color"], "white")
+                assertEquals(instance.canUndo(), false)
+                assertEquals(instance.canRedo(), true)
 
-            parts = instance.getParts()
-            @Suppress("unchecked_cast")
-            front = parts["front"] as Map<String, String>
-            assertEquals(front["material"], "suede")
-            assertEquals(front["color"], "black")
-            assertEquals(instance.canUndo(), true)
-            assertEquals(instance.canRedo(), false)
+                instance.redo()
+
+                parts = instance.getParts()
+                @Suppress("unchecked_cast")
+                front = parts["front"] as Map<String, String>
+                assertEquals(front["material"], "suede")
+                assertEquals(front["color"], "black")
+                assertEquals(instance.canUndo(), true)
+                assertEquals(instance.canRedo(), false)
+
         }
     }
 

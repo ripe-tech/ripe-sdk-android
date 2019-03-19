@@ -5,21 +5,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.setMain
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
-import org.junit.Before
 import org.junit.Test
 
 
-class ObservableTest {
-
-    @Before
-    fun setUp() {
-        @Suppress("experimental_api_usage")
-        Dispatchers.setMain(Dispatchers.Unconfined)
-    }
+class ObservableTest: BaseTest() {
 
     @Test
     fun testAddRemove() {
@@ -53,9 +46,11 @@ class ObservableTest {
         val deferreds = observable.trigger("test")
 
         runBlocking {
-            val results = deferreds.await()
-            assertEquals(results[0], "result")
-            assertEquals(results[1], "delay")
+            launch(Dispatchers.Main) {
+                val results = deferreds.await()
+                assertEquals(results[0], "result")
+                assertEquals(results[1], "delay")
+            }
         }
     }
 }
