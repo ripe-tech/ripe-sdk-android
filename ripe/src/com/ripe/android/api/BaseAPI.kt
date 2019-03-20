@@ -151,7 +151,7 @@ interface BaseAPI {
         val model = options["model"] as? String ?: this.owner.model
         val variant = options["variant"] as? String ?: this.owner.variant
         @Suppress("unchecked_cast")
-        val parts = options["parts"] as? Map<String, Any> ?: this.owner.getParts()
+        val parts = options["parts"] as? Map<String, Any> ?: this.owner.getPartsCopy()
         val engraving = options["engraving"] as? String ?: this.owner.engraving
         val country = options["country"] as? String ?: this.owner.country
         val currency = options["currency"] as? String ?: this.owner.currency

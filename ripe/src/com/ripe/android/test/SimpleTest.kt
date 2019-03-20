@@ -1,13 +1,10 @@
 package com.ripe.android.test
 
-import com.ripe.android.base.Observable
 import com.ripe.android.base.Ripe
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.suspendCancellableCoroutine
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import kotlin.coroutines.resume
 
 
 class SimpleTest : BaseTest() {
@@ -63,7 +60,7 @@ class SimpleTest : BaseTest() {
             @Suppress("unchecked_cast")
             val initialParts = result["parts"] as Map<String, Any>
 
-            assertEquals(instance.getParts(), initialParts)
+            assertEquals(instance.getPartsCopy(), initialParts)
             assertEquals(instance.canUndo(), false)
             assertEquals(instance.canRedo(), false)
 
@@ -71,7 +68,7 @@ class SimpleTest : BaseTest() {
             assertEquals(instance.canUndo(), false)
             assertEquals(instance.canRedo(), false)
 
-            var parts = instance.getParts()
+            var parts = instance.getPartsCopy()
             assertEquals(parts, initialParts)
 
             @Suppress("unchecked_cast")
@@ -80,7 +77,7 @@ class SimpleTest : BaseTest() {
             assertEquals(front["color"], "white")
 
             instance.setPart("front", "suede", "black")
-            parts = instance.getParts()
+            parts = instance.getPartsCopy()
             @Suppress("unchecked_cast")
             front = parts["front"] as Map<String, String>
             assertEquals(front["material"], "suede")
@@ -90,7 +87,7 @@ class SimpleTest : BaseTest() {
 
             instance.undo()
 
-            parts = instance.getParts()
+            parts = instance.getPartsCopy()
             @Suppress("unchecked_cast")
             front = parts["front"] as Map<String, String>
             assertEquals(parts, initialParts)
@@ -101,7 +98,7 @@ class SimpleTest : BaseTest() {
 
             instance.redo()
 
-            parts = instance.getParts()
+            parts = instance.getPartsCopy()
             @Suppress("unchecked_cast")
             front = parts["front"] as Map<String, String>
             assertEquals(front["material"], "suede")
@@ -111,13 +108,6 @@ class SimpleTest : BaseTest() {
         }
     }
 
-    suspend fun waitForEvent(instance: Observable, event: String) = suspendCancellableCoroutine<Any> { continuation ->
-        instance.bind(event) { result ->
-            if (continuation.isActive) {
-                continuation.resume(result)
-                continuation.cancel()
-            }
-        }
-    }
+
 
 }

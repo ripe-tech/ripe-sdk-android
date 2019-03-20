@@ -19,14 +19,14 @@ open class Plugin constructor(open val options: Map<String, Any>?) : Observable(
      *
      * @param owner The Ripe instance to register to.
      */
-    fun register(owner: Ripe) {
+    open fun register(owner: Ripe) {
         this.owner = owner
     }
 
     /**
      * Unregisters this plugin from its owner.
      */
-    fun unregister() {
+    open fun unregister() {
         this.owner = null
     }
 }

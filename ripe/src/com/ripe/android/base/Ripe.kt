@@ -41,6 +41,11 @@ class Ripe @JvmOverloads constructor(var brand: String?, var model: String?, opt
     var api = RipeAPI(this)
 
     /**
+     * The current customisation of the model.
+     */
+    var parts: MutableMap<String, Any> = HashMap()
+
+    /**
      * The current initials of the model.
      */
     var initials = ""
@@ -84,7 +89,6 @@ class Ripe @JvmOverloads constructor(var brand: String?, var model: String?, opt
     private var plugins: MutableList<Plugin> = ArrayList()
     private var useDefaults = true
     private var usePrice = true
-    private var parts: MutableMap<String, Any> = HashMap()
     private var history: MutableList<Map<String, Any>> = ArrayList()
     private var historyPointer = -1
 
@@ -221,7 +225,7 @@ class Ripe @JvmOverloads constructor(var brand: String?, var model: String?, opt
 
         // notifies that the config has changed and waits for listeners
         // before concluding the config operation
-        this.trigger("post_config").await()
+        this.trigger("post_config", this.loadedConfig!!).await()
 
         // triggers the local update operations
         this.update()
@@ -257,7 +261,7 @@ class Ripe @JvmOverloads constructor(var brand: String?, var model: String?, opt
      * Retrieves a copy of the current customization.
      * @return A map with the current parts.
      */
-    fun getParts(): Map<String, Any> {
+    fun getPartsCopy(): Map<String, Any> {
         return cloneParts(this.parts)
     }
 
@@ -300,15 +304,15 @@ class Ripe @JvmOverloads constructor(var brand: String?, var model: String?, opt
             partsList = this._partsList(parts as HashMap<String, Any>)
         }
 
-        val noPartEvent = options["noPartEvent"] as? Boolean ?: false
+        val noPartEvents = options["noPartEvents"] as? Boolean ?: false
 
         if (noEvents) {
-            return this.setParts(partsList, noPartEvent)
+            return this.setParts(partsList, noPartEvents)
         }
 
         val eventValue = mapOf("parts" to this.parts, "options" to options)
         this.trigger("pre_parts", eventValue)
-        this._setParts(partsList, noPartEvent)
+        this._setParts(partsList, noPartEvents)
         this.update()
         this.trigger("parts", eventValue)
         this.trigger("post_parts", eventValue)
@@ -563,7 +567,7 @@ class Ripe @JvmOverloads constructor(var brand: String?, var model: String?, opt
             return
         }
 
-        val parts = this.getParts()
+        val parts = this.getPartsCopy()
         this.history = this.history.subList(0, this.historyPointer + 1)
         this.history.add(parts)
         this.historyPointer = this.history.size - 1
