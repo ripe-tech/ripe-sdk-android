@@ -37,9 +37,9 @@ class SyncPlugin constructor(rulesMap: Map<String, Any>? = null, override var op
         }
 
         this.partBind = owner.bind("part") {
-            val name = it["part"] as String
+            val name = it["part"] as? String
             @Suppress("unchecked_cast")
-            val value = it["value"] as Map<String, String?>
+            val value = it["value"] as? Map<String, String?>
             this.applySync(name, value)
         }
     }
@@ -72,7 +72,7 @@ class SyncPlugin constructor(rulesMap: Map<String, Any>? = null, override var op
     }
 
     private fun applySync(partName: String?, partValue: Map<String, String?>?) {
-        for ((key, ruleValue) in this.rules) {
+        for ((key, _) in this.rules) {
             // if a part was selected and it is part of
             // the rule then its value is used otherwise
             // the first part of the rule is used

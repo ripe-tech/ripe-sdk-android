@@ -10,6 +10,34 @@ import org.junit.Test
 
 class SyncTest : BaseTest() {
     @Test
+    fun testStringSync() {
+        val syncPlugin = SyncPlugin(mapOf("full" to listOf("upper", "bottom")))
+        val instance = Ripe(null, null, mapOf("plugins" to listOf(syncPlugin)))
+        val initialParts = mapOf(
+            "upper" to mapOf("material" to "nappa", "color" to "black"),
+            "bottom" to mapOf("material" to "nappa", "color" to "black")
+        )
+        instance.loadedConfig = mapOf("defaults" to initialParts)
+        instance.parts = initialParts.toMutableMap()
+
+        instance.trigger("part")
+        @Suppress("unchecked_cast")
+        var upper = instance.parts["upper"] as Map<String, String>
+        @Suppress("unchecked_cast")
+        var bottom = instance.parts["bottom"] as Map<String, String>
+        assertEquals(upper["color"], "black")
+        assertEquals(bottom["color"], "black")
+
+        instance.setPart("bottom", "nappa", "white")
+        @Suppress("unchecked_cast")
+        upper = instance.parts["upper"] as Map<String, String>
+        @Suppress("unchecked_cast")
+        bottom = instance.parts["bottom"] as Map<String, String>
+        assertEquals(upper["color"], "white")
+        assertEquals(bottom["color"], "white")
+    }
+
+    @Test
     fun testConfigSync() {
         runBlocking {
             launch(Dispatchers.Main) {
