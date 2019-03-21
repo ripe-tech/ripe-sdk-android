@@ -51,14 +51,33 @@ repositories {
 }
 
 bintray {
-    user =  System.getenv("BINTRAY_USER")
-    key =  System.getenv("BINTRAY_KEY")
+    user = System.getenv("BINTRAY_USER")
+    key = System.getenv("BINTRAY_KEY")
     pkg {
-        repo = "ripe-sdk-android"
-        name = "RIPE SDK Android"
+        repo = "maven"
+        name = "ripe-sdk-android"
         userOrg = "platforme"
         licenses = ["Apache-2.0"]
         vcsUrl = "https://github.com/ripe-tech/ripe-sdk-android.git"
+        version {
+            name = "0.1.0"
+            desc = "0.1.0"
+            released  = new Date()
+            vcsTag = "0.1.0"
+        }
+    }
+}
+
+publishing {
+    publications {
+        MyPublication(MavenPublication) {
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+            groupId "com.ripe.android"
+            artifactId "ripe-sdk-android"
+            version "0.1.0"
+        }
     }
 }
 
