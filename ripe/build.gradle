@@ -54,6 +54,10 @@ repositories {
 bintray {
     user = System.getenv("BINTRAY_USER")
     key = System.getenv("BINTRAY_KEY")
+    dryRun = false
+    override = false
+    publish = true
+    publications = ["RipeSDK"]
     pkg {
         repo = "maven"
         name = "ripe-sdk-android"
@@ -71,8 +75,8 @@ bintray {
 
 publishing {
     publications {
-        MyPublication(MavenPublication) {
-            from components.android
+        RipeSDK(MavenPublication) {
+            artifact("$buildDir/outputs/aar/ripe-release.aar")
             groupId "com.ripe.android"
             artifactId "ripe-sdk-android"
             version "0.1.0"
