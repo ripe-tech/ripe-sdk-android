@@ -24,7 +24,7 @@ before_deploy:
   - gradle -b wrapper.gradle wrapper
 deploy:
   provider: script
-  script: ./gradle clean bintrayUpload
+  script: ./gradlew clean bintrayUpload
   on:
     tags: true
     jdk: oraclejdk8
