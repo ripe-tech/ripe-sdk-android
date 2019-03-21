@@ -52,8 +52,8 @@ repositories {
 }
 
 bintray {
-    user = System.getenv("BINTRAY_USER")
-    key = System.getenv("BINTRAY_KEY")
+    user = "platforme"
+    key = "184bde5cb1f6a327ac7ebab8042468ec95f323f3"
     publications = ["RipePublication"]
     pkg {
         repo = "maven"
