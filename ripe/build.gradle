@@ -1,3 +1,4 @@
+apply plugin: "com.novoda.bintray-release"
 apply plugin: "com.android.library"
 apply plugin: "kotlin-android"
 apply plugin: "org.jetbrains.dokka-android"
@@ -33,6 +34,20 @@ android {
             }
         }
     }
+}
+
+publish {
+    def groupProjectID = "com.ripe.android"
+    def artifactProjectID = "ripe-sdk-android"
+    def publishVersionID = "1.0.0"
+
+    userOrg = "platforme"
+    repoName = "ripe-sdk-android"
+    groupId = groupProjectID
+    artifactId = artifactProjectID
+    publishVersion = publishVersionID
+    desc = "Android version of the RIPE SDK."
+    website = "https://github.com/ripe-tech/ripe-sdk-android"
 }
 
 dependencies {
