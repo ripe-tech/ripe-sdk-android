@@ -1,7 +1,7 @@
-apply plugin: "com.novoda.bintray-release"
 apply plugin: "com.android.library"
 apply plugin: "kotlin-android"
 apply plugin: "org.jetbrains.dokka-android"
+apply plugin: "com.jfrog.bintray"
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -36,20 +36,6 @@ android {
     }
 }
 
-publish {
-    def groupProjectID = "com.ripe.android"
-    def artifactProjectID = "ripe-sdk-android"
-    def publishVersionID = "0.1.0"
-
-    userOrg = "platforme"
-    repoName = "ripe-sdk-android"
-    groupId = groupProjectID
-    artifactId = artifactProjectID
-    publishVersion = publishVersionID
-    desc = "Android version of the RIPE SDK."
-    website = "https://github.com/ripe-tech/ripe-sdk-android"
-}
-
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -62,6 +48,18 @@ dependencies {
 
 repositories {
     mavenCentral()
+}
+
+bintray {
+    user =  System.getenv("BINTRAY_USER")
+    key =  System.getenv("BINTRAY_KEY")
+    pkg {
+        repo = "ripe-sdk-android"
+        name = "RIPE SDK Android"
+        userOrg = "platforme"
+        licenses = ["Apache-2.0"]
+        vcsUrl = "https://github.com/ripe-tech/ripe-sdk-android.git"
+    }
 }
 
 dokka {
