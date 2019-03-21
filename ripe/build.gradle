@@ -39,7 +39,7 @@ android {
 publish {
     def groupProjectID = "com.ripe.android"
     def artifactProjectID = "ripe-sdk-android"
-    def publishVersionID = "1.0.0"
+    def publishVersionID = "0.1.0"
 
     userOrg = "platforme"
     repoName = "ripe-sdk-android"
