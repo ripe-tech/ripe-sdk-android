@@ -35,6 +35,9 @@ android {
             }
         }
     }
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
@@ -52,20 +55,20 @@ repositories {
 }
 
 bintray {
-    user = "platforme"
-    key = "184bde5cb1f6a327ac7ebab8042468ec95f323f3"
+    user = System.getenv("BINTRAY_USER")
+    key = System.getenv("BINTRAY_KEY")
     publications = ["RipePublication"]
     pkg {
         repo = "maven"
-        name = "ripe-sdk-android"
+        name = "$package_name"
         userOrg = "platforme"
         licenses = ["Apache-2.0"]
         vcsUrl = "https://github.com/ripe-tech/ripe-sdk-android.git"
         version {
-            name = "0.1.0"
-            desc = "0.1.0"
+            name = "$package_version"
+            desc = "$package_version"
             released  = new Date()
-            vcsTag = "0.1.0"
+            vcsTag = "$package_version"
         }
     }
 }
@@ -79,10 +82,10 @@ publishing {
     publications {
         RipePublication(MavenPublication) {
             artifact sourcesJar
-            artifact("$buildDir/outputs/aar/ripe.aar")
+            artifact("$buildDir/outputs/aar/ripe-release.aar")
             groupId "com.ripe.android"
-            artifactId "ripe-sdk-android"
-            version "0.1.0"
+            artifactId "$package_name"
+            version "$package_version"
             pom.withXml {
                 configurations.compile.allDependencies.each {
                     def dependencyNode = dependenciesNode.appendNode("dependency")
