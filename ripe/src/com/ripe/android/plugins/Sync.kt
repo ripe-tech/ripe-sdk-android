@@ -32,8 +32,10 @@ class SyncPlugin constructor(rulesMap: Map<String, Any>? = null, override var op
 
         this.postConfigBind = if (this.manual) null else owner.bind("post_config") {
             @Suppress("unchecked_cast")
-            val rules = it["sync"] as Map<String, Any>
-            this.rules = this.normalizeRules(rules)
+            val rules = it["sync"] as? Map<String, Any>
+            if (rules != null) {
+                this.rules = this.normalizeRules(rules)
+            }
         }
 
         this.partBind = owner.bind("part") {
