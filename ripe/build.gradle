@@ -62,6 +62,7 @@ bintray {
         repo = "maven"
         name = "$package_name"
         userOrg = "platforme"
+        publish = true
         licenses = ["Apache-2.0"]
         vcsUrl = "https://github.com/ripe-tech/ripe-sdk-android.git"
         version {
