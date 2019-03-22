@@ -1,6 +1,8 @@
 apply plugin: "com.android.library"
 apply plugin: "kotlin-android"
 apply plugin: "org.jetbrains.dokka-android"
+apply plugin: "com.jfrog.bintray"
+apply plugin: "maven-publish"
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -33,6 +35,9 @@ android {
             }
         }
     }
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
@@ -47,6 +52,51 @@ dependencies {
 
 repositories {
     mavenCentral()
+}
+
+bintray {
+    user = System.getenv("BINTRAY_USER")
+    key = System.getenv("BINTRAY_KEY")
+    publications = ["RipePublication"]
+    pkg {
+        repo = "maven"
+        name = "$package_name"
+        userOrg = "platforme"
+        publish = true
+        licenses = ["Apache-2.0"]
+        vcsUrl = "https://github.com/ripe-tech/ripe-sdk-android.git"
+        version {
+            name = "$package_version"
+            desc = "$package_version"
+            released  = new Date()
+            vcsTag = "$package_version"
+        }
+    }
+}
+
+task sourcesJar(type: Jar, dependsOn: build) {
+    classifier = "sources"
+    from android.sourceSets.main.java.srcDirs
+}
+
+publishing {
+    publications {
+        RipePublication(MavenPublication) {
+            artifact sourcesJar
+            artifact("$buildDir/outputs/aar/ripe-release.aar")
+            groupId "com.ripe.android"
+            artifactId "$package_name"
+            version "$package_version"
+            pom.withXml {
+                configurations.compile.allDependencies.each {
+                    def dependencyNode = dependenciesNode.appendNode("dependency")
+                    dependencyNode.appendNode("groupId", it.group)
+                    dependencyNode.appendNode("artifactId", it.name)
+                    dependencyNode.appendNode("version", it.version)
+                }
+            }
+        }
+    }
 }
 
 dokka {
