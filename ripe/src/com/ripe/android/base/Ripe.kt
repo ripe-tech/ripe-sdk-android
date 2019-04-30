@@ -277,7 +277,7 @@ class Ripe @JvmOverloads constructor(var brand: String?, var model: String?, opt
     @JvmOverloads
     fun setPart(part: String, material: String?, color: String?, noEvents: Boolean = false, options: Map<String, Any> = HashMap()) {
         if (noEvents) {
-            return this._setPart(part, material, color)
+            this._setPart(part, material, color)
         }
 
         val eventValue = mapOf<String, Any>("parts" to this.parts, "options" to options)

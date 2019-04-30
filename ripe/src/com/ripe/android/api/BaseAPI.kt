@@ -52,6 +52,7 @@ interface BaseAPI {
      * @param options A map containing configuration information that can be used to override
      * the current configuration - allows setting *brand*, *model*, *parts*, *initals*
      * and *profiles*.
+     * @return The Image url representation of the passed options.
      */
     fun getImageUrl(options: Map<String, Any> = HashMap()): String {
         val imageOptions = this.getImageOptions(options)

@@ -20,9 +20,16 @@ class SyncPlugin constructor(rulesMap: Map<String, Any>? = null, override var op
     private var postConfigBind: ObservableCallback? = null
     private var partBind: ObservableCallback? = null
 
+    /**
+     * The Sync Plugin binds the **post_config** and **part** events,
+     * in order to:
+     * - retrieve the model's configuration
+     * - change the necessary parts making them comply with the syncing rules
+     *
+     * @param owner The [Ripe] instance in use.
+     */
     override fun register(owner: Ripe) {
         super.register(owner)
-
 
         if (this.auto && owner.loadedConfig != null) {
             @Suppress("unchecked_cast")
@@ -46,6 +53,10 @@ class SyncPlugin constructor(rulesMap: Map<String, Any>? = null, override var op
         }
     }
 
+    /**
+     * The unregister to be called (by the owner)the plugins unbinds events and executes
+     * any necessary cleanup operation.
+     */
     override fun unregister() {
         this.owner?.unbind("part", this.partBind)
         this.owner?.unbind("post_config", this.postConfigBind)
