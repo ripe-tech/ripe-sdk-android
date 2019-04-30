@@ -24,7 +24,7 @@ interface BaseAPI {
     /**
      * Helper method that retrieves the base API URL from the owner's options.
      *
-     * @return the base API url to be used.
+     * @return The base API url to be used.
      */
     fun getUrl(): String {
         return this.owner.options["url"] as String? ?: "https://sandbox.platforme.com/api/"
