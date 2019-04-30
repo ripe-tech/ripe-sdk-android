@@ -80,6 +80,9 @@ class Image constructor(private val imageView: ImageView, override val owner: Ri
 
     override fun deinit() {}
 
+    /**
+     * @suppress
+     */
     private fun _initialsBuilder(initials: String, engraving: String, view: ImageView): HashMap<String, Any> {
         return hashMapOf(
                 "initials" to initials,

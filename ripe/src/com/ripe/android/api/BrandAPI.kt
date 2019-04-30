@@ -26,6 +26,9 @@ interface BrandAPI : BaseAPI {
         return this.cacheURLAsync(url, _options)
     }
 
+    /**
+     * @suppress
+     */
     private fun getConfigOptions(options: Map<String, Any> = HashMap()): Map<String, Any> {
         val configOptions = options.toMutableMap()
         val brand = options["brand"] as String? ?: this.owner.brand
@@ -64,6 +67,9 @@ interface BrandAPI : BaseAPI {
         return this.cacheURLAsync(url, _options)
     }
 
+    /**
+     * @suppress
+     */
     private fun getDefaultsOptions(options: Map<String, Any> = HashMap()): Map<String, Any> {
         val defaultOptions = options.toMutableMap()
         val brand = options["brand"] as String? ?: this.owner.brand

@@ -53,6 +53,9 @@ class SyncPlugin constructor(rulesMap: Map<String, Any>? = null, override var op
         super.unregister()
     }
 
+    /**
+     * @suppress
+     */
     private fun normalizeRules(rules: Map<String, Any>?): Map<String, Any> {
         val result = HashMap<String, Any>()
         if (rules == null) {
@@ -73,6 +76,9 @@ class SyncPlugin constructor(rulesMap: Map<String, Any>? = null, override var op
         return result
     }
 
+    /**
+     * @suppress
+     */
     private fun applySync(partName: String?, partValue: Map<String, String?>?) {
         for ((key, _) in this.rules) {
             // if a part was selected and it is part of
@@ -119,6 +125,9 @@ class SyncPlugin constructor(rulesMap: Map<String, Any>? = null, override var op
         }
     }
 
+    /**
+     * @suppress
+     */
     private fun shouldSync(rule: List<Map<String, String>>, name: String, value: Map<String, String?>): Boolean {
         rule.forEach {
             val part = it["part"]

@@ -61,12 +61,16 @@ interface BaseAPI {
         return "${url}?${this.buildQuery(params)}"
     }
 
-    /** @suppress */
+    /**
+     * @suppress
+     */
     fun <T> cacheURLAsync(url: String, options: Map<String, Any>): Deferred<T?> {
         return this.requestURLAsync<T>(url, options)
     }
 
-    /** @suppress */
+    /**
+     * @suppress
+     */
     fun <T> requestURLAsync(url: String, options: Map<String, Any>): Deferred<T?> {
         var requestUrl = url
         val method = options["method"] as String? ?: "GET"
@@ -106,6 +110,9 @@ interface BaseAPI {
         }
     }
 
+    /**
+     * @suppress
+     */
     private fun getPriceOptions(options: Map<String, Any>): Map<String, Any> {
         val url = this.getUrl() + "config/price"
         val result = this.getQueryOptions(options).toMutableMap()
@@ -116,6 +123,9 @@ interface BaseAPI {
         return result
     }
 
+    /**
+     * @suppress
+     */
     private fun getImageOptions(options: Map<String, Any> = HashMap()): Map<String, Any> {
         val result = this.getQueryOptions(options).toMutableMap()
         @Suppress("unchecked_cast")
@@ -141,7 +151,9 @@ interface BaseAPI {
         return result
     }
 
-    /** @suppress */
+    /**
+     * @suppress
+     */
     fun getQueryOptions(options: Map<String, Any>): Map<String, Any> {
         val result = options.toMutableMap()
         @Suppress("unchecked_cast")
@@ -199,12 +211,16 @@ interface BaseAPI {
         return result
     }
 
-    /** @suppress */
+    /**
+     * @suppress
+     */
     fun build(options: Map<String, Any>): Map<String, Any> {
         return options // TODO
     }
 
-    /** @suppress */
+    /**
+     * @suppress
+     */
     fun buildQuery(params: Map<String, Any>): String {
         val buffer = ArrayList<String>()
         params.forEach { (key, value) ->
