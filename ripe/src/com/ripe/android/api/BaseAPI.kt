@@ -24,7 +24,7 @@ interface BaseAPI {
     /**
      * Helper method that retrieves the base API URL from the owner's options.
      *
-     * @return the base API url to be used.
+     * @return The base API url to be used.
      */
     fun getUrl(): String {
         return this.owner.options["url"] as String? ?: "https://sandbox.platforme.com/api/"
@@ -52,6 +52,7 @@ interface BaseAPI {
      * @param options A map containing configuration information that can be used to override
      * the current configuration - allows setting *brand*, *model*, *parts*, *initals*
      * and *profiles*.
+     * @return The Image url representation of the passed options.
      */
     fun getImageUrl(options: Map<String, Any> = HashMap()): String {
         val imageOptions = this.getImageOptions(options)
@@ -61,12 +62,16 @@ interface BaseAPI {
         return "${url}?${this.buildQuery(params)}"
     }
 
-    /** @suppress */
+    /**
+     * @suppress
+     */
     fun <T> cacheURLAsync(url: String, options: Map<String, Any>): Deferred<T?> {
         return this.requestURLAsync<T>(url, options)
     }
 
-    /** @suppress */
+    /**
+     * @suppress
+     */
     fun <T> requestURLAsync(url: String, options: Map<String, Any>): Deferred<T?> {
         var requestUrl = url
         val method = options["method"] as String? ?: "GET"
@@ -90,8 +95,7 @@ interface BaseAPI {
         }
 
         return CoroutineScope(Dispatchers.IO).async {
-            val urlS = requestUrl
-            val url = URL(urlS)
+            val url = URL(requestUrl)
             val result = url.readText()
             val gson = Gson()
             val type = object : TypeToken<T>() {}.type
@@ -106,6 +110,9 @@ interface BaseAPI {
         }
     }
 
+    /**
+     * @suppress
+     */
     private fun getPriceOptions(options: Map<String, Any>): Map<String, Any> {
         val url = this.getUrl() + "config/price"
         val result = this.getQueryOptions(options).toMutableMap()
@@ -116,6 +123,9 @@ interface BaseAPI {
         return result
     }
 
+    /**
+     * @suppress
+     */
     private fun getImageOptions(options: Map<String, Any> = HashMap()): Map<String, Any> {
         val result = this.getQueryOptions(options).toMutableMap()
         @Suppress("unchecked_cast")
@@ -141,7 +151,9 @@ interface BaseAPI {
         return result
     }
 
-    /** @suppress */
+    /**
+     * @suppress
+     */
     fun getQueryOptions(options: Map<String, Any>): Map<String, Any> {
         val result = options.toMutableMap()
         @Suppress("unchecked_cast")
@@ -199,12 +211,16 @@ interface BaseAPI {
         return result
     }
 
-    /** @suppress */
+    /**
+     * @suppress
+     */
     fun build(options: Map<String, Any>): Map<String, Any> {
         return options // TODO
     }
 
-    /** @suppress */
+    /**
+     * @suppress
+     */
     fun buildQuery(params: Map<String, Any>): String {
         val buffer = ArrayList<String>()
         params.forEach { (key, value) ->

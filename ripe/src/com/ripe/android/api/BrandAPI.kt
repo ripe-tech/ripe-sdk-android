@@ -17,7 +17,8 @@ interface BrandAPI : BaseAPI {
      *  - **flag** - a specific flag that may change the provided materials/colors available.
      *  - **filter** - if the configuration should be filtered by the country and/or flag. `true` by default.
      *
-     * @param options A map with options
+     * @param options A map with options.
+     * @return A Deferred that will be completed with the result.
      */
     fun getConfigAsync(options: Map<String, Any> = HashMap()): Deferred<Map<String, Any>?> {
         var _options = this.getConfigOptions(options)
@@ -26,6 +27,9 @@ interface BrandAPI : BaseAPI {
         return this.cacheURLAsync(url, _options)
     }
 
+    /**
+     * @suppress
+     */
     private fun getConfigOptions(options: Map<String, Any> = HashMap()): Map<String, Any> {
         val configOptions = options.toMutableMap()
         val brand = options["brand"] as String? ?: this.owner.brand
@@ -56,6 +60,7 @@ interface BrandAPI : BaseAPI {
      * then returns the defaults of the owner's current model.
      *
      * @param options a map that accepts *brand* and *model* as keys.
+     * @return A Deferred that will be completed with the result.
      */
     fun getDefaultsAsync(options: Map<String, Any> = HashMap()): Deferred<Map<String, Any>?> {
         var _options = this.getDefaultsOptions(options)
@@ -64,6 +69,9 @@ interface BrandAPI : BaseAPI {
         return this.cacheURLAsync(url, _options)
     }
 
+    /**
+     * @suppress
+     */
     private fun getDefaultsOptions(options: Map<String, Any> = HashMap()): Map<String, Any> {
         val defaultOptions = options.toMutableMap()
         val brand = options["brand"] as String? ?: this.owner.brand

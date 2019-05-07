@@ -26,6 +26,9 @@ interface BuildAPI : BaseAPI {
         return this.cacheURLAsync(url, localeOptions)
     }
 
+    /**
+     * @suppress
+     */
     private fun _getLocaleModelOptions(options: Map<String, Any>): Map<String, Any> {
         val brand = options["brand"] ?: this.owner.brand
         val model = options["model"] ?: this.owner.model

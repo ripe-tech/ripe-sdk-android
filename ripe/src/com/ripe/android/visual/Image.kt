@@ -13,7 +13,12 @@ import java.net.URL
  * Reactively updates the image of an ImageView whenever the state of its owner changes.
  * An Image can be configured with the following options:
  *
- * - **showInitials** - A [Boolean] indicating if the owner's personalization should be shown (defaults to `true¨).
+ * - **showInitials** - A [Boolean] indicating if the owner's personalization should be shown (defaults to `true`).
+ * - **frame** - The Ripe instance frame to display (defaults to `0`).
+ * - **size** - The image size in pixels (defaults to `1000`).
+ * - **width** - The image width in pixels (defaults to `null`, meaning it will fallback to `size`).
+ * - **height** - The image height in pixels (defaults to `null`, meaning it will fallback to `size`).
+ * - **crop** - A Boolean indicating if it is to crop the image composition.
  * - **initialsBuilder** - A method that receives the *initials* and *engraving* as Strings and the ImageView that
  * will be used and returns a map with the initials and a profile list. This is the default method:
  *
@@ -31,7 +36,6 @@ import java.net.URL
  * @property options A map with options to configure the image.
  *
  * @constructor Constructs a new Image with the imageView, a Ripe instance as owner and a options map.
- *
  */
 class Image constructor(private val imageView: ImageView, override val owner: Ripe, override val options: Map<String, Any> = HashMap()) :
         Visual(owner, options) {
@@ -44,6 +48,12 @@ class Image constructor(private val imageView: ImageView, override val owner: Ri
     private var engraving: String? = null
     private var url: String? = null
 
+    /**
+     * This function is called (by the owner) whenever its state changes
+     * so that the Image can update itself for the new state.
+     *
+     * @param state A map containing the new state of the owner.
+     */
     override fun update(state: Map<String, Any>) {
         val brand = this.owner.brand as String
         val model = this.owner.model as String
@@ -78,8 +88,16 @@ class Image constructor(private val imageView: ImageView, override val owner: Ri
         }
     }
 
+    /**
+     * The Image deinitializer, to be called (by the owner) when
+     * it should stop responding to updates so that any necessary
+     * cleanup operations can be executed.
+     */
     override fun deinit() {}
 
+    /**
+     * @suppress
+     */
     private fun _initialsBuilder(initials: String, engraving: String, view: ImageView): HashMap<String, Any> {
         return hashMapOf(
                 "initials" to initials,

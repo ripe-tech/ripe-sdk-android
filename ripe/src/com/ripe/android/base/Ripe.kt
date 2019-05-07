@@ -277,7 +277,7 @@ class Ripe @JvmOverloads constructor(var brand: String?, var model: String?, opt
     @JvmOverloads
     fun setPart(part: String, material: String?, color: String?, noEvents: Boolean = false, options: Map<String, Any> = HashMap()) {
         if (noEvents) {
-            return this._setPart(part, material, color)
+            this._setPart(part, material, color)
         }
 
         val eventValue = mapOf<String, Any>("parts" to this.parts, "options" to options)
@@ -473,6 +473,9 @@ class Ripe @JvmOverloads constructor(var brand: String?, var model: String?, opt
         this.plugins.remove(plugin)
     }
 
+    /**
+     * @suppress
+     */
     private fun _getState(): Map<String, Any> {
         return mapOf(
                 "parts" to this.parts,
@@ -481,6 +484,9 @@ class Ripe @JvmOverloads constructor(var brand: String?, var model: String?, opt
         )
     }
 
+    /**
+     * @suppress
+     */
     private fun _setOptions(options: Map<String, Any>) {
         this.options = options.toMutableMap()
         this.variant = options["variant"] as? String
@@ -494,6 +500,9 @@ class Ripe @JvmOverloads constructor(var brand: String?, var model: String?, opt
         this.usePrice = options["usePrice"] as? Boolean ?: true
     }
 
+    /**
+     * @suppress
+     */
     @JvmOverloads
     private fun _setPart(part: String, material: String?, color: String?, noEvents: Boolean = false) {
         // ensures that there's one valid configuration loaded
@@ -543,10 +552,16 @@ class Ripe @JvmOverloads constructor(var brand: String?, var model: String?, opt
         this.trigger("post_part", eventValue)
     }
 
+    /**
+     * @suppress
+     */
     private fun _setParts(update: List<List<String?>>, noEvents: Boolean) {
         update.forEach { this._setPart(it[0]!!, it[1], it[2], noEvents) }
     }
 
+    /**
+     * @suppress
+     */
     private fun _partsList(parts: HashMap<String, Any>): ArrayList<ArrayList<String?>> {
         val partsList = ArrayList<ArrayList<String?>>()
         for ((key, value) in parts) {
@@ -557,6 +572,9 @@ class Ripe @JvmOverloads constructor(var brand: String?, var model: String?, opt
         return partsList
     }
 
+    /**
+     * @suppress
+     */
     private fun _pushHistory() {
         if (this.parts.isEmpty()) {
             return
@@ -574,6 +592,8 @@ class Ripe @JvmOverloads constructor(var brand: String?, var model: String?, opt
     }
 
     /**
+     * @surpress
+     *
      * Makes a deep copy of the provided parts map to avoid unintended changes.
      *
      * @param parts THe parts map to be cloned.

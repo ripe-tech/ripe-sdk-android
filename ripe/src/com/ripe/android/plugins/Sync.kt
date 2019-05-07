@@ -20,9 +20,16 @@ class SyncPlugin constructor(rulesMap: Map<String, Any>? = null, override var op
     private var postConfigBind: ObservableCallback? = null
     private var partBind: ObservableCallback? = null
 
+    /**
+     * The Sync Plugin binds the **post_config** and **part** events,
+     * in order to:
+     * - retrieve the model's configuration
+     * - change the necessary parts making them comply with the syncing rules
+     *
+     * @param owner The [Ripe] instance in use.
+     */
     override fun register(owner: Ripe) {
         super.register(owner)
-
 
         if (this.auto && owner.loadedConfig != null) {
             @Suppress("unchecked_cast")
@@ -46,6 +53,10 @@ class SyncPlugin constructor(rulesMap: Map<String, Any>? = null, override var op
         }
     }
 
+    /**
+     * The unregister to be called (by the owner)the plugins unbinds events and executes
+     * any necessary cleanup operation.
+     */
     override fun unregister() {
         this.owner?.unbind("part", this.partBind)
         this.owner?.unbind("post_config", this.postConfigBind)
@@ -53,6 +64,9 @@ class SyncPlugin constructor(rulesMap: Map<String, Any>? = null, override var op
         super.unregister()
     }
 
+    /**
+     * @suppress
+     */
     private fun normalizeRules(rules: Map<String, Any>?): Map<String, Any> {
         val result = HashMap<String, Any>()
         if (rules == null) {
@@ -73,6 +87,9 @@ class SyncPlugin constructor(rulesMap: Map<String, Any>? = null, override var op
         return result
     }
 
+    /**
+     * @suppress
+     */
     private fun applySync(partName: String?, partValue: Map<String, String?>?) {
         for ((key, _) in this.rules) {
             // if a part was selected and it is part of
@@ -119,6 +136,9 @@ class SyncPlugin constructor(rulesMap: Map<String, Any>? = null, override var op
         }
     }
 
+    /**
+     * @suppress
+     */
     private fun shouldSync(rule: List<Map<String, String>>, name: String, value: Map<String, String?>): Boolean {
         rule.forEach {
             val part = it["part"]
