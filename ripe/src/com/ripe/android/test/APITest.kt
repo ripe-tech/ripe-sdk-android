@@ -21,7 +21,7 @@ class APITest : BaseTest() {
                 @Suppress("unchecked_cast")
                 val gendersUK = result["uk"] as List<String>
                 assertEquals(gendersFR, listOf("female"))
-                assertEquals(gendersUK, listOf("male", "female"))
+                assertEquals(gendersUK, listOf("female", "male"))
             }
         }
     }
