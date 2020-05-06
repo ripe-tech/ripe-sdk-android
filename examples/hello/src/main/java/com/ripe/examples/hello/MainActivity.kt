@@ -1,5 +1,6 @@
 package com.ripe.examples.hello
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.ImageView
@@ -22,7 +23,7 @@ class MainActivity : AppCompatActivity() {
             val total = result["total"]
             val priceFinal = total!!["price_final"] as Double
             val currency = total["currency"] as String
-            textView.text = "${priceFinal} ${currency}"
+            textView.text = "$priceFinal $currency"
         }
         ripe.bind("post_config") {
             ripe.setInitials("PT", "grey")
