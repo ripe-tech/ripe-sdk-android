@@ -4,7 +4,8 @@
 
     <application
         android:allowBackup="true"
-        android:theme="@style/Theme.AppCompat.Light">
+        android:theme="@style/Theme.AppCompat.Light"
+        android:icon="@mipmap/ic_launcher">
         <activity
             android:name="com.ripe.examples.hello_java.MainActivity"
             android:label="@string/title">
