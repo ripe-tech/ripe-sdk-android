@@ -247,7 +247,7 @@ class Ripe @JvmOverloads constructor(var brand: String?, var model: String?, opt
 
         // in case the current instance is ready and the use price
         // flag is set then triggers the running of the price retrieval
-        // process that shoould finish with the price event
+        // process that should finish with the price event
         if (this.ready && this.usePrice) {
             val ripe = this
             @Suppress("experimental_api_usage")
