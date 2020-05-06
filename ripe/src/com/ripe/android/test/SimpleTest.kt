@@ -30,6 +30,7 @@ class SimpleTest : BaseTest() {
 
             @Suppress("unchecked_cast")
             val result = waitForEvent(instance, "price") as Map<String, Any>
+
             @Suppress("unchecked_cast")
             var total = result["total"] as Map<String, Any>
             var priceFinal = total["price_final"] as Double
@@ -55,8 +56,10 @@ class SimpleTest : BaseTest() {
     fun testUndoSetParts() {
         runBlocking(Dispatchers.Main) {
             val instance = Ripe("swear", "vyner")
+
             @Suppress("unchecked_cast")
             val result = waitForEvent(instance, "post_parts") as Map<String, Any>
+
             @Suppress("unchecked_cast")
             val initialParts = result["parts"] as Map<String, Any>
 
@@ -107,7 +110,6 @@ class SimpleTest : BaseTest() {
             assertEquals(instance.canRedo(), false)
         }
     }
-
 
 
 }

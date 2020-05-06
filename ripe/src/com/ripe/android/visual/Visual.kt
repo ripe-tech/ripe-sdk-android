@@ -9,6 +9,4 @@ import com.ripe.android.base.Ripe
  * @property owner The Ripe instance to be represented.
  * @property options A map with options to configure the instance.
  */
-open class Visual constructor(override val owner: Ripe, override val options: Map<String, Any>?) : Interactable(owner, options) {
-
-}
+open class Visual constructor(override val owner: Ripe, override val options: Map<String, Any>?) : Interactable(owner, options)

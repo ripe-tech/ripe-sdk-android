@@ -16,8 +16,8 @@ class SyncTest : BaseTest() {
                 val syncPlugin = SyncPlugin(mapOf("full" to listOf("upper", "bottom")))
                 val instance = Ripe(null, null, mapOf("plugins" to listOf(syncPlugin)))
                 val initialParts = mapOf(
-                    "upper" to mapOf("material" to "nappa", "color" to "black"),
-                    "bottom" to mapOf("material" to "nappa", "color" to "black")
+                        "upper" to mapOf("material" to "nappa", "color" to "black"),
+                        "bottom" to mapOf("material" to "nappa", "color" to "black")
                 )
                 instance.loadedConfig = mapOf("defaults" to initialParts)
                 instance.parts = initialParts.toMutableMap()
@@ -25,6 +25,7 @@ class SyncTest : BaseTest() {
                 instance.trigger("part")
                 @Suppress("unchecked_cast")
                 var upper = instance.parts["upper"] as Map<String, String>
+
                 @Suppress("unchecked_cast")
                 var bottom = instance.parts["bottom"] as Map<String, String>
                 assertEquals(upper["color"], "black")
@@ -46,13 +47,13 @@ class SyncTest : BaseTest() {
         runBlocking {
             launch(Dispatchers.Main) {
                 val syncPlugin = SyncPlugin(mapOf("full" to listOf(
-                    mapOf("part" to "upper"),
-                    mapOf("part" to "bottom")
+                        mapOf("part" to "upper"),
+                        mapOf("part" to "bottom")
                 )))
                 val instance = Ripe(null, null, mapOf("plugins" to listOf(syncPlugin)))
                 val initialParts = mapOf(
-                    "upper" to mapOf("material" to "nappa", "color" to "black"),
-                    "bottom" to mapOf("material" to "suede", "color" to "white")
+                        "upper" to mapOf("material" to "nappa", "color" to "black"),
+                        "bottom" to mapOf("material" to "suede", "color" to "white")
                 )
                 instance.loadedConfig = mapOf("defaults" to initialParts)
                 instance.parts = initialParts.toMutableMap()
@@ -82,13 +83,13 @@ class SyncTest : BaseTest() {
         runBlocking {
             launch(Dispatchers.Main) {
                 val syncPlugin = SyncPlugin(mapOf("full" to listOf(
-                    mapOf("part" to "upper", "material" to "nappa"),
-                    mapOf("part" to "bottom", "material" to "suede")
+                        mapOf("part" to "upper", "material" to "nappa"),
+                        mapOf("part" to "bottom", "material" to "suede")
                 )))
                 val instance = Ripe(null, null, mapOf("plugins" to listOf(syncPlugin)))
                 val initialParts = mapOf(
-                    "upper" to mapOf("material" to "nappa", "color" to "black"),
-                    "bottom" to mapOf("material" to "leather", "color" to "black")
+                        "upper" to mapOf("material" to "nappa", "color" to "black"),
+                        "bottom" to mapOf("material" to "leather", "color" to "black")
                 )
                 instance.loadedConfig = mapOf("defaults" to initialParts)
                 instance.parts = initialParts.toMutableMap()
@@ -117,13 +118,13 @@ class SyncTest : BaseTest() {
         runBlocking {
             launch(Dispatchers.Main) {
                 val syncPlugin = SyncPlugin(mapOf("full" to listOf(
-                    mapOf("part" to "upper", "color" to "white"),
-                    mapOf("part" to "bottom", "color" to "white")
+                        mapOf("part" to "upper", "color" to "white"),
+                        mapOf("part" to "bottom", "color" to "white")
                 )))
                 val instance = Ripe(null, null, mapOf("plugins" to listOf(syncPlugin)))
                 val initialParts = mapOf(
-                    "upper" to mapOf("material" to "nappa", "color" to "black"),
-                    "bottom" to mapOf("material" to "suede", "color" to "black")
+                        "upper" to mapOf("material" to "nappa", "color" to "black"),
+                        "bottom" to mapOf("material" to "suede", "color" to "black")
                 )
                 instance.loadedConfig = mapOf("defaults" to initialParts)
                 instance.parts = initialParts.toMutableMap()
@@ -135,6 +136,7 @@ class SyncTest : BaseTest() {
 
                 @Suppress("unchecked_cast")
                 var bottom = instance.parts["bottom"] as Map<String, String>
+
                 @Suppress("unchecked_cast")
                 var upper = instance.parts["upper"] as Map<String, String>
                 assertEquals(bottom["material"], "suede")
@@ -162,13 +164,13 @@ class SyncTest : BaseTest() {
         runBlocking {
             launch(Dispatchers.Main) {
                 val syncPlugin = SyncPlugin(mapOf("full" to listOf(
-                    mapOf("part" to "upper", "material" to "nappa", "color" to "green"),
-                    mapOf("part" to "bottom", "material" to "suede", "color" to "red")
+                        mapOf("part" to "upper", "material" to "nappa", "color" to "green"),
+                        mapOf("part" to "bottom", "material" to "suede", "color" to "red")
                 )))
                 val instance = Ripe(null, null, mapOf("plugins" to listOf(syncPlugin)))
                 val initialParts = mapOf(
-                    "upper" to mapOf("material" to "nappa", "color" to "black"),
-                    "bottom" to mapOf("material" to "suede", "color" to "black")
+                        "upper" to mapOf("material" to "nappa", "color" to "black"),
+                        "bottom" to mapOf("material" to "suede", "color" to "black")
                 )
                 instance.loadedConfig = mapOf("defaults" to initialParts)
                 instance.parts = initialParts.toMutableMap()
@@ -180,6 +182,7 @@ class SyncTest : BaseTest() {
 
                 @Suppress("unchecked_cast")
                 val bottom = instance.parts["bottom"] as Map<String, String>
+
                 @Suppress("unchecked_cast")
                 val upper = instance.parts["upper"] as Map<String, String>
                 assertEquals(bottom["material"], "suede")
@@ -197,12 +200,12 @@ class SyncTest : BaseTest() {
                 val syncPlugin = SyncPlugin()
                 val instance = Ripe(null, null, mapOf("plugins" to listOf(syncPlugin)))
                 val initialParts = mapOf(
-                    "upper" to mapOf("material" to "nappa", "color" to "black"),
-                    "bottom" to mapOf("material" to "nappa", "color" to "black")
+                        "upper" to mapOf("material" to "nappa", "color" to "black"),
+                        "bottom" to mapOf("material" to "nappa", "color" to "black")
                 )
                 val config = mapOf(
-                    "defaults" to initialParts,
-                    "sync" to mapOf("full" to listOf("upper", "bottom"))
+                        "defaults" to initialParts,
+                        "sync" to mapOf("full" to listOf("upper", "bottom"))
                 )
                 instance.loadedConfig = config
                 instance.parts = initialParts.toMutableMap()
@@ -216,6 +219,7 @@ class SyncTest : BaseTest() {
 
                 @Suppress("unchecked_cast")
                 val bottom = instance.parts["bottom"] as Map<String, String>
+
                 @Suppress("unchecked_cast")
                 val upper = instance.parts["upper"] as Map<String, String>
                 assertEquals(bottom["color"], "white")
@@ -230,10 +234,11 @@ class SyncTest : BaseTest() {
             launch(Dispatchers.Main) {
                 val syncPlugin = SyncPlugin()
                 val instance = Ripe("swear", "vyner", mapOf("plugins" to listOf(syncPlugin)))
-                waitForEvent(instance,"post_config")
+                waitForEvent(instance, "post_config")
 
                 @Suppress("unchecked_cast")
                 var hardware = instance.parts["hardware"] as Map<String, String>
+
                 @Suppress("unchecked_cast")
                 var logo = instance.parts["logo"] as Map<String, String>
                 assertEquals(hardware["color"], "silver")

@@ -12,7 +12,7 @@ import kotlin.coroutines.resume
 
 open class BaseTest {
 
-    class MockRipe: Observable() {
+    class MockRipe : Observable() {
         var parts: MutableMap<String, Any> = HashMap()
 
         fun setPart(part: String, material: String, color: String) {

@@ -18,6 +18,7 @@ class APITest : BaseTest() {
 
                 @Suppress("unchecked_cast")
                 val gendersFR = result["fr"] as List<String>
+
                 @Suppress("unchecked_cast")
                 val gendersUK = result["uk"] as List<String>
                 assertEquals(gendersFR, listOf("female"))
@@ -53,6 +54,7 @@ class APITest : BaseTest() {
                 val deferred = instance.api.sizeToNativeBAsync(listOf("fr"), listOf(42.0), listOf("female"))
                 val results = deferred.await()!!
                 val result = results[0]
+
                 @Suppress("unchecked_cast")
                 val scale = result["scale"] as String
                 val value = result["value"] as Double
@@ -87,6 +89,7 @@ class APITest : BaseTest() {
                 val deferred = instance.api.nativeToSizeBAsync(listOf("fr"), listOf(31), listOf("female"))
                 val results = deferred.await()!!
                 val result = results[0]
+
                 @Suppress("unchecked_cast")
                 val value = result["value"] as Double
                 assertEquals(value, 42.0, 0.0)

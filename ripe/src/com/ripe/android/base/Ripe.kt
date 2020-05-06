@@ -30,6 +30,7 @@ class Ripe @JvmOverloads constructor(var brand: String?, var model: String?, opt
      * A map with options to customise the Ripe instance.
      */
     var options = options.toMutableMap()
+
     /**
      * The variant of the model.
      */
@@ -517,6 +518,7 @@ class Ripe @JvmOverloads constructor(var brand: String?, var model: String?, opt
         // optional or an error is thrown if it's required
         @Suppress("unchecked_cast")
         val defaults = this.loadedConfig!!["defaults"] as Map<String, Any>
+
         @Suppress("unchecked_cast")
         val partInfo = defaults[part] as Map<String, Any>
         val isOptional = partInfo["optional"] as? Boolean ?: false
