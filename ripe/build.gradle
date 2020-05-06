@@ -68,7 +68,7 @@ bintray {
         version {
             name = "$package_version"
             desc = "$package_version"
-            released  = new Date()
+            released = new Date()
             vcsTag = "$package_version"
         }
     }

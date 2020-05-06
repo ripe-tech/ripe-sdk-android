@@ -16,6 +16,7 @@ import kotlinx.coroutines.launch
  *  - **currency** - The currency that should be used to calculate the price.
  *  - **locale** - The locale to be used by default when localizing values.
  *  - **flag** - A specific attribute of the model.
+ *  - **init** - If the instance should be initialized by the constructor.
  *  - **useDefaults** - If the default parts of the model should be used when no initials parts are set.
  *  - **usePrice** - If the price should be automatically retrieved whenever there is a customization change.
  *  - **plugins** - A list of plugins to be registered to the Ripe instance.
@@ -94,45 +95,50 @@ class Ripe @JvmOverloads constructor(var brand: String?, var model: String?, opt
     private var historyPointer = -1
 
     init {
-        // saves a reference to the current instance to be used within
-        // closure based functions
-        val ripe = this
+        // determines if the current instance should be initialized and
+        // only in such cases runs the initialization operations
+        val init = options["init"] as? Boolean ?: true
+        if (init) {
+            // saves a reference to the current instance to be used within
+            // closure based functions
+            val ripe = this
 
-        // sets the complete set of options passed as parameters to this
-        // constructor (effectively changing the current config)
-        this._setOptions(options)
+            // sets the complete set of options passed as parameters to this
+            // constructor (effectively changing the current config)
+            this._setOptions(options)
 
-        // iterates over all the plugins present in the options (meant
-        // to be registered) and adds them to the current instance
-        @Suppress("unchecked_cast")
-        val plugins = options["plugins"] as? List<Plugin>
-        plugins?.forEach {
-            this.addPlugin(it)
-        }
-
-        // runs the configuration operation on the current instance, using
-        // the requested parameters and options, multiple configuration
-        // operations may be executed over the object life-time
-        @Suppress("experimental_api_usage")
-        MainScope().launch {
-            ripe.config(brand, model, options)
-        }
-
-        // listens for the post parts event and saves the current configuration
-        // for the undo operations (history control)
-        this.bind("post_parts") {
-            // in case the current operation was an undo and redo one there's
-            // nothing to be done (no history stack change)
+            // iterates over all the plugins present in the options (meant
+            // to be registered) and adds them to the current instance
             @Suppress("unchecked_cast")
-            val options = it["options"] as? Map<String, Any>
-            val action = options?.get("action") as? String
-            if (action in arrayOf("undo", "redo")) {
-                return@bind
+            val plugins = options["plugins"] as? List<Plugin>
+            plugins?.forEach {
+                this.addPlugin(it)
             }
 
-            // pushes the current state of the configuration (parts) into
-            // the history stack allowing undo and redo
-            this._pushHistory()
+            // runs the configuration operation on the current instance, using
+            // the requested parameters and options, multiple configuration
+            // operations may be executed over the object life-time
+            @Suppress("experimental_api_usage")
+            MainScope().launch {
+                ripe.config(brand, model, options)
+            }
+
+            // listens for the post parts event and saves the current configuration
+            // for the undo operations (history control)
+            this.bind("post_parts") {
+                // in case the current operation was an undo and redo one there's
+                // nothing to be done (no history stack change)
+                @Suppress("unchecked_cast")
+                val _options = it["options"] as? Map<String, Any>
+                val action = _options?.get("action") as? String
+                if (action in arrayOf("undo", "redo")) {
+                    return@bind
+                }
+
+                // pushes the current state of the configuration (parts) into
+                // the history stack allowing undo and redo
+                this._pushHistory()
+            }
         }
     }
 
@@ -528,7 +534,6 @@ class Ripe @JvmOverloads constructor(var brand: String?, var model: String?, opt
     /**
      * @suppress
      */
-    @JvmOverloads
     private fun _setPart(part: String, material: String?, color: String?, noEvents: Boolean = false) {
         // ensures that there's one valid configuration loaded
         // in the current instance, required for part setting
