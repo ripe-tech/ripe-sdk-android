@@ -229,7 +229,8 @@ class Ripe @JvmOverloads constructor(var brand: String?, var model: String?, opt
         // before concluding the config operation
         this.trigger("post_config", this.loadedConfig!!).await()
 
-        // triggers the local update operations
+        // triggers the local update operations to flush both the visual
+        // and the logic part of the ripe instance
         this.update()
     }
 
