@@ -1,6 +1,5 @@
 package com.ripe.examples.hello
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.ImageView
@@ -19,6 +18,7 @@ class MainActivity : AppCompatActivity() {
         val ripe = Ripe("dummy", "dummy")
         ripe.bindImage(imageView)
         ripe.bind("price") {
+            @Suppress("unchecked_cast")
             val result = it as Map<String, Map<String, Any>>
             val total = result["total"]
             val priceFinal = total!!["price_final"] as Double
