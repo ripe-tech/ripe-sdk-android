@@ -116,7 +116,7 @@ class Ripe @JvmOverloads constructor(var brand: String?, var model: String?, opt
         // listens for the post parts event and saves the current configuration
         // for the undo operations (history control)
         this.bind("post_parts") {
-            // in case the current opertion was an undo and redo one there's
+            // in case the current operation was an undo and redo one there's
             // nothing to be done (no history stack change)
             @Suppress("unchecked_cast")
             val options = it["options"] as? Map<String, Any>
