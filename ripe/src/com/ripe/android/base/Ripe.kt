@@ -241,8 +241,13 @@ class Ripe @JvmOverloads constructor(var brand: String?, var model: String?, opt
     fun update(state: Map<String, Any> = this._getState()) {
         this.children.forEach { it.update(state) }
 
+        // in case the current instance is now ready, should trigger
+        // the update event (as expected)
         if (this.ready) this.trigger("update")
 
+        // in case the current instance is ready and the use price
+        // flag is set then triggers the running of the price retrieval
+        // process that shoould finish with the price event
         if (this.ready && this.usePrice) {
             val ripe = this
             @Suppress("experimental_api_usage")

@@ -26,7 +26,7 @@ class SimpleTest : BaseTest() {
     fun testInstanceValues() {
         runBlocking(Dispatchers.Main) {
             val instance = Ripe("dummy", "dummy")
-            waitForEvent(instance, "config")
+            waitForEvent(instance, "ready")
 
             @Suppress("unchecked_cast")
             val result = waitForEvent(instance, "price") as Map<String, Any>
