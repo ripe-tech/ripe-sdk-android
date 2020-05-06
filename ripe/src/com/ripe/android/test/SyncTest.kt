@@ -55,7 +55,7 @@ class SyncTest : BaseTest() {
                         mapOf("part" to "upper"),
                         mapOf("part" to "bottom")
                 )))
-                val instance = Ripe((null, null, mapOf(
+                val instance = Ripe(null, null, mapOf(
                         "plugins" to listOf(syncPlugin),
                         "usePrice" to false
                 ))
@@ -96,7 +96,7 @@ class SyncTest : BaseTest() {
                         mapOf("part" to "upper", "material" to "nappa"),
                         mapOf("part" to "bottom", "material" to "suede")
                 )))
-                val instance = Ripe((null, null, mapOf(
+                val instance = Ripe(null, null, mapOf(
                         "plugins" to listOf(syncPlugin),
                         "usePrice" to false
                 ))
@@ -136,7 +136,7 @@ class SyncTest : BaseTest() {
                         mapOf("part" to "upper", "color" to "white"),
                         mapOf("part" to "bottom", "color" to "white")
                 )))
-                val instance = Ripe((null, null, mapOf(
+                val instance = Ripe(null, null, mapOf(
                         "plugins" to listOf(syncPlugin),
                         "usePrice" to false
                 ))
@@ -223,7 +223,7 @@ class SyncTest : BaseTest() {
         runBlocking {
             launch(Dispatchers.Main) {
                 val syncPlugin = SyncPlugin()
-                val instance = Ripe((null, null, mapOf(
+                val instance = Ripe(null, null, mapOf(
                         "plugins" to listOf(syncPlugin),
                         "usePrice" to false
                 ))
