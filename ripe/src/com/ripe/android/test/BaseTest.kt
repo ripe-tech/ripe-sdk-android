@@ -3,12 +3,10 @@ package com.ripe.android.test
 import com.ripe.android.base.Observable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.newSingleThreadContext
-import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.AfterClass
 import org.junit.BeforeClass
-import kotlin.coroutines.resume
 
 open class BaseTest {
 
@@ -40,15 +38,6 @@ open class BaseTest {
             @Suppress("experimental_api_usage")
             Dispatchers.resetMain()
             mainThreadSurrogate.close()
-        }
-    }
-
-    suspend fun waitForEvent(instance: Observable, event: String) = suspendCancellableCoroutine<Any> { continuation ->
-        instance.bind(event) { result ->
-            if (continuation.isActive) {
-                continuation.resume(result)
-                continuation.cancel()
-            }
         }
     }
 }

@@ -13,6 +13,8 @@ class APITest : BaseTest() {
         runBlocking {
             launch(Dispatchers.Main) {
                 val instance = Ripe(null, null)
+                instance.isReady()
+
                 val deferred = instance.api.getSizesAsync()
                 val result = deferred.await()!!
 
@@ -32,6 +34,8 @@ class APITest : BaseTest() {
         runBlocking {
             launch(Dispatchers.Main) {
                 val instance = Ripe(null, null)
+                instance.isReady()
+
                 val deferred = instance.api.sizeToNativeAsync("fr", 42.0, "female")
                 val result = deferred.await()!!
 
@@ -51,6 +55,8 @@ class APITest : BaseTest() {
         runBlocking {
             launch(Dispatchers.Main) {
                 val instance = Ripe(null, null)
+                instance.isReady()
+
                 val deferred = instance.api.sizeToNativeBAsync(listOf("fr"), listOf(42.0), listOf("female"))
                 val results = deferred.await()!!
                 val result = results[0]
@@ -71,6 +77,8 @@ class APITest : BaseTest() {
         runBlocking {
             launch(Dispatchers.Main) {
                 val instance = Ripe(null, null)
+                instance.isReady()
+
                 val deferred = instance.api.nativeToSizeAsync("fr", 31, "female")
                 val result = deferred.await()!!
 
@@ -86,6 +94,8 @@ class APITest : BaseTest() {
         runBlocking {
             launch(Dispatchers.Main) {
                 val instance = Ripe(null, null)
+                instance.isReady()
+
                 val deferred = instance.api.nativeToSizeBAsync(listOf("fr"), listOf(31), listOf("female"))
                 val results = deferred.await()!!
                 val result = results[0]

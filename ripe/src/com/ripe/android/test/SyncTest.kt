@@ -15,6 +15,8 @@ class SyncTest : BaseTest() {
             launch(Dispatchers.Main) {
                 val syncPlugin = SyncPlugin(mapOf("full" to listOf("upper", "bottom")))
                 val instance = Ripe(null, null, mapOf("plugins" to listOf(syncPlugin)))
+                instance.isReady()
+
                 val initialParts = mapOf(
                         "upper" to mapOf("material" to "nappa", "color" to "black"),
                         "bottom" to mapOf("material" to "nappa", "color" to "black")
@@ -51,6 +53,8 @@ class SyncTest : BaseTest() {
                         mapOf("part" to "bottom")
                 )))
                 val instance = Ripe(null, null, mapOf("plugins" to listOf(syncPlugin)))
+                instance.isReady()
+
                 val initialParts = mapOf(
                         "upper" to mapOf("material" to "nappa", "color" to "black"),
                         "bottom" to mapOf("material" to "suede", "color" to "white")
@@ -87,6 +91,8 @@ class SyncTest : BaseTest() {
                         mapOf("part" to "bottom", "material" to "suede")
                 )))
                 val instance = Ripe(null, null, mapOf("plugins" to listOf(syncPlugin)))
+                instance.isReady()
+
                 val initialParts = mapOf(
                         "upper" to mapOf("material" to "nappa", "color" to "black"),
                         "bottom" to mapOf("material" to "leather", "color" to "black")
@@ -122,6 +128,8 @@ class SyncTest : BaseTest() {
                         mapOf("part" to "bottom", "color" to "white")
                 )))
                 val instance = Ripe(null, null, mapOf("plugins" to listOf(syncPlugin)))
+                instance.isReady()
+
                 val initialParts = mapOf(
                         "upper" to mapOf("material" to "nappa", "color" to "black"),
                         "bottom" to mapOf("material" to "suede", "color" to "black")
@@ -168,6 +176,8 @@ class SyncTest : BaseTest() {
                         mapOf("part" to "bottom", "material" to "suede", "color" to "red")
                 )))
                 val instance = Ripe(null, null, mapOf("plugins" to listOf(syncPlugin)))
+                instance.isReady()
+
                 val initialParts = mapOf(
                         "upper" to mapOf("material" to "nappa", "color" to "black"),
                         "bottom" to mapOf("material" to "suede", "color" to "black")
@@ -199,6 +209,8 @@ class SyncTest : BaseTest() {
             launch(Dispatchers.Main) {
                 val syncPlugin = SyncPlugin()
                 val instance = Ripe(null, null, mapOf("plugins" to listOf(syncPlugin)))
+                instance.isReady()
+
                 val initialParts = mapOf(
                         "upper" to mapOf("material" to "nappa", "color" to "black"),
                         "bottom" to mapOf("material" to "nappa", "color" to "black")
@@ -234,7 +246,7 @@ class SyncTest : BaseTest() {
             launch(Dispatchers.Main) {
                 val syncPlugin = SyncPlugin()
                 val instance = Ripe("swear", "vyner", mapOf("plugins" to listOf(syncPlugin)))
-                waitForEvent(instance, "post_config")
+                instance.isReady()
 
                 @Suppress("unchecked_cast")
                 var hardware = instance.parts["hardware"] as Map<String, String>

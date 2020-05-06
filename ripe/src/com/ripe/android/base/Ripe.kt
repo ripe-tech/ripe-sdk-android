@@ -182,9 +182,7 @@ class Ripe @JvmOverloads constructor(var brand: String?, var model: String?, opt
 
         // retrieves the configuration for the currently loaded model so
         // that others may use it freely (cache mechanism)
-        this.loadedConfig = if (hasModel) this.api.getConfigAsync().await() else {
-            null
-        }
+        this.loadedConfig = if (hasModel) this.api.getConfigAsync().await() else null
 
         // determines if the defaults for the selected model should
         // be loaded so that the parts structure is initially populated
@@ -459,6 +457,21 @@ class Ripe @JvmOverloads constructor(var brand: String?, var model: String?, opt
      */
     fun canRedo(): Boolean {
         return this.history.size - 1 > this.historyPointer
+    }
+
+    /**
+     * Verifies if the current ripe instance is ready (properly loaded)
+     * and if not blocks until it becomes ready.
+     *
+     * @return If the current instance has successfully been initialized.
+     */
+    suspend fun isReady(): Boolean? {
+        if (this.ready) {
+            return true
+        } else {
+            this.waitForEvent("ready")
+            return true
+        }
     }
 
     /**

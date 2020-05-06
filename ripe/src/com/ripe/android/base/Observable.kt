@@ -3,6 +3,8 @@ package com.ripe.android.base
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.async
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlin.coroutines.resume
 
 /**
  * A function to be executed when an event. It receives a dictionary with the response as parameter and returns a deferred result which is completed asynchronously.
@@ -122,4 +124,20 @@ open class Observable {
      */
     @JvmOverloads
     fun trigger(event: String, args: Map<String, Any> = HashMap()) = runCallbacks(event, args)
+
+    /**
+     * Waits for a certain event to occurs suspending the current coroutine until
+     * the event is triggered.
+     *
+     * @param event The name of the event to be triggered.
+     * @returns The result value from the event, that can assume any kind of type.
+     */
+    suspend fun waitForEvent(event: String) = suspendCancellableCoroutine<Any> { continuation ->
+        this.bind(event) { result ->
+            if (continuation.isActive) {
+                continuation.resume(result)
+                continuation.cancel()
+            }
+        }
+    }
 }

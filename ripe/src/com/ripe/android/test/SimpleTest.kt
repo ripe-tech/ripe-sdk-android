@@ -13,9 +13,11 @@ class SimpleTest : BaseTest() {
     fun testInstance() {
         runBlocking(Dispatchers.Main) {
             val instance = Ripe(null, null)
+            instance.isReady()
+
             assertEquals(instance.initials, "")
             assertEquals(instance.engraving, "")
-            assertEquals(instance.ready, false)
+            assertEquals(instance.ready, true)
 
             instance.config("dummy", "dummy")
             assertEquals(instance.ready, true)
@@ -26,10 +28,10 @@ class SimpleTest : BaseTest() {
     fun testInstanceValues() {
         runBlocking(Dispatchers.Main) {
             val instance = Ripe("dummy", "dummy")
-            waitForEvent(instance, "ready")
+            instance.isReady()
 
             @Suppress("unchecked_cast")
-            val result = waitForEvent(instance, "price") as Map<String, Any>
+            val result = instance.waitForEvent("price") as Map<String, Any>
 
             @Suppress("unchecked_cast")
             var total = result["total"] as Map<String, Any>
@@ -56,12 +58,9 @@ class SimpleTest : BaseTest() {
     fun testUndoSetParts() {
         runBlocking(Dispatchers.Main) {
             val instance = Ripe("swear", "vyner")
+            instance.isReady()
 
-            @Suppress("unchecked_cast")
-            val result = waitForEvent(instance, "post_parts") as Map<String, Any>
-
-            @Suppress("unchecked_cast")
-            val initialParts = result["parts"] as Map<String, Any>
+            val initialParts = instance.parts
 
             assertEquals(instance.getPartsCopy(), initialParts)
             assertEquals(instance.canUndo(), false)
