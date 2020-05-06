@@ -98,8 +98,11 @@ interface BaseAPI {
         }
 
         return CoroutineScope(Dispatchers.IO).async {
+            // opens the connection for the request URL as defined
+            // and then reads the complete set of contents from it
             val url = URL(requestUrl)
             val result = url.readText()
+
             val gson = Gson()
             val type = object : TypeToken<T>() {}.type
 
