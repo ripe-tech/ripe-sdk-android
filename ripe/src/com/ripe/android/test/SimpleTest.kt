@@ -12,7 +12,7 @@ class SimpleTest : BaseTest() {
     @Test
     fun testInstance() {
         runBlocking(Dispatchers.Main) {
-            val instance = Ripe(null, null)
+            val instance = Ripe(null, null, mapOf("usePrice" to false))
             instance.isReady()
 
             assertEquals(instance.initials, "")
@@ -57,7 +57,7 @@ class SimpleTest : BaseTest() {
     @Test
     fun testUndoSetParts() {
         runBlocking(Dispatchers.Main) {
-            val instance = Ripe("swear", "vyner")
+            val instance = Ripe("swear", "vyner", mapOf("usePrice" to false))
             instance.isReady()
 
             val initialParts = instance.parts

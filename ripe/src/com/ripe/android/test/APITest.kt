@@ -12,7 +12,7 @@ class APITest : BaseTest() {
     fun testGetSizes() {
         runBlocking {
             launch(Dispatchers.Main) {
-                val instance = Ripe(null, null)
+                val instance = Ripe(null, null, mapOf("usePrice" to false))
                 instance.isReady()
 
                 val deferred = instance.api.getSizesAsync()
@@ -33,7 +33,7 @@ class APITest : BaseTest() {
     fun testSizeToNative() {
         runBlocking {
             launch(Dispatchers.Main) {
-                val instance = Ripe(null, null)
+                val instance = Ripe(null, null, mapOf("usePrice" to false))
                 instance.isReady()
 
                 val deferred = instance.api.sizeToNativeAsync("fr", 42.0, "female")
@@ -54,7 +54,7 @@ class APITest : BaseTest() {
     fun testSizeToNativeB() {
         runBlocking {
             launch(Dispatchers.Main) {
-                val instance = Ripe(null, null)
+                val instance = Ripe(null, null, mapOf("usePrice" to false))
                 instance.isReady()
 
                 val deferred = instance.api.sizeToNativeBAsync(listOf("fr"), listOf(42.0), listOf("female"))
@@ -76,7 +76,7 @@ class APITest : BaseTest() {
     fun testNativeToSize() {
         runBlocking {
             launch(Dispatchers.Main) {
-                val instance = Ripe(null, null)
+                val instance = Ripe(null, null, mapOf("usePrice" to false))
                 instance.isReady()
 
                 val deferred = instance.api.nativeToSizeAsync("fr", 31, "female")
@@ -93,7 +93,7 @@ class APITest : BaseTest() {
     fun testNativeToSizeB() {
         runBlocking {
             launch(Dispatchers.Main) {
-                val instance = Ripe(null, null)
+                val instance = Ripe(null, null, mapOf("usePrice" to false))
                 instance.isReady()
 
                 val deferred = instance.api.nativeToSizeBAsync(listOf("fr"), listOf(31), listOf("female"))
