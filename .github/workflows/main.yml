@@ -9,5 +9,5 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: 1.8
-      - run: gradle -b wrapper.gradle wrapper
+      - run: chmod +x gradlew
       - run: ./gradlew clean test
