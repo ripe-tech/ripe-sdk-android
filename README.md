@@ -2,6 +2,13 @@
 
 Android version of the [RIPE SDK](https://github.com/ripe-tech/ripe-sdk).
 
+Most of the design decision found on the original SDK are present and on this version in pretty much the same way.
+
+## Features
+
+* Support for Java and Kotlin
+* Coroutines usage
+
 ## Documentation
 
 For API reference documentation follow [ripe-sdk-android-docs.platforme.com](https://ripe-sdk-android-docs.platforme.com).
