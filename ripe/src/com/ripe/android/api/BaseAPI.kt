@@ -57,6 +57,7 @@ interface BaseAPI {
     fun getImageUrl(options: Map<String, Any> = HashMap()): String {
         val imageOptions = this.getImageOptions(options)
         val url = imageOptions["url"] as String
+
         @Suppress("unchecked_cast")
         val params = imageOptions["params"] as Map<String, Any>
         return "${url}?${this.buildQuery(params)}"
@@ -75,8 +76,10 @@ interface BaseAPI {
     fun <T> requestURLAsync(url: String, options: Map<String, Any>): Deferred<T?> {
         var requestUrl = url
         val method = options["method"] as String? ?: "GET"
+
         @Suppress("unchecked_cast")
         val params = options["params"] as Map<String, Any>? ?: HashMap()
+
         @Suppress("unchecked_cast")
         val headers = options["headers"] as Map<String, String>? ?: HashMap()
         var data = options["data"]
@@ -128,11 +131,13 @@ interface BaseAPI {
      */
     private fun getImageOptions(options: Map<String, Any> = HashMap()): Map<String, Any> {
         val result = this.getQueryOptions(options).toMutableMap()
+
         @Suppress("unchecked_cast")
         val params: MutableMap<String, Any> = result["params"] as? MutableMap<String, Any>
                 ?: HashMap()
 
         val initials = options["initials"] as String?
+
         @Suppress("unchecked_cast")
         val profile = options["profile"] as Array<String>?
         if (initials != null) {
@@ -156,12 +161,14 @@ interface BaseAPI {
      */
     fun getQueryOptions(options: Map<String, Any>): Map<String, Any> {
         val result = options.toMutableMap()
+
         @Suppress("unchecked_cast")
         val optionsParams = options["params"] as Map<String, Any>?
                 ?: HashMap()
         val brand = options["brand"] as? String ?: this.owner.brand
         val model = options["model"] as? String ?: this.owner.model
         val variant = options["variant"] as? String ?: this.owner.variant
+
         @Suppress("unchecked_cast")
         val parts = options["parts"] as? Map<String, Any> ?: this.owner.getPartsCopy()
         val engraving = options["engraving"] as? String ?: this.owner.engraving

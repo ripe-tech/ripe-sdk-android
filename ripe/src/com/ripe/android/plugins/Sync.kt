@@ -12,7 +12,7 @@ import com.ripe.android.base.Ripe
  * @param rulesMap A Map with synchronization rules to be applied.
  * If defined, overrides the rules defined on the model's config.
  */
-class SyncPlugin constructor(rulesMap: Map<String, Any>? = null, override var options: Map<String, Any> = HashMap()): Plugin(options) {
+class SyncPlugin constructor(rulesMap: Map<String, Any>? = null, override var options: Map<String, Any> = HashMap()) : Plugin(options) {
 
     private var rules = this.normalizeRules(rulesMap)
     private val manual = options["manual"] as? Boolean ?: rulesMap != null
@@ -47,6 +47,7 @@ class SyncPlugin constructor(rulesMap: Map<String, Any>? = null, override var op
 
         this.partBind = owner.bind("part") {
             val name = it["part"] as? String
+
             @Suppress("unchecked_cast")
             val value = it["value"] as? Map<String, String?>
             this.applySync(name, value)
@@ -73,7 +74,7 @@ class SyncPlugin constructor(rulesMap: Map<String, Any>? = null, override var op
             return result
         }
 
-        for((ruleName, value) in rules) {
+        for ((ruleName, value) in rules) {
             @Suppress("unchecked_cast")
             val rule = (value as List<Any>).toMutableList()
             for (index in 0 until rule.size) {
@@ -99,6 +100,7 @@ class SyncPlugin constructor(rulesMap: Map<String, Any>? = null, override var op
             val rule = this.rules[key] as List<Map<String, String>>
             val firstPart = rule[0]
             val name = partName ?: firstPart["part"]
+
             @Suppress("unchecked_cast")
             val value = partValue ?: this.owner!!.parts[name] as Map<String, String>
 
