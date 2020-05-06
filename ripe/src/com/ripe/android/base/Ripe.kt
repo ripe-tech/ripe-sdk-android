@@ -221,7 +221,8 @@ class Ripe @JvmOverloads constructor(var brand: String?, var model: String?, opt
             return
         }
 
-        // updates the parts of the current instance
+        // updates the parts of the current instance according to either
+        // the (explicitly) provided parts or the ones loaded from the config
         this.setParts(parts, false, mapOf("noPartEvents" to true))
 
         // notifies that the config has changed and waits for listeners
