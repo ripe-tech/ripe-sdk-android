@@ -1,6 +1,6 @@
 # [![RIPE SDK Android](res/logo.png)](https://tech.platforme.com)
 
-Android version of the RIPE SDK.
+Android version of the [RIPE SDK](https://travis-ci.org/ripe-tech/ripe-sdk).
 
 ## Documentation
 
