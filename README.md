@@ -6,6 +6,7 @@ Most of the design decision found on the original SDK are present and on this ve
 
 ## Features
 
+* Consistent design decisions
 * Support for Java and Kotlin
 * Coroutines usage
 
