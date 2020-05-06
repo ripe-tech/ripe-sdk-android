@@ -94,9 +94,13 @@ class Ripe @JvmOverloads constructor(var brand: String?, var model: String?, opt
     private var historyPointer = -1
 
     init {
-        this._setOptions(options)
-
+        // saves a reference to the current instance to be used within
+        // closure based functions
         val ripe = this
+
+        // sets the complete set of options passed as parameters to this
+        // constructor (effectively changing the current config)
+        this._setOptions(options)
 
         // iterates over all the plugins present in the options (meant
         // to be registered) and adds them to the current instance
