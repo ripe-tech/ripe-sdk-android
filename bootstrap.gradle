@@ -1,0 +1,4 @@
+task wrapperBuild(type: Wrapper) {
+    gradleVersion = "5.6.4"
+    distributionUrl = "https://services.gradle.org/distributions/gradle-$gradleVersion-all.zip"
+}
