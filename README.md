@@ -1,4 +1,4 @@
-# [![RIPE SDK Android](res/logo.png)](https://tech.platforme.com)
+<h1><a href="https://tech.platforme.com"><img src="res/logo.svg" alt="RIPE SDK Android" height="60" style="height: 60px;"></a></h1>
 
 Android version of the [RIPE SDK](https://github.com/ripe-tech/ripe-sdk).
 
