@@ -9,7 +9,7 @@ import kotlin.coroutines.resume
 /**
  * A function to be executed when an event. It receives a dictionary with the response as parameter and returns a deferred result which is completed asynchronously.
  *
- * @param response A dictionary with the payload of the event
+ * @param args A dictionary with the payload of the event
  * @return A Deferred that may be completed asynchronously
  */
 typealias ObservableCallback = (args: Map<String, Any>) -> Deferred<Any?>?
