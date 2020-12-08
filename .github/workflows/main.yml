@@ -4,7 +4,6 @@ jobs:
   build:
     name: Build
     strategy:
-      max-parallel: 1
       matrix:
         java-version: [1.8, 1.9, 10, 11, 12]
     runs-on: ubuntu-latest

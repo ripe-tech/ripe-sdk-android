@@ -171,6 +171,7 @@ interface BaseAPI {
         val brand = options["brand"] as? String ?: this.owner.brand
         val model = options["model"] as? String ?: this.owner.model
         val variant = options["variant"] as? String ?: this.owner.variant
+        val version = options["version"] as? String ?: this.owner.version
 
         @Suppress("unchecked_cast")
         val parts = options["parts"] as? Map<String, Any> ?: this.owner.getPartsCopy()
@@ -189,6 +190,9 @@ interface BaseAPI {
         }
         if (variant != null) {
             params["variant"] = variant
+        }
+        if (version != null) {
+            params["version"] = version
         }
         if (full) {
             params["engraving"] = engraving
