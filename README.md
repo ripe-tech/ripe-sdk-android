@@ -2,7 +2,7 @@
 
 Android version of the [RIPE SDK](https://github.com/ripe-tech/ripe-sdk).
 
-Most of the design decisions found on the original SDK are present and this version is pretty much the same way.
+Most of the design decisions found on the original SDK are present in this version in pretty much the same way.
 
 ## Features
 
