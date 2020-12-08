@@ -18,7 +18,7 @@ ADD build.gradle /
 ADD settings.gradle /
 ADD ripe /ripe
 
-RUN gradle wrapper
+RUN gradle -b bootstrap.gradle wrapperBuild
 RUN ./gradlew dokka
 
 RUN pip3 install --upgrade netius
