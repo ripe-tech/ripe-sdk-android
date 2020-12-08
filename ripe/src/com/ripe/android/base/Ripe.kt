@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
  * Represents a customizable model.
  * The **options** map supports the following keys:
  *  - **variant** - The variant of the model.
+ *  - **version** - The version of the build in use.
  *  - **parts** - The initial parts of the model.
  *  - **country** - The country where the model will be sold.
  *  - **currency** - The currency that should be used to calculate the price.
@@ -36,6 +37,11 @@ class Ripe @JvmOverloads constructor(var brand: String?, var model: String?, opt
      * The variant of the model.
      */
     var variant: String? = null
+
+    /**
+     * The version of the build in use.
+     */
+    var version: String? = null
 
     /**
      * The API instance to be used.
@@ -147,6 +153,7 @@ class Ripe @JvmOverloads constructor(var brand: String?, var model: String?, opt
      *
      * The **options** map supports the following keys:
      *  - **variant** - The variant of the model.
+     *  - **version** - The version of the build in use.
      *  - **parts** - The initial parts of the model.
      *  - **country** - The country where the model will be sold.
      *  - **currency** - The currency that should be used to calculate the price.
@@ -521,6 +528,7 @@ class Ripe @JvmOverloads constructor(var brand: String?, var model: String?, opt
     private fun _setOptions(options: Map<String, Any>) {
         this.options = options.toMutableMap()
         this.variant = options["variant"] as? String
+        this.version = options["version"] as? String
         @Suppress("unchecked_cast")
         this.parts = options["parts"] as? MutableMap<String, Any> ?: HashMap()
         this.country = options["country"] as? String
