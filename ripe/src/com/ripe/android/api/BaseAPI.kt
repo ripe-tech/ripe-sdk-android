@@ -13,7 +13,7 @@ import java.net.URLEncoder
 
 /**
  * This interface contains the base methods to be used by the various API classes.
- *
+ * The contents of these class can be safely used by other related "mixins".
  */
 interface BaseAPI {
     /**
