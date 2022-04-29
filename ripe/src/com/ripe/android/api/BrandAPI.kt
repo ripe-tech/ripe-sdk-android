@@ -34,6 +34,12 @@ interface BrandAPI : BaseAPI {
         logoOptions.putAll(mapOf("url" to url, "method" to "GET", "params" to params))
         return logoOptions
     }
+    fun getMeshAsync(options: Map<String, Any> = HashMap()): Map<String, Any>{
+        var _options = this.getMeshOptions(options)
+        _options = this.build(_options)
+        val url = _options["url"] as String
+        return this.cacheURLAsync(url, _options)
+    }
     /**
      * Returns the configuration information of a specific brand and model. If no model is provided
      * then returns the information of the owner's current model.
