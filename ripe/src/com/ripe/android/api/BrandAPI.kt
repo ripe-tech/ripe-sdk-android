@@ -6,6 +6,12 @@ import kotlinx.coroutines.Deferred
  * The interface for the Brand API.
  */
 interface BrandAPI : BaseAPI {
+    fun getLogoAsync(options: Map<String, Any> = HashMap()): Map<String, Any>{
+        var _options = this.getLogoOptions(options)
+        _options = this.build(_options)
+        val url = _options["url"] as String
+        return this.cacheURLAsync(url, _options)
+    }
 
     /**
      * Returns the configuration information of a specific brand and model. If no model is provided
