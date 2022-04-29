@@ -6,57 +6,61 @@ import kotlinx.coroutines.Deferred
  * The interface for the Brand API.
  */
 interface BrandAPI : BaseAPI {
-    fun getLogoAsync(options: Map<String, Any> = HashMap()): Map<String, Any>{
-        var _options = this.getLogoOptions(options)
-        _options = this.build(_options)
-        val url = _options["url"] as String
-        return this.cacheURLAsync(url, _options)
-    }
+    // fun getLogoAsync(options: Map<String, Any> = HashMap()): Map<String, Any>{
+    //     var _options = this.getLogoOptions(options)
+    //     _options = this.build(_options)
+    //     val url = _options["url"] as String
+    //     return this.cacheURLAsync(url, _options)
+    // }
 
     fun getLogoOptions(options: Map<String, Any> = HashMap()): Map<String, Any>{
         val logoOptions = options.toMutableMap()
         val brand = options["brand"] as String? ?: this.owner.brand
         val version = options["version"] as String? ?: this.owner.version
         val variant = options["variant"] as String? ?: this.owner.variant
-        val format = options["format"] as String? ?: this.owner.format
+        // owner does not have format property, add it (and avoid colliding name with _ prefix)
+        // val format = options["format"] as String? ?: this.owner.format
         val model = options["model"] as String? ?: this.owner.model
         val country = options["country"] as String? ?: this.owner.country
         val flag = options["flag"] as String? ?: this.owner.flag
         val filter = options["filter"] as? Boolean
         val url = "${this.getUrl()}brands/${brand}/models/${model}/logo"
         val params = HashMap<String, Any>()
-        if (version == null){
+        if (version != null){
             params["version"] = version
         }
-        if (variant == null){
+        if (variant != null){
             params["variant"] = variant
         }
         logoOptions.putAll(mapOf("url" to url, "method" to "GET", "params" to params))
         return logoOptions
     }
-    fun getMeshAsync(options: Map<String, Any> = HashMap()): Map<String, Any>{
-        var _options = this.getMeshOptions(options)
-        _options = this.build(_options)
-        val url = _options["url"] as String
-        return this.cacheURLAsync(url, _options)
-    }
-    fun getMeshOptions(){
-        val meshOptions = options.toMutableMap()
-        val brand = options["brand"] as String? ?: this.owner.brand
-        val model = options["model"] as String? ?: this.owner.model
-        val version = options["version"] as String? ?: this.owner.version
-        val variant = options["variant"] as String? ?: this.owner.variant
-        val url = "${this.url}brands/${brand}/models/${model}/mesh"
-        val params = HashMap<String, Any>()
-        if (version == null){
-            params["version"] = version
-        }
-        if (variant == null){
-            params["variant"] = variant
-        }
-        meshOptions.putAll(mapOf("url" to url, "method" to "GET", "params" to params))
-        return meshOptions
-    }
+
+    // fun getMeshAsync(options: Map<String, Any> = HashMap()): Map<String, Any>{
+    //     var _options = this.getMeshOptions(options)
+    //     _options = this.build(_options)
+    //     val url = _options["url"] as String
+    //     return this.cacheURLAsync(url, _options)
+    // }
+
+    // fun getMeshOptions(){
+    //     val meshOptions = options.toMutableMap()
+    //     val brand = options["brand"] as String? ?: this.owner.brand
+    //     val model = options["model"] as String? ?: this.owner.model
+    //     val version = options["version"] as String? ?: this.owner.version
+    //     val variant = options["variant"] as String? ?: this.owner.variant
+    //     val url = "${this.url}brands/${brand}/models/${model}/mesh"
+    //     val params = HashMap<String, Any>()
+    //     if (version == null){
+    //         params["version"] = version
+    //     }
+    //     if (variant == null){
+    //         params["variant"] = variant
+    //     }
+    //     meshOptions.putAll(mapOf("url" to url, "method" to "GET", "params" to params))
+    //     return meshOptions
+    // }
+
     /**
      * Returns the configuration information of a specific brand and model. If no model is provided
      * then returns the information of the owner's current model.
