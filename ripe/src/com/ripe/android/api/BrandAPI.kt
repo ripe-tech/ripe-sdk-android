@@ -6,12 +6,12 @@ import kotlinx.coroutines.Deferred
  * The interface for the Brand API.
  */
 interface BrandAPI : BaseAPI {
-    // fun getLogoAsync(options: Map<String, Any> = HashMap()): Map<String, Any>{
-    //     var _options = this.getLogoOptions(options)
-    //     _options = this.build(_options)
-    //     val url = _options["url"] as String
-    //     return this.cacheURLAsync(url, _options)
-    // }
+    fun getLogoAsync(options: Map<String, Any> = HashMap()): Deferred<Map<String, Any>?>{
+        var _options = this.getLogoOptions(options)
+        _options = this.build(_options)
+        val url = _options["url"] as String
+        return this.cacheURLAsync(url, _options)
+    }
 
     fun getLogoOptions(options: Map<String, Any> = HashMap()): Map<String, Any>{
         val logoOptions = options.toMutableMap()
