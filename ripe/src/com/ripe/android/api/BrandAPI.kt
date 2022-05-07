@@ -43,23 +43,24 @@ interface BrandAPI : BaseAPI {
     //     return this.cacheURLAsync(url, _options)
     // }
 
-    // fun getMeshOptions(){
-    //     val meshOptions = options.toMutableMap()
-    //     val brand = options["brand"] as String? ?: this.owner.brand
-    //     val model = options["model"] as String? ?: this.owner.model
-    //     val version = options["version"] as String? ?: this.owner.version
-    //     val variant = options["variant"] as String? ?: this.owner.variant
-    //     val url = "${this.url}brands/${brand}/models/${model}/mesh"
-    //     val params = HashMap<String, Any>()
-    //     if (version == null){
-    //         params["version"] = version
-    //     }
-    //     if (variant == null){
-    //         params["variant"] = variant
-    //     }
-    //     meshOptions.putAll(mapOf("url" to url, "method" to "GET", "params" to params))
-    //     return meshOptions
-    // }
+    fun getMeshOptions(options: Map<String, Any> = HashMap()): Map<String, Any>{
+        val meshOptions = options.toMutableMap()
+        val brand = options["brand"] as String? ?: this.owner.brand
+        val model = options["model"] as String? ?: this.owner.model
+        val version = options["version"] as String? ?: this.owner.version
+        val variant = options["variant"] as String? ?: this.owner.variant
+        val url = "${this.getUrl()}brands/${brand}/models/${model}/mesh"
+        val params = HashMap<String, Any>()
+        if (version != null){
+            params["version"] = version
+        }
+        if (variant != null){
+            params["variant"] = variant
+        }
+        meshOptions.putAll(mapOf
+        ("url" to url, "method" to "GET", "params" to params))
+        return meshOptions
+    }
 
     /**
      * Returns the configuration information of a specific brand and model. If no model is provided
