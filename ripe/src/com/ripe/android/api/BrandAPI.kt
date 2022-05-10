@@ -32,12 +32,12 @@ interface BrandAPI : BaseAPI {
         return logoOptions
     }
 
-    // fun getMeshAsync(options: Map<String, Any> = HashMap()): Map<String, Any>{
-    //     var _options = this.getMeshOptions(options)
-    //     _options = this.build(_options)
-    //     val url = _options["url"] as String
-    //     return this.cacheURLAsync(url, _options)
-    // }
+    fun getMeshAsync(options: Map<String, Any> = HashMap()): Deferred<Map<String, Any>?>{
+        var _options = this.getMeshOptions(options)
+        _options = this.build(_options)
+        val url = _options["url"] as String
+        return this.cacheURLAsync(url, _options)
+    }
 
     fun getMeshOptions(options: Map<String, Any> = HashMap()): Map<String, Any>{
         val meshOptions = options.toMutableMap()
