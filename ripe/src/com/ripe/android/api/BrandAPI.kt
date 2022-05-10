@@ -20,7 +20,7 @@ interface BrandAPI : BaseAPI {
         val variant = options["variant"] as String? ?: this.owner.variant
         val model = options["model"] as String? ?: this.owner.model
         val format = options["format"] as String? ?: "png"
-        val url = "${this.getUrl()}brands/${brand}/models/${model}/logo.${format}"
+        val url = "${this.getUrl()}brands/${brand}/logo.${format}"
         val params = HashMap<String, Any>()
         if (version != null){
             params["version"] = version
