@@ -18,13 +18,9 @@ interface BrandAPI : BaseAPI {
         val brand = options["brand"] as String? ?: this.owner.brand
         val version = options["version"] as String? ?: this.owner.version
         val variant = options["variant"] as String? ?: this.owner.variant
-        // owner does not have format property, add it (and avoid colliding name with _ prefix)
-        // val format = options["format"] as String? ?: this.owner.format
         val model = options["model"] as String? ?: this.owner.model
-        val country = options["country"] as String? ?: this.owner.country
-        val flag = options["flag"] as String? ?: this.owner.flag
-        val filter = options["filter"] as? Boolean
-        val url = "${this.getUrl()}brands/${brand}/models/${model}/logo"
+        val format = options["format"] as String? ?: "png"
+        val url = "${this.getUrl()}brands/${brand}/models/${model}/logo.${format}"
         val params = HashMap<String, Any>()
         if (version != null){
             params["version"] = version
