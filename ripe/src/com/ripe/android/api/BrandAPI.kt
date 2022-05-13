@@ -13,7 +13,7 @@ interface BrandAPI : BaseAPI {
         return this.cacheURLAsync(url, logoOptions)
     }
 
-    private fun getLogoOptions(options: Map<String, Any> = HashMap()): Map<String, Any>{
+    fun getLogoOptions(options: Map<String, Any> = HashMap()): Map<String, Any>{
         val brand = options["brand"] ?: this.owner.brand
         val version = options["version"] ?: this.owner.version
         val variant = options["variant"] ?: this.owner.variant
@@ -34,7 +34,7 @@ interface BrandAPI : BaseAPI {
         return this.cacheURLAsync(url, meshOptions)
     }
 
-    private fun getMeshOptions(options: Map<String, Any> = HashMap()): Map<String, Any>{
+    fun getMeshOptions(options: Map<String, Any> = HashMap()): Map<String, Any>{
         val brand = options["brand"] ?: this.owner.brand
         val model = options["model"] ?: this.owner.model
         val version = options["version"] ?: this.owner.version
