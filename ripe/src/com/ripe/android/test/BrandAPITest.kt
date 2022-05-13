@@ -17,36 +17,49 @@ class BrandAPITest : BaseTest(){
     fun testGetLogoOptions(){
         val brandApi = MockBrandAPI()
 
-        var options = brandApi.getLogoOptions()
+        val options = brandApi.getLogoOptions()
         assertEquals(options,
             mapOf(
-                "url" to "https://sandbox.platforme.com/api/brands/dummy/models/dummy/logo",
+                "url" to "https://sandbox.platforme.com/api/brands/dummy/logo.png",
                 "method" to "GET",
                 "params" to HashMap<String, Any>()
             )
         )
 
-        options = brandApi.getLogoOptions(mapOf(
-            "variant" to "variant"
-        ))
-        assertEquals(options,
+        val fields: Map<String, Any> = mapOf(
+            "brand" to "dummy",
+            "version" to "dummy",
+            "variant" to "dummy",
+            "format" to "svg"
+        )
+        val options2 = brandApi.getLogoOptions(fields)
+        assertEquals(options2,
             mapOf(
-                "url" to "https://sandbox.platforme.com/api/brands/dummy/models/dummy/logo",
+                "url" to "https://sandbox.platforme.com/api/brands/dummy/logo.svg",
                 "method" to "GET",
                 "params" to mapOf(
-                    "variant" to "variant"
-                )
+                    "version" to "dummy",
+                    "variant" to "dummy"
+                ),
+                "brand" to "dummy",
+                "version" to "dummy",
+                "variant" to "dummy",
+                "format" to "svg"
             )
         )
     }
 
     @Test
     fun testGetMeshOptions(){
-        // val brandApi = BrandAPI()
-        // val options = brandApi.getMeshOptions()
-        // assertEquals(options,
-        // mapOf("url" to url,
-        // "method" to "GET",
-        // "params" to params))
+        val brandApi = MockBrandAPI()
+        val options = brandApi.getMeshOptions()
+
+        assertEquals(options,
+            mapOf(
+                "url" to "https://sandbox.platforme.com/api/brands/dummy/models/dummy/mesh",
+                "method" to "GET",
+                "params" to HashMap<String, Any>()
+            )
+        )
     }
 }
