@@ -6,54 +6,45 @@ import kotlinx.coroutines.Deferred
  * The interface for the Brand API.
  */
 interface BrandAPI : BaseAPI {
-    fun getLogoAsync(options: Map<String, Any> = HashMap()): Deferred<Map<String, Any>?>{
-        var _options = this.getLogoOptions(options)
-        _options = this.build(_options)
-        val url = _options["url"] as String
-        return this.cacheURLAsync(url, _options)
+    fun getLogoAsync(options: Map<String, Any> = HashMap()): Deferred<Map<String, Any>?> {
+        var logoOptions = this.getLogoOptions(options)
+        logoOptions = this.build(logoOptions)
+        val url = logoOptions["url"] as String
+        return this.cacheURLAsync(url, logoOptions)
     }
 
-    fun getLogoOptions(options: Map<String, Any> = HashMap()): Map<String, Any>{
-        val logoOptions = options.toMutableMap()
-        val brand = options["brand"] as String? ?: this.owner.brand
-        val version = options["version"] as String? ?: this.owner.version
-        val variant = options["variant"] as String? ?: this.owner.variant
-        val format = options["format"] as String? ?: "png"
+    private fun getLogoOptions(options: Map<String, Any> = HashMap()): Map<String, Any>{
+        val brand = options["brand"] ?: this.owner.brand
+        val version = options["version"] ?: this.owner.version
+        val variant = options["variant"] ?: this.owner.variant
+        val format = options["format"] ?: "png"
         val url = "${this.getUrl()}brands/${brand}/logo.${format}"
         val params = HashMap<String, Any>()
-        if (version != null){
-            params["version"] = version
-        }
-        if (variant != null){
-            params["variant"] = variant
-        }
+        if (version != null) params["version"] = version
+        if (variant != null) params["variant"] = variant
+        val logoOptions = options.toMutableMap()
         logoOptions.putAll(mapOf("url" to url, "method" to "GET", "params" to params))
         return logoOptions
     }
 
-    fun getMeshAsync(options: Map<String, Any> = HashMap()): Deferred<Map<String, Any>?>{
-        var _options = this.getMeshOptions(options)
-        _options = this.build(_options)
-        val url = _options["url"] as String
-        return this.cacheURLAsync(url, _options)
+    fun getMeshAsync(options: Map<String, Any> = HashMap()): Deferred<Map<String, Any>?> {
+        var meshOptions = this.getMeshOptions(options)
+        meshOptions = this.build(meshOptions)
+        val url = meshOptions["url"] as String
+        return this.cacheURLAsync(url, meshOptions)
     }
 
-    fun getMeshOptions(options: Map<String, Any> = HashMap()): Map<String, Any>{
-        val meshOptions = options.toMutableMap()
-        val brand = options["brand"] as String? ?: this.owner.brand
-        val model = options["model"] as String? ?: this.owner.model
-        val version = options["version"] as String? ?: this.owner.version
-        val variant = options["variant"] as String? ?: this.owner.variant
+    private fun getMeshOptions(options: Map<String, Any> = HashMap()): Map<String, Any>{
+        val brand = options["brand"] ?: this.owner.brand
+        val model = options["model"] ?: this.owner.model
+        val version = options["version"] ?: this.owner.version
+        val variant = options["variant"] ?: this.owner.variant
         val url = "${this.getUrl()}brands/${brand}/models/${model}/mesh"
         val params = HashMap<String, Any>()
-        if (version != null){
-            params["version"] = version
-        }
-        if (variant != null){
-            params["variant"] = variant
-        }
-        meshOptions.putAll(mapOf
-        ("url" to url, "method" to "GET", "params" to params))
+        if (version != null) params["version"] = version
+        if (variant != null) params["variant"] = variant
+        val meshOptions = options.toMutableMap()
+        meshOptions.putAll(mapOf("url" to url, "method" to "GET", "params" to params))
         return meshOptions
     }
 
