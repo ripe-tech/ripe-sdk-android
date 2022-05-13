@@ -62,36 +62,27 @@ interface BrandAPI : BaseAPI {
      * @return A Deferred that will be completed with the result.
      */
     fun getConfigAsync(options: Map<String, Any> = HashMap()): Deferred<Map<String, Any>?> {
-        var _options = this.getConfigOptions(options)
-        _options = this.build(_options)
-        val url = _options["url"] as String
-        return this.cacheURLAsync(url, _options)
+        var configOptions = this.getConfigOptions(options)
+        configOptions = this.build(configOptions)
+        val url = configOptions["url"] as String
+        return this.cacheURLAsync(url, configOptions)
     }
 
     /**
      * @suppress
      */
-    private fun getConfigOptions(options: Map<String, Any> = HashMap()): Map<String, Any> {
-        val configOptions = options.toMutableMap()
+    fun getConfigOptions(options: Map<String, Any> = HashMap()): Map<String, Any> {
         val brand = options["brand"] as String? ?: this.owner.brand
         val model = options["model"] as String? ?: this.owner.model
         val country = options["country"] as String? ?: this.owner.country
         val flag = options["flag"] as String? ?: this.owner.flag
         val filter = options["filter"] as? Boolean
         val url = "${this.getUrl()}brands/${brand}/models/${model}/config"
-
         val params = HashMap<String, Any>()
-        if (country != null) {
-            params["country"] = country
-        }
-        if (flag != null) {
-            params["flag"] = flag
-        }
-
-        if (filter != null) {
-            params["filter"] = if (filter) "1" else "0"
-        }
-
+        if (country != null) params["country"] = country
+        if (flag != null) params["flag"] = flag
+        if (filter != null) params["filter"] = if (filter) "1" else "0"
+        val configOptions = options.toMutableMap()
         configOptions.putAll(mapOf("url" to url, "method" to "GET", "params" to params))
         return configOptions
     }
