@@ -1,7 +1,5 @@
 package com.ripe.android.test
 
-import com.ripe.android.api.BrandAPI
-import com.ripe.android.base.Ripe
 import com.ripe.android.base.Observable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.newSingleThreadContext
