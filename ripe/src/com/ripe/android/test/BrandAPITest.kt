@@ -14,36 +14,38 @@ class MockBrandAPI : BrandAPI {
 class BrandAPITest : BaseTest(){
 
     @Test
-    fun testGetLogoOptions(){
+    fun testGetLogoOptionsDefaults(){
         val brandApi = MockBrandAPI()
-
-        val options = brandApi.getLogoOptions()
-        assertEquals(options,
+        val result = brandApi.getLogoOptions()
+        assertEquals(result,
             mapOf(
                 "url" to "https://sandbox.platforme.com/api/brands/dummy/logo.png",
                 "method" to "GET",
                 "params" to HashMap<String, Any>()
             )
         )
+    }
 
-        val fields: Map<String, Any> = mapOf(
+    @Test
+    fun testGetLogoOptions(){
+        val brandApi = MockBrandAPI()
+        val result = brandApi.getLogoOptions(mapOf(
             "brand" to "dummy",
-            "version" to "dummy",
-            "variant" to "dummy",
+            "version" to "version",
+            "variant" to "variant",
             "format" to "svg"
-        )
-        val options2 = brandApi.getLogoOptions(fields)
-        assertEquals(options2,
+        ))
+        assertEquals(result,
             mapOf(
                 "url" to "https://sandbox.platforme.com/api/brands/dummy/logo.svg",
                 "method" to "GET",
                 "params" to mapOf(
-                    "version" to "dummy",
-                    "variant" to "dummy"
+                    "version" to "version",
+                    "variant" to "variant"
                 ),
                 "brand" to "dummy",
-                "version" to "dummy",
-                "variant" to "dummy",
+                "version" to "version",
+                "variant" to "variant",
                 "format" to "svg"
             )
         )
