@@ -95,10 +95,10 @@ interface BrandAPI : BaseAPI {
      * @return A Deferred that will be completed with the result.
      */
     fun getDefaultsAsync(options: Map<String, Any> = HashMap()): Deferred<Map<String, Any>?> {
-        var _options = this.getDefaultsOptions(options)
-        _options = this.build(_options)
-        val url = _options["url"] as String
-        return this.cacheURLAsync(url, _options)
+        var defaultOptions = this.getDefaultsOptions(options)
+        defaultOptions = this.build(defaultOptions)
+        val url = defaultOptions["url"] as String
+        return this.cacheURLAsync(url, defaultOptions)
     }
 
     /**
