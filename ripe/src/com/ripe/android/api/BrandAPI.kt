@@ -105,10 +105,10 @@ interface BrandAPI : BaseAPI {
      * @suppress
      */
     private fun getDefaultsOptions(options: Map<String, Any> = HashMap()): Map<String, Any> {
-        val defaultOptions = options.toMutableMap()
         val brand = options["brand"] as String? ?: this.owner.brand
         val model = options["model"] as String? ?: this.owner.model
         val url = "${this.getUrl()}brands/${brand}/models/${model}/defaults"
+        val defaultOptions = options.toMutableMap()
         defaultOptions.putAll(mapOf("url" to url, "method" to "GET"))
         return defaultOptions
     }
