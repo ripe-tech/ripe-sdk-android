@@ -77,6 +77,29 @@ class BrandAPITest : BaseTest(){
         )
     }
     @Test
+    fun testGetMeshOptions(){
+        val brandApi = MockBrandAPI()
+        val options = brandApi.getMeshOptions(mapOf(
+            "brand" to "dummy",
+            "version" to "version",
+            "variant" to "variant"
+        ))
+
+        assertEquals(options,
+            mapOf(
+                "url" to "https://sandbox.platforme.com/api/brands/dummy/models/dummy/mesh",
+                "method" to "GET",
+                "params" to mapOf(
+                    "version" to "version",
+                    "variant" to "variant"
+                ),
+                "brand" to "dummy",
+                "version" to "version",
+                "variant" to "variant"
+            )
+        )
+    }
+    @Test
     fun testGetConfigOptionsDefaults(){
         val brandApi = MockBrandAPI()
         val options = brandApi.getConfigOptions()
