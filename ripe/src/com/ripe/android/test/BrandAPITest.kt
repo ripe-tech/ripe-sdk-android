@@ -64,7 +64,7 @@ class BrandAPITest : BaseTest(){
     }
 
     @Test
-    fun testGetMeshOptions(){
+    fun testGetMeshOptionsDefaults(){
         val brandApi = MockBrandAPI()
         val options = brandApi.getMeshOptions()
 
@@ -77,7 +77,7 @@ class BrandAPITest : BaseTest(){
         )
     }
     @Test
-    fun testGetConfigOptions(){
+    fun testGetConfigOptionsDefaults(){
         val brandApi = MockBrandAPI()
         val options = brandApi.getConfigOptions()
 
