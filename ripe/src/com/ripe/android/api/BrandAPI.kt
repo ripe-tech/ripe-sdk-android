@@ -27,6 +27,12 @@ interface BrandAPI : BaseAPI {
         return logoOptions
     }
 
+    fun getLogoUrl(options: Map<String, Any> = HashMap()): String {
+        val options = this.getLogoOptions(options)
+        val url = options["url"] as String
+        val params = options["params"] as Map<String, Any>
+        return "${url}?${this.buildQuery(params)}"
+    }
     fun getMeshAsync(options: Map<String, Any> = HashMap()): Deferred<Map<String, Any>?> {
         var meshOptions = this.getMeshOptions(options)
         meshOptions = this.build(meshOptions)
