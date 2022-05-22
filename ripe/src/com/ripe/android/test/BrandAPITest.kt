@@ -89,4 +89,31 @@ class BrandAPITest : BaseTest(){
             )
         )
     }
+    @Test
+    fun testGetConfigOptions(){
+        val brandApi = MockBrandAPI()
+        val options = brandApi.getConfigOptions(mapOf(
+            "brand" to "dummy",
+            "model" to "model",
+            "country" to "country",
+            "country" to "country",
+            "flag" to "flag",
+            "filter" to "0"
+        ))
+        assertEquals(options,
+            mapOf(
+                "url" to "https://sandbox.platforme.com/api/brands/dummy/models/model/config",
+                "method" to "GET",
+                "params" to mapOf(
+                    "country" to "country",
+                    "flag" to "flag"
+                ),
+                "brand" to "dummy",
+                "model" to "model",
+                "country" to "country",
+                "flag" to "flag",
+                "filter" to "0"
+            )
+        )
+    }
 }
