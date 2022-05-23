@@ -110,7 +110,7 @@ interface BrandAPI : BaseAPI {
     /**
      * @suppress
      */
-    private fun getDefaultsOptions(options: Map<String, Any> = HashMap()): Map<String, Any> {
+    fun getDefaultsOptions(options: Map<String, Any> = HashMap()): Map<String, Any> {
         val brand = options["brand"] as String? ?: this.owner.brand
         val model = options["model"] as String? ?: this.owner.model
         val url = "${this.getUrl()}brands/${brand}/models/${model}/defaults"
