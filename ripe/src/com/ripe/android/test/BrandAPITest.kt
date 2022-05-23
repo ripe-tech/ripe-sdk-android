@@ -32,9 +32,6 @@ class BrandAPITest : BaseTest(){
     fun testGetLogoOptionsDefaults(){
         val brandApi = MockBrandAPI()
         val result = brandApi.getLogoOptions()
-
-        print("RESULT:  ")
-        println(result)
         assertEquals(result,
             mapOf(
                 "url" to "https://sandbox.platforme.com/api/brands/dummy/logo.png",
