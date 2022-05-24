@@ -14,6 +14,13 @@ class MockBrandAPI : BrandAPI {
 class BrandAPITest : BaseTest(){
 
     @Test
+    fun testGetLogoUrlDefaults(){
+        val brandApi = MockBrandAPI()
+        val result = brandApi.getLogoUrl()
+        assertEquals(result,
+        "https://sandbox.platforme.com/api/brands/dummy/logo.png?")
+    }
+    @Test
     fun testGetLogoUrl(){
         val brandApi = MockBrandAPI()
         val result = brandApi.getLogoUrl(
