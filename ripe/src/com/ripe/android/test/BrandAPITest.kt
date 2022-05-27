@@ -158,4 +158,16 @@ class BrandAPITest : BaseTest(){
             )
         )
     }
+    @Test
+    fun testGetDefaulstOptionsDefaults(){
+        val brandApi = MockBrandAPI()
+        val options = brandApi.getDefaultsOptions()
+        println(options)
+        assertEquals(options,
+            mapOf(
+                "url" to "https://sandbox.platforme.com/api/brands/dummy/models/dummy/defaults",
+                "method" to "GET"
+            )
+        )
+    }
 }
