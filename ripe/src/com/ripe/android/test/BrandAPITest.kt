@@ -187,4 +187,18 @@ class BrandAPITest : BaseTest(){
             )
         )
     }
+    @Test
+    fun testGetCombinationsOptionsDefaults(){
+        val brandApi = MockBrandAPI()
+        val options = brandApi.getCombinationsOptions()
+        assertEquals(options,
+            mapOf(
+                "url" to "https://sandbox.platforme.com/api/brands/dummy/models/dummy/combinations",
+                "method" to "GET",
+                "params" to mapOf(
+                    "useName" to false
+                )
+            )
+        )
+    }
 }
