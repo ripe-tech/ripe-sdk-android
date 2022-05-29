@@ -118,4 +118,37 @@ interface BrandAPI : BaseAPI {
         defaultOptions.putAll(mapOf("url" to url, "method" to "GET"))
         return defaultOptions
     }
+    fun getCombinationsOptions(options: Map<String, Any> = HashMap()): Map<String, Any> {
+        val brand = options["brand"] ?: this.owner.brand
+        val model = options["model"] ?: this.owner.model
+        val version = options["version"] ?: this.owner.version
+        val useName = options["useName"] ?: false
+        val country = options["country"] ?: this.owner.country
+        val flag = options["flag"] ?: this.owner.flag
+        val url = "${this.getUrl()}brands/${brand}/models/${model}/combinations"
+        val params = HashMap<String, Any>()
+        if (version != null) params["version"] = version
+        if (useName != null) params["useName"] = useName
+        if (country != null) params["country"] = country
+        if (flag != null) params["flag"] = flag
+        if (options["resolve"] != null){
+            val resolve = options["resolve"] as Boolean
+            params["resolve"] = if (resolve) "1" else "0"
+        }
+        if (options["sort"] != null){
+            val sort = options["sort"] as Boolean
+            params["sort"] = if (sort) "1" else "0"
+        }
+        if (options["filter"] != null){
+            val filter = options["filter"] as Boolean
+            params["filter"] = if (filter) "1" else "0"
+        }
+        val combinationsOptions = options.toMutableMap()
+        combinationsOptions.putAll(mapOf(
+            "url" to url,
+            "method" to "GET",
+            "params" to params
+        ))
+        return combinationsOptions
+    }
 }
