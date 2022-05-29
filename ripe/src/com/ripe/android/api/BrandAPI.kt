@@ -33,6 +33,7 @@ interface BrandAPI : BaseAPI {
         val params = options["params"] as Map<String, Any>
         return "${url}?${this.buildQuery(params)}"
     }
+
     fun getMeshAsync(options: Map<String, Any> = HashMap()): Deferred<Map<String, Any>?> {
         var meshOptions = this.getMeshOptions(options)
         meshOptions = this.build(meshOptions)
@@ -118,6 +119,7 @@ interface BrandAPI : BaseAPI {
         defaultOptions.putAll(mapOf("url" to url, "method" to "GET"))
         return defaultOptions
     }
+
     fun getCombinationsOptions(options: Map<String, Any> = HashMap()): Map<String, Any> {
         val brand = options["brand"] ?: this.owner.brand
         val model = options["model"] ?: this.owner.model
