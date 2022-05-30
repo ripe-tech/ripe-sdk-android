@@ -246,4 +246,24 @@ class BrandAPITest : BaseTest(){
             )
         )
     }
+
+    @Test
+    fun testGetFactoryOptions(){
+        val brandApi = MockBrandAPI()
+        val options = brandApi.getFactoryOptions(
+           mapOf(
+            "brand" to "dummy",
+            "model" to "model"
+            )
+        )
+        println(options)
+        assertEquals(options,
+            mapOf(
+                "url" to "https://sandbox.platforme.com/api/brands/dummy/models/model/factory",
+                "method" to "GET",
+                "brand" to "dummy",
+                "model" to "model"
+            )
+        )
+    }
 }
