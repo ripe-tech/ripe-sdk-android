@@ -162,4 +162,23 @@ interface BrandAPI : BaseAPI {
         factoryOptions.putAll(mapOf("url" to url, "method" to "GET"))
         return factoryOptions
     }
+
+    fun validateModelOptions(options: Map<String, Any> = HashMap()):Map<String, Any> {
+        val gender = if (options["gender"] != null) options["gender"] else null
+        val size = if (options["size"] != null) options["size"] else null
+        val brand = options["brand"] ?: this.owner.brand
+        val model = options["model"] ?: this.owner.model
+        val queryOptions = if (options["queryOptions"] != null) options["queryOptions"] else true
+        val initialsOptions = if (options["initialsOptions"] != null) options["initialsOptions"] else true
+        if (queryOptions){
+            options = getQueryOptions(modelOptions.mapOf("brand" to null, "model" to "null"))
+        }
+        if (initialsOptions) options = getInitialsOptions(options)
+        val url = "${this.getUrl()}brands/${brand}/models/${model}/validate"
+        val params = options.params || emptyArray();
+        if (gender != null) params["gender"] = gender
+        if (size != null) params["size"] = size
+        modelOptions.putAll(mapOf("url" to url, "method" to "GET"))
+        return modelOptions
+    }
 }
