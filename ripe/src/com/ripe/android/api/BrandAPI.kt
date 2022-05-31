@@ -153,4 +153,13 @@ interface BrandAPI : BaseAPI {
         ))
         return combinationsOptions
     }
+
+    fun getFactoryOptions(options: Map<String, Any> = HashMap()):Map<String, Any> {
+        val brand = options["brand"] ?: this.owner.brand
+        val model = options["model"] ?: this.owner.model
+        val url = "${this.getUrl()}brands/${brand}/models/${model}/factory"
+        val factoryOptions = options.toMutableMap()
+        factoryOptions.putAll(mapOf("url" to url, "method" to "GET"))
+        return factoryOptions
+    }
 }
