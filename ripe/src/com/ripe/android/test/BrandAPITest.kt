@@ -159,7 +159,7 @@ class BrandAPITest : BaseTest(){
         )
     }
     @Test
-    fun testGetDefaulstOptionsDefaults(){
+    fun testGetDefaultsOptionsDefaults(){
         val brandApi = MockBrandAPI()
         val options = brandApi.getDefaultsOptions()
         assertEquals(options,
