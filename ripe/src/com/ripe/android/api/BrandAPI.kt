@@ -30,7 +30,7 @@ interface BrandAPI : BaseAPI {
     fun getLogoUrl(options: Map<String, Any> = HashMap()): String {
         val options = this.getLogoOptions(options)
         val url = options["url"] as String
-        val params = options["params"] as Map<String, Any>
+        val params = options["params"] as? Map<String, Any>
         return "${url}?${this.buildQuery(params)}"
     }
 
