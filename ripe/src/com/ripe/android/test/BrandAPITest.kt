@@ -274,7 +274,6 @@ class BrandAPITest : BaseTest(){
             "model" to "model"
             )
         )
-        println(options)
         assertEquals(options,
             mapOf(
                 "url" to "https://sandbox.platforme.com/api/brands/dummy/models/model/factory",
