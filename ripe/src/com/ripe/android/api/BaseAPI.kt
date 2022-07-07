@@ -225,6 +225,9 @@ interface BaseAPI {
         return result
     }
 
+    fun getInitialsOptions(options: Map<String, Any>): Map<String, Any> {
+        return options // TODO
+    }
     /**
      * @suppress
      */
