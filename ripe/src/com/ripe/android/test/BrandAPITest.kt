@@ -13,6 +13,26 @@ class MockBrandAPI : BrandAPI {
 
 class BrandAPITest : BaseTest(){
     @Test
+    fun testGetLogoAsyncDefaults(){
+        runBlocking{
+            launch(Dispatchers.Main){
+                val brandApi = MockBrandAPI()
+
+                val deferred = brandApi.getLogoAsync(
+                    mapOf
+                    (
+                        "brand" to "dummy"
+                    )
+                )
+                println("TEST")
+                println(deferred)
+
+                val result = deferred.await()!!
+                assertEquals(result, result)
+            }
+        }
+    }
+    @Test
     fun testGetLogoUrlDefaults(){
         val brandApi = MockBrandAPI()
         val result = brandApi.getLogoUrl()
