@@ -8,6 +8,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.CompletableDeferred
 import java.net.URL
 import java.net.URLEncoder
 
@@ -96,25 +97,60 @@ interface BaseAPI {
             data = query
             contentType = "application/x-www-form-urlencoded"
         }
-
-        return CoroutineScope(Dispatchers.IO).async {
+        contentType = "application/json"
+         return CoroutineScope(Dispatchers.IO).async {
             // opens the connection for the request URL as defined
             // and then reads the complete set of contents from it
             val url = URL(requestUrl)
+            var resultMap: T?
             val result = url.readText()
 
-            val gson = Gson()
-            val type = object : TypeToken<T>() {}.type
-
-            var resultMap: T?
-            try {
-                resultMap = gson.fromJson<T>(result, type)
-            } catch (exception: JsonSyntaxException) {
-                resultMap = null
+            if (contentType == "application/json"){
+                try {
+                    val gson = Gson()
+                    val type = object : TypeToken<T>() {}.type
+                    resultMap = gson.fromJson<T>(result, type)
+                    resultMap
+                } catch (exception: JsonSyntaxException) {
+                }
             }
-            resultMap
+            // else {
+            //     CompletableDeferred(result) as T? //check out kotlin syntax
+            // }
+            // CompletableDeferred(result) as T?
+            //after these issues, translate _requestURLFetch from sdk
         }
     }
+
+    private fun requestURLFetch(url, options: Map<String, Any> = HashMap()){
+        val method = options["method"] ?: "GET"
+        val params = HashMap<String, Any>()
+        val headers = HashMap<String, Any>()
+        var dataStr = options["data"] ?: null
+        val dataJ = options["dataJ"] ?: null
+        val dataM = options["dataM"] ?: null
+        val contentType = options["contentType"] ?: null
+        val validCodes = options["validCodes"] ?: arrayOf(200)
+        val authErrorCodes = options["authErrorCodes"] ?: arrayOf(401, 403, 440, 499)
+        val credentials = options["credentials"] ?: "omit"
+        val keepAlive = this.options["keepAlive"] as Boolean? ?: true
+
+        val query = this.buildQuery(params)
+        val isEmpty = arrayOf("GET", "DELETE").indexOf(method) != -1
+        val hasQuery = url.indexOf("?") != -1
+        val separator = if (hasQuery) "&" else "?"
+
+        if (isEmpty || dataStr) {
+            url = url + separator + query
+        } else if (dataJ != null) {
+            val gson = Gson()
+            val jsonStr = gson.toJson(dataJ)
+            url = url + separator + query
+            contentType = "application/json"
+        } else {
+            dataStr = query
+            contentType = "application/x-www-form-urlencoded"
+        }
 
     /**
      * @suppress
@@ -233,6 +269,7 @@ interface BaseAPI {
      */
     fun build(options: Map<String, Any>): Map<String, Any> {
         return options // TODO
+        // set content type here (see sdk)
     }
 
     /**
