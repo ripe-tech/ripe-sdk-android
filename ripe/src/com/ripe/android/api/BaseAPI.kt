@@ -83,74 +83,50 @@ interface BaseAPI {
 
         @Suppress("unchecked_cast")
         val headers = options["headers"] as Map<String, String>? ?: HashMap()
-        var data = options["data"]
+        var _data = options["data"] as String? ?: null
+        var dataJ = options["dataJ"] as String? ?: null
+        var dataM = options["dataM"] as String? ?: null
         var contentType = options["contentType"]
 
         val query = this.buildQuery(params)
         val isEmpty = arrayOf("GET", "DELETE").contains(method)
         val hasQuery = requestUrl.contains("?")
         val separator = if (hasQuery) "&" else "?"
-
-        if (isEmpty || data != null) {
+        if (isEmpty || _data != null) {
             requestUrl += separator + query
+        } else if (dataJ !== null){
+            contentType = "application/json";
+            //stringify here
+        } else if (dataM !== null) {
+            throw Exception("Multipart is not supported using legacy");
         } else {
-            data = query
+            _data = query
             contentType = "application/x-www-form-urlencoded"
         }
-        contentType = "application/json"
          return CoroutineScope(Dispatchers.IO).async {
             // opens the connection for the request URL as defined
             // and then reads the complete set of contents from it
             val url = URL(requestUrl)
             var resultMap: T?
             val result = url.readText()
-
             if (contentType == "application/json"){
-                try {
+                try{
                     val gson = Gson()
                     val type = object : TypeToken<T>() {}.type
                     resultMap = gson.fromJson<T>(result, type)
-                    resultMap
-                } catch (exception: JsonSyntaxException) {
+                } catch (exception: JsonSyntaxException){
+                    // println("TEST OUTPUT: ")
+                    // println(exception)
+                    resultMap = null
                 }
             }
-            // else {
-            //     CompletableDeferred(result) as T? //check out kotlin syntax
+            // else{
+            //     result as T?
             // }
-            // CompletableDeferred(result) as T?
-            //after these issues, translate _requestURLFetch from sdk
+            //result as T?
+            null
         }
     }
-
-    private fun requestURLFetch(url, options: Map<String, Any> = HashMap()){
-        val method = options["method"] ?: "GET"
-        val params = HashMap<String, Any>()
-        val headers = HashMap<String, Any>()
-        var dataStr = options["data"] ?: null
-        val dataJ = options["dataJ"] ?: null
-        val dataM = options["dataM"] ?: null
-        val contentType = options["contentType"] ?: null
-        val validCodes = options["validCodes"] ?: arrayOf(200)
-        val authErrorCodes = options["authErrorCodes"] ?: arrayOf(401, 403, 440, 499)
-        val credentials = options["credentials"] ?: "omit"
-        val keepAlive = this.options["keepAlive"] as Boolean? ?: true
-
-        val query = this.buildQuery(params)
-        val isEmpty = arrayOf("GET", "DELETE").indexOf(method) != -1
-        val hasQuery = url.indexOf("?") != -1
-        val separator = if (hasQuery) "&" else "?"
-
-        if (isEmpty || dataStr) {
-            url = url + separator + query
-        } else if (dataJ != null) {
-            val gson = Gson()
-            val jsonStr = gson.toJson(dataJ)
-            url = url + separator + query
-            contentType = "application/json"
-        } else {
-            dataStr = query
-            contentType = "application/x-www-form-urlencoded"
-        }
 
     /**
      * @suppress
