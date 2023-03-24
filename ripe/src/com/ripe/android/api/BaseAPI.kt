@@ -8,7 +8,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
-import kotlinx.coroutines.CompletableDeferred
 import java.net.URL
 import java.net.URLEncoder
 
@@ -83,48 +82,37 @@ interface BaseAPI {
 
         @Suppress("unchecked_cast")
         val headers = options["headers"] as Map<String, String>? ?: HashMap()
-        var _data = options["data"] as String? ?: null
-        var dataJ = options["dataJ"] as String? ?: null
-        var dataM = options["dataM"] as String? ?: null
+        var data = options["data"]
         var contentType = options["contentType"]
 
         val query = this.buildQuery(params)
         val isEmpty = arrayOf("GET", "DELETE").contains(method)
         val hasQuery = requestUrl.contains("?")
         val separator = if (hasQuery) "&" else "?"
-        if (isEmpty || _data != null) {
+
+        if (isEmpty || data != null) {
             requestUrl += separator + query
-        } else if (dataJ !== null){
-            contentType = "application/json";
-            //stringify here
-        } else if (dataM !== null) {
-            throw Exception("Multipart is not supported using legacy");
         } else {
-            _data = query
+            data = query
             contentType = "application/x-www-form-urlencoded"
         }
-         return CoroutineScope(Dispatchers.IO).async {
+
+        return CoroutineScope(Dispatchers.IO).async {
             // opens the connection for the request URL as defined
             // and then reads the complete set of contents from it
             val url = URL(requestUrl)
-            var resultMap: T?
             val result = url.readText()
-            if (contentType == "application/json"){
-                try{
-                    val gson = Gson()
-                    val type = object : TypeToken<T>() {}.type
-                    resultMap = gson.fromJson<T>(result, type)
-                } catch (exception: JsonSyntaxException){
-                    // println("TEST OUTPUT: ")
-                    // println(exception)
-                    resultMap = null
-                }
+
+            val gson = Gson()
+            val type = object : TypeToken<T>() {}.type
+
+            var resultMap: T?
+            try {
+                resultMap = gson.fromJson<T>(result, type)
+            } catch (exception: JsonSyntaxException) {
+                resultMap = null
             }
-            // else{
-            //     result as T?
-            // }
-            //result as T?
-            null
+            resultMap
         }
     }
 
@@ -237,15 +225,11 @@ interface BaseAPI {
         return result
     }
 
-    fun getInitialsOptions(options: Map<String, Any>): Map<String, Any> {
-        return options // TODO
-    }
     /**
      * @suppress
      */
     fun build(options: Map<String, Any>): Map<String, Any> {
         return options // TODO
-        // set content type here (see sdk)
     }
 
     /**
