@@ -162,6 +162,4 @@ interface BrandAPI : BaseAPI {
         factoryOptions.putAll(mapOf("url" to url, "method" to "GET"))
         return factoryOptions
     }
-
-
 }

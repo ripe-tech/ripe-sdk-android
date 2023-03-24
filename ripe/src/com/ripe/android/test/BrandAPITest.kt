@@ -32,6 +32,7 @@ class BrandAPITest : BaseTest(){
             }
         }
     }
+
     @Test
     fun testGetLogoUrlDefaults(){
         val brandApi = MockBrandAPI()
@@ -39,6 +40,7 @@ class BrandAPITest : BaseTest(){
         assertEquals(result,
         "https://sandbox.platforme.com/api/brands/dummy/logo.png?")
     }
+
     @Test
     fun testGetLogoUrl(){
         val brandApi = MockBrandAPI()
@@ -177,6 +179,7 @@ class BrandAPITest : BaseTest(){
             )
         )
     }
+
     @Test
     fun testGetDefaultsOptionsDefaults(){
         val brandApi = MockBrandAPI()
@@ -188,6 +191,7 @@ class BrandAPITest : BaseTest(){
             )
         )
     }
+
     @Test
     fun testGetDefaulstOptions(){
         val brandApi = MockBrandAPI()
@@ -206,6 +210,7 @@ class BrandAPITest : BaseTest(){
             )
         )
     }
+
     @Test
     fun testGetCombinationsOptionsDefaults(){
         val brandApi = MockBrandAPI()
@@ -220,6 +225,7 @@ class BrandAPITest : BaseTest(){
             )
         )
     }
+    
     @Test
     fun testGetCombinationsOptions(){
         val brandApi = MockBrandAPI()
