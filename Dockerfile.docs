@@ -21,6 +21,6 @@ ADD ripe /ripe
 RUN gradle wrapper
 RUN ./gradlew dokka
 
-RUN pip3 install --upgrade netius
+RUN pip3 install --no-cache-dir --upgrade netius
 
 CMD ["/usr/bin/python3", "-m", "netius.extra.filea"]
